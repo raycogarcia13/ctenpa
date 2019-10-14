@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "ctenpa",
+            "dialect": "PostgreSQL",
+            "name": "local",
+            "password": "many",
+            "port": 5432,
+            "server": "localhost",
+            "username": "postgres"
+        }
+    ]
+}
