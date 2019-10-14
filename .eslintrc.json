@@ -9,7 +9,7 @@
         "eslint:recommended",
         "plugin:vue/essential",
         "plugin:@typescript-eslint/eslint-recommended",
-        "airbnb",
+        // "airbnb",
         "prettier"
     ],
     "globals": {
