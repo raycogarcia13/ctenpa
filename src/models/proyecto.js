@@ -1,23 +1,32 @@
 module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Rol',{
+    const tabla = sequelize.define('Proyecto',{
         id:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
-        rol:{
+        codigo:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        name:{
+        nombre:{
             type:DataTypes.STRING,
             allowNull:false
+        },
+        valor_total:{
+            type:DataTypes.FLOAT,
+            allowNull:false
+        },
+        descripcion:{
+            type:DataTypes.TEXT,
+            allowNull:true
         }
     },{
-        tableName:'rol'
+        tableName:'proyecto'
     });
     tabla.associate = (models)=>{
-        tabla.hasMany(models.Usuario)
+        tabla.belongsTo(models.Contrato);
+        tabla.hasMany(models.Subproyecto);
     }
 
     return tabla;

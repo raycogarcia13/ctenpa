@@ -6,10 +6,10 @@ let db = null;
 module.exports = app =>{
   
   const conf = app.libs.config;
-
+  
   if(!db){
     const sequelize=new Sequelize(conf.database,conf.username,conf.password,conf);
-  
+
     db = {
       sequelize,
       Sequelize,
