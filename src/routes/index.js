@@ -1,4 +1,3 @@
-/* eslint-disable vue/valid-v-else-if */
 module.exports = app => {
 
     app.get('/', (req, res) => {
