@@ -1,0 +1,37 @@
+{
+  "name": "ctenpa",
+  "version": "1.0.0",
+  "description": "Control de Tiempo de trabajo sobre proyectos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raycogarcia13/ctenpa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raycogarcia13/ctenpa/issues"
+  },
+  "homepage": "https://github.com/raycogarcia13/ctenpa#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.6.0",
+    "bcrypt": "^3.0.6",
+    "consign": "^0.1.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.19.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "nodemon": "^1.19.3"
+  }
+}
