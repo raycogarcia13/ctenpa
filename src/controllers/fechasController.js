@@ -84,9 +84,12 @@ module.exports =  {
         return cant;
     },
     diasFeriados:async (mes,anno,app)=>{
-        let dayI=new Date(anno+'/'+mes+1);
-        let dayEnd=new Date(anno+'/'+mes+cantDaysMonth(mes,anno));
-        let all=await app.db.models.Feriados.findAll();
+        let end=cantDaysMonth(mes,anno);
+        if(mes<10)
+            mes='0'+mes;
+        let dayI = '01/'+mes+'/'+anno;
+        let dayEnd = end+'/'+mes+'/'+anno;
+        let all=await app.db.sequelize.query("Select * from dias_feriados where fecha>= '"+dayI+"' and fecha<= '"+dayEnd+"'", { type: app.db.sequelize.QueryTypes.SELECT});
         return all;
     }
 

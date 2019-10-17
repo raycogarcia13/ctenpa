@@ -1,43 +1,40 @@
 module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Proyectista',{
+    const tabla = sequelize.define('Auditoria',{
         id:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
+        ip:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
+        action:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
+        metodo:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
+        qry:{
+            type:DataTypes.TEXT,
+            allowNull:false
+        },
+        url:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
         nombre:{
             type:DataTypes.STRING,
             allowNull:false
-        },
-        apellidos:{
-            type:DataTypes.STRING,
-            allowNull:false
-        },
-        escala_salarial:{
-            type:DataTypes.STRING,
-            allowNull:false
-        },
-        cargo:{
-            type:DataTypes.STRING,
-            allowNull:false
-        },
-        salario_basico:{
-            type:DataTypes.FLOAT,
-            allowNull:false
-        },
-        salario_hora:{
-            type:DataTypes.FLOAT,
-            allowNull:false
         }
-        
+
     },{
-        tableName:'proyectista'
+        tableName:'auditoria'
     });
     tabla.associate = (models)=>{
         tabla.belongsTo(models.Usuario);
-        tabla.belongsTo(models.Area);
-        tabla.hasMany(models.Equipo);
-        tabla.hasMany(models.Control_Activity);
     }
 
     return tabla;

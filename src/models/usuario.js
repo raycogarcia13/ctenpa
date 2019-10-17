@@ -1,33 +1,34 @@
 module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Actividad',{
+    const tabla = sequelize.define('Usuario',{
         id:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
-        actividad:{
+        username:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        tiempo_d:{
-            type:DataTypes.FLOAT,
+        descripcion:{
+            type:DataTypes.STRING,
             allowNull:true
         },
-        pro_ratea:{
-            type:DataTypes.BOOLEAN,
-            allowNull:false,
-            defaultValue:false
+        password:{
+            type:DataTypes.STRING,
+            allowNull:false
         },
-        productiva:{
-            type:DataTypes.BOOLEAN,
+        email:{
+            type:DataTypes.STRING,
             allowNull:false,
-            defaultValue:false
+            validate:{
+                isEmail:true
+            }
         }
     },{
-        tableName:'actividad'
+        tableName:'usuario'
     });
     tabla.associate = (models)=>{
-        // tabla.belongsTo(models.Usuario);
+        tabla.belongsTo(models.Rol);
     }
 
     return tabla;

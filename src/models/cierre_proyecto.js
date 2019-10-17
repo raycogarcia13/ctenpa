@@ -1,30 +1,28 @@
 module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Usuario',{
+    const tabla = sequelize.define('Cierre_proyecto',{
         id:{
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
         },
-        username:{
+        codigo:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        password:{
-            type:DataTypes.STRING,
+        prod_mercantil:{
+            type:DataTypes.FLOAT,
             allowNull:false
         },
-        email:{
-            type:DataTypes.STRING,
-            allowNull:false,
-            validate:{
-                isEmail:true
-            }
-        }
+        prod_cuc:{
+            type:DataTypes.FLOAT,
+            allowNull:false
+        },
     },{
-        tableName:'usuario'
+        tableName:'cierre_proyecto'
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Rol);
+        tabla.belongsTo(models.Proyecto);
+        tabla.hasMany(models.Cierre_proyectista);
     }
 
     return tabla;
