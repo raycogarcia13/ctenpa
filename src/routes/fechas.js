@@ -1,3 +1,4 @@
+import moment from 'moment' 
 module.exports = app => {
     
     const cntrl=app.controllers.fechasController;
@@ -24,9 +25,21 @@ module.exports = app => {
     })
 
     // dado un mes y un año, devuelve los dias feriados del mismo
-    app.post('/api/fechas/month_feriados',async (req,res)=>{
-        let all=await cntrl.diasFeriados(req.body.mes,req.body.anno,app);
+    app.get('/api/fechas/month_feriados/:mes/:anno',async (req,res)=>{
+        let all=await cntrl.diasFeriados(req.params.mes,req.params.anno,app);
         res.json(all);
+    })
+    
+    app.post('/api/fechas/month_feriados', (req,res)=>{
+        // res.json({fecha:moment(req.body.fecha,'dd/mm/YYY')});
+        app.db.models.Feriados.create({
+            fecha:new Date(req.body.fecha),
+            motivo:req.body.motivo
+        })
+        .then(result=>res.json(result))
+        .catch(error=>{
+            res.status(412).json({msg:error.message})
+        })
     })
 
 }

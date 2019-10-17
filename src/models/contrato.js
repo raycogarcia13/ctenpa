@@ -1,9 +1,9 @@
 module.exports = (sequelize , DataTypes) =>{
     const tabla = sequelize.define('Contrato',{
         id:{
-            type:DataTypes.INTEGER,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey:true,
-            autoIncrement:true
         },
         nombre:{
             type:DataTypes.STRING,

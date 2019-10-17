@@ -1,9 +1,9 @@
 module.exports = (sequelize , DataTypes) =>{
     const tabla = sequelize.define('Control_Obra',{
         id:{
-            type:DataTypes.INTEGER,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey:true,
-            autoIncrement:true
         },
         dia:{
             type:DataTypes.INTEGER,

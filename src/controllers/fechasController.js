@@ -84,8 +84,8 @@ module.exports =  {
         return cant;
     },
     diasFeriados:async (mes,anno,app)=>{
-        let end=cantDaysMonth(mes,anno);
-        if(mes<10)
+        let end=cantDaysMonth(parseInt(mes),parseInt(anno));
+        if(parseInt(mes)<10)
             mes='0'+mes;
         let dayI = '01/'+mes+'/'+anno;
         let dayEnd = end+'/'+mes+'/'+anno;
