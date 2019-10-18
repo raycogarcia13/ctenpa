@@ -22,7 +22,9 @@ module.exports = (sequelize , DataTypes) =>{
     });
     tabla.associate = (models)=>{
         tabla.belongsTo(models.Proyecto);
+        tabla.belongsTo(models.Area);
         tabla.hasMany(models.Equipo);
+        tabla.hasMany(models.Factura_Subproyecto);
     }
 
     return tabla;
