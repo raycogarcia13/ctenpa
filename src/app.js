@@ -14,5 +14,3 @@ consign({
 .then('./libs/boot.js')
 .into(app);
 
-
-
