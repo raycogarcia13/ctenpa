@@ -4,10 +4,10 @@ module.exports = app => {
     const cntrl=app.controllers.fechasController;
 
     // devuelve el dia de la semana dada una fecha
-    app.post('/api/fechas/dia_semana',(req,res)=>{
-        let d=cntrl.dayOfWeek(req.body.fecha);
-        res.json(d)
-    });
+    app.post('/api/fechas/dia_semana',cntrl.dayOfWeek)//(req,res)=>{
+        // let d=cntrl.dayOfWeek(req.body.fecha);
+        // res.json(d)
+    // });
 
     // devuelve la cantida de hroas de un dia en especifico
     app.post('/api/fechas/day_hours',(req,res)=>{
