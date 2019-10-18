@@ -1,16 +1,20 @@
 import express from 'express';
+import path from 'path';
 
 module.exports = app => {
 
     // config puerto
-    app.set('port',process.env.PORT||3000);
+    app.set('port', process.env.PORT || 3000);
     //entornos
     app.set('env', 'development');
-    
+
     // json
     app.use(express.json());
 
-    app.use((req,res,next)=>{
+    // static
+    app.use(express.static(path.join(__dirname, 'public')));
+
+    app.use((req, res, next) => {
         next()
     })
 }

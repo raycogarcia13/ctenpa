@@ -4,13 +4,12 @@ import consign from 'consign';
 const app = express();
 
 consign({
-    cwd : __dirname
-})
-.include('./libs/config.js')
-.then('./controllers')
-.then('./db.js')
-.then('./libs/middlewares.js')
-.then('./routes')
-.then('./libs/boot.js')
-.into(app);
-
+        cwd: __dirname
+    })
+    .include('./libs/config.js')
+    .then('./controllers')
+    .then('./db.js')
+    .then('./libs/middlewares.js')
+    .then('./routes')
+    .then('./libs/boot.js')
+    .into(app);
