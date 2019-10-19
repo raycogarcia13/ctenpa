@@ -1,5 +1,3 @@
-// import * as app from '../app'
-// const rol = app.db.models.Rol;
 module.exports = app => {
     const rol = app.db.models.Rol;
     return {
