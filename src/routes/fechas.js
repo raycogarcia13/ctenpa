@@ -1,4 +1,3 @@
-import moment from 'moment' 
 module.exports = app => {
     
     const cntrl=app.controllers.fechasController;
@@ -31,7 +30,6 @@ module.exports = app => {
     })
     
     app.post('/api/fechas/month_feriados', (req,res)=>{
-        // res.json({fecha:moment(req.body.fecha,'dd/mm/YYY')});
         app.db.models.Feriados.create({
             fecha:new Date(req.body.fecha),
             motivo:req.body.motivo
