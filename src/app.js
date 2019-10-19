@@ -9,9 +9,9 @@ consign({
         cwd: __dirname
     })
     .include('./libs/config.js')
-    .then('./controllers')
     .then('./db.js')
     .then('./libs/middlewares.js')
+    .then('./controllers')
     .then('./routes')
     .then('./libs/boot.js')
     .into(app);
