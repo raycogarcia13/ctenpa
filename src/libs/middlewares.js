@@ -6,7 +6,7 @@ module.exports = app => {
     app.set('port',process.env.PORT||3000);
     //entornos
     app.set('env', 'development');
-    
+
     // json
     app.use(express.json());
 

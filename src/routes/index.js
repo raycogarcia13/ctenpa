@@ -1,6 +1,6 @@
 module.exports = app => {
 
-    app.get('/',(req,res)=>{
+    app.get('/api',(req,res)=>{
         res.json({status:"Api CtEnpa",entity:"UEB ENPA IJ"})
     })
 

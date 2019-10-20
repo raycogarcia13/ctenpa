@@ -63,9 +63,9 @@ function countHourDayP(dt){
 }
 
 module.exports =  {
-    dayOfWeek:att=>{
-        let d=dayOfWeekP(att);
-        return {dia:d,name:dias[d]};
+    dayOfWeek:(req,res)=>{
+        let d=dayOfWeekP(req.body.fecha);
+        res.json({dia:d,name:dias[d]});
     },
     countHourDay:att=>{
         return countHourDayP(att);
