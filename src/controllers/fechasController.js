@@ -79,7 +79,6 @@ module.exports =  {
         {
         let date=new Date(anno+'/'+mes+'/'+i);
         cant+=countHourDayP(date);
-        console.log(countHourDayP(date));
         }
         return cant;
     },
