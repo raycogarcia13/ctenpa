@@ -3,7 +3,7 @@ import consign from 'consign';
 
 const app = express();
 
-app.use(express.static(__dirname+'/public'))
+app.use(express.static(__dirname + '/public'))
 
 consign({
     .include('./libs/config.js')

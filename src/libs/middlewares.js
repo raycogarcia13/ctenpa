@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 
 module.exports = app => {
 
@@ -10,9 +9,6 @@ module.exports = app => {
 
     // json
     app.use(express.json());
-
-    // static
-    app.use(express.static(path.join(__dirname, 'public')));
 
     app.use((req, res, next) => {
         next()

@@ -1,24 +1,28 @@
-module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Rol',{
-        id:{
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV1,
-            primaryKey:true,
-        },
-        rol:{
-            type:DataTypes.STRING,
-            allowNull:false
-        },
-        name:{
-            type:DataTypes.STRING,
-            allowNull:false
+module.exports = (sequelize, DataTypes) => {
+    const tabla = sequelize.define(
+        "Rol", {
+            id: {
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV1,
+                primaryKey: true,
+
+            },
+            rol: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false
+            }
+        }, {
+            tableName: "rol"
         }
-    },{
-        tableName:'rol'
-    });
-    tabla.associate = (models)=>{
-        tabla.hasMany(models.Usuario)
-    }
+    );
+    tabla.associate = models => {
+        tabla.hasMany(models.Usuario);
+    };
+    // app.models.Rol.beforeCreate(rol => rol.id = uuid());
 
     return tabla;
-}
+};

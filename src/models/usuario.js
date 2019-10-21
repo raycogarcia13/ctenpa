@@ -1,33 +1,33 @@
-module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Usuario',{
-        id:{
+module.exports = (sequelize, DataTypes) => {
+    const tabla = sequelize.define('Usuario', {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV1,
-            primaryKey:true,
+            primaryKey: true,
         },
-        username:{
-            type:DataTypes.STRING,
-            allowNull:false
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        descripcion:{
-            type:DataTypes.STRING,
-            allowNull:true
+        descripcion: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
-        password:{
-            type:DataTypes.STRING,
-            allowNull:false
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        email:{
-            type:DataTypes.STRING,
-            allowNull:false,
-            validate:{
-                isEmail:true
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                isEmail: true
             }
         }
-    },{
-        tableName:'usuario'
+    }, {
+        tableName: 'usuario'
     });
-    tabla.associate = (models)=>{
+    tabla.associate = (models) => {
         tabla.belongsTo(models.Rol);
     }
 
