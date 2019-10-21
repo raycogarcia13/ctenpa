@@ -19,7 +19,7 @@ module.exports = app => {
                         id: id
                     }
                 })
-                return updRol
+                return res.status(200).json(updRol)
             }
             const newRol = await rol.create(req.body)
             return res.status(200).json(newRol);
