@@ -1,33 +1,40 @@
-module.exports = {
-    async getUsers() {
-        const us = app.db.models.Usuario.findAll()
-        // return us;
-        console.log(us);
-    },
-    async getUserById(id) {
-        const currentUser = await app.db.models.Usuario.findByPk(id)
-        return currentUser
-    },
-    async createOrUpdateUser(user) {
-        console.log(user.id);
-        let id = user.id;
-        if (id) {
-            const updatedUser = await app.db.models.Usuario.update(user, {
+module.exports = app => {
+    const user = app.db.models.Usuario;
+    return {
+        getUsers: async (req, res) => {
+            let us = await user.findAll()
+            return res.status(200).json(us);
+        },
+        getUserById: async (req, res) => {
+            console.log(req.body.id);
+            let currentUser = await user.findByPk(req.body.id)
+            return res.status(200).json(currentUser);
+        },
+        createOrUpdateUser: async (req, res) => {
+            console.log(req.body.id);
+            let id = req.body.id;
+            if (id) {
+                const updUser = await user.update(req.body, {
+                    where: {
+                        id: id
+                    }
+                })
+                return res.status(200).json(updUser)
+            }
+            const newUser = await rol.create(req.body)
+            return res.status(200).json(newUser);
+        },
+        deleteUser: async (req, res) => {
+            let id = req.body.id;
+            const deletedTask = await user.destroy({
                 where: {
                     id: id
                 }
             })
-            return updatedUser
+            res.send('se elimino el usuario');
+            return res.status(200).json(deletedTask)
+
         }
-        const newUser = await app.db.models.Usuario.create(alimento)
-        return newUser
-    },
-    async deleteUser(id) {
-        const deletedTask = await app.db.models.Usuario.destroy({
-            where: {
-                id: id
-            }
-        })
-        return deletedTask
     }
+
 }
