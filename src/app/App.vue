@@ -1,12 +1,13 @@
 <template>
     <div id="app">
         CTEnpa
-        <sider v-if="isLogin"></sider>
+        <sider v-if="autenticado"></sider>
         <router-view></router-view>
     </div>
 </template>
 <script>
 import Sider from './views/Sider.vue'
+import { mapState } from 'vuex';
 export default {
     name:'app',
     data() {
@@ -14,18 +15,12 @@ export default {
            
         }
     },
-    computed:{
-        isLogin(){
-            if(this.$router.currentRoute=='login')
-                return false
-            return true;
-        }
-    },
+    computed: mapState(['autenticado']),
     components:{
         Sider
     },
     mounted(){
-        // this.$router.go('-1');
+        console.log(this.autenticado)
     }
 }
 </script>
