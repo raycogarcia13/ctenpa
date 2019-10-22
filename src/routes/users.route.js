@@ -6,7 +6,9 @@ module.exports = app => {
 
     app.route('/api/user')
         .get(log.authenticated, control.getUsers)
+        .post(control.createUser);
+    app.route('/api/user/:id')
         .delete(control.deleteUser)
-        .put(control.createOrUpdateUser)
-        .post(control.getUserById);
+        .get(control.getUserById)
+        .put(control.UpdateUser)
 }
