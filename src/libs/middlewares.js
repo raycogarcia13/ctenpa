@@ -1,7 +1,9 @@
 import express from 'express';
+// const apiRouteSecured = require('../routes/apiRouteSecured.route');
+// const router = express.Router();
+
 
 module.exports = app => {
-
     // config puerto
     app.set('port', process.env.PORT || 3000);
     //entornos
@@ -10,11 +12,16 @@ module.exports = app => {
     // json
     app.use(express.json());
 
+
     app.use((req, res, next) => {
-        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        // res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
         next()
     })
+
+    // rutas
+    // app.use('/api', auth);
+
+    // comprobar token
+
 
 
 

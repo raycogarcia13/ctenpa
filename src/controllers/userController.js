@@ -9,7 +9,11 @@ module.exports = app => {
         },
         getUserById: async (req, res) => {
             console.log(req.body.id);
-            let currentUser = await user.findByPk(req.body.id)
+            let currentUser = await user.findByPk(req.body.id, {
+                include: [{
+                    model: app.db.models.Rol,
+                }]
+            })
             return res.status(200).json(currentUser);
         },
         createOrUpdateUser: async (req, res) => {
@@ -55,7 +59,9 @@ module.exports = app => {
             res.send('se elimino el usuario');
             return res.status(200).json(deletedTask)
 
-        }
+        },
+
+
     }
 
 }
