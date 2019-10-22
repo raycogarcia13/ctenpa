@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt'
+
 module.exports = app => {
     const user = app.db.models.Usuario;
     return {
@@ -11,18 +13,37 @@ module.exports = app => {
             return res.status(200).json(currentUser);
         },
         createOrUpdateUser: async (req, res) => {
-            console.log(req.body.id);
-            let id = req.body.id;
-            if (id) {
-                const updUser = await user.update(req.body, {
-                    where: {
-                        id: id
-                    }
-                })
-                return res.status(200).json(updUser)
+            try {
+                const salt = await bcrypt.genSalt(16);
+                const hashed = await bcrypt.hashSync(req.body.password, salt);
+
+                let insertUser = {
+                    username: req.body.username,
+                    descripcion: req.body.descripcion,
+                    password: hashed,
+                    email: req.body.email,
+                    RolId: req.body.RolId
+                }
+
+                //    actualizar en caso de q pase el id
+                let id = req.body.id;
+                if (id) {
+                    const updUser = await user.update(insertUser, {
+                        where: {
+                            id: id
+                        }
+                    })
+                    return res.status(201).json(updUser)
+                }
+
+                // insertar el usuario
+                const newUser = await user.create(insertUser)
+                return res.status(201).json(newUser);
+            } catch (error) {
+                res.status(500).send();
             }
-            const newUser = await rol.create(req.body)
-            return res.status(200).json(newUser);
+
+
         },
         deleteUser: async (req, res) => {
             let id = req.body.id;
