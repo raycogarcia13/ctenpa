@@ -1,33 +1,49 @@
-module.exports = {
-    login: (req, res, next) => {
-        console.log("caso login");
-        var params = req.body;
-        var username = params.username;
-        var password = params.password;
-        User.findOne({
-                username: username
-            })
-            .then(user => {
-                if (user === null || !bcrypt.compareSync(password, user.password))
-                    next(new error_types.Error404("Usuario o Contraseña incorrecta"));
-                else {
-                    console.log("*** comienza generacion token*****");
-                    const payload = {
-                        sub: user.id,
-                        exp: Math.round(Date.now() / 1000) + parseInt(process.env.JWT_LIFETIME),
-                        username: user.username
-                    };
-                    const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET, {
-                        algorithm: process.env.JWT_ALGORITHM
-                    });
-                    res.json({
-                        data: {
-                            token: token
-                        }
-                    });
-                }
-            })
-            .catch(err => next(err)) // error en DB
-    }
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-}
+module.exports = app => {
+  const User = app.db.models.Usuario;
+  return {
+    login: (req, res, next) => {
+      let params = req.body;
+      let username = params.username;
+      let password = params.password;
+      User.findOne({
+          where: {
+            username: req.body.username
+          },
+          include: [{
+            model: app.db.models.Rol,
+          }]
+        })
+        .then(user => {
+          if (user === null || !bcrypt.compareSync(password, user.password))
+            return (res.send("Usuario o Contraseña incorrecta"));
+          else {
+            console.log("*** comienza generacion token***");
+            const payload = {
+              sub: user.id,
+              username: user.username,
+              rolid: user.RolId,
+              rol: user.Rol.rol
+            };
+            const token = jwt.sign(
+              JSON.stringify(payload),
+              process.env.JWT_SECRET, {
+                algorithm: process.env.JWT_ALGORITHM
+              }
+            );
+            return res.header('secret', token).json({
+              data: {
+                user: user,
+                token: token
+              }
+            });
+          }
+        })
+        .catch(err => next(err)); // error en DB
+    }
+  };
+};
