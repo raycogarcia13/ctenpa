@@ -9,10 +9,10 @@
             <form method="post">
                 <div class="body bg-white">
                     <div class="form-group">
-                        <input type="text" name="userid" class="form-control" placeholder="User ID"/>
+                        <input type="text" name="userid" v-model="username" class="form-control" placeholder="User ID"/>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control" placeholder="Password"/>
+                        <input type="password" name="password" v-model="password" class="form-control" placeholder="Password"/>
                     </div>          
                     <div class="form-group">
                         <input type="checkbox" name="remember_me"/> Recordar

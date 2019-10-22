@@ -19,6 +19,7 @@ module.exports = app => {
           }]
         })
         .then(user => {
+          // console.log(user);
           if (user === null || !bcrypt.compareSync(password, user.password))
             return res.json({
               status: 401,
