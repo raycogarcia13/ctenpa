@@ -61,6 +61,14 @@ export default {
         if(this.autenticado)
             this.$router.push("/home");
 
+        // this.$api.post('user',{
+        //     username:'kronos',
+        //     password:'kronosk13',
+        //     email:'rayco.garcia13@nauta.cu',
+        //     des:'Administrador Rayco',
+        //     RolId:'90f07d16-f4f7-11e9-b0b3-6155f7e7f629',
+        // })
+
            
     },
 }
