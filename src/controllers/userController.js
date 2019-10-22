@@ -8,15 +8,14 @@ module.exports = app => {
             return res.status(200).json(us);
         },
         getUserById: async (req, res) => {
-            console.log(req.body.id);
-            let currentUser = await user.findByPk(req.body.id, {
+            let currentUser = await user.findByPk(req.params.id, {
                 include: [{
                     model: app.db.models.Rol,
                 }]
             })
             return res.status(200).json(currentUser);
         },
-        createOrUpdateUser: async (req, res) => {
+        UpdateUser: async (req, res) => {
             try {
                 const salt = await bcrypt.genSalt(16);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
@@ -28,9 +27,8 @@ module.exports = app => {
                     email: req.body.email,
                     RolId: req.body.RolId
                 }
-
                 //    actualizar en caso de q pase el id
-                let id = req.body.id;
+                let id = req.params.id;
                 if (id) {
                     const updUser = await user.update(insertUser, {
                         where: {
@@ -39,18 +37,33 @@ module.exports = app => {
                     })
                     return res.status(201).json(updUser)
                 }
-
-                // insertar el usuario
-                const newUser = await user.create(insertUser)
-                return res.status(201).json(newUser);
             } catch (error) {
                 res.status(500).send();
             }
 
 
         },
+
+        createUser: async (req, res) => {
+            try {
+                const salt = await bcrypt.genSalt(16);
+                const hashed = await bcrypt.hashSync(req.body.password, salt);
+
+                let insertUser = {
+                    username: req.body.username,
+                    descripcion: req.body.descripcion,
+                    password: hashed,
+                    email: req.body.email,
+                    RolId: req.body.RolId
+                }
+                const newUser = await user.create(insertUser)
+                return res.status(201).json(newUser);
+            } catch (error) {
+                res.status(500).send();
+            }
+        },
         deleteUser: async (req, res) => {
-            let id = req.body.id;
+            let id = req.params.id;
             const deletedTask = await user.destroy({
                 where: {
                     id: id
