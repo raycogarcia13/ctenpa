@@ -9,10 +9,10 @@
             <form method="post">
                 <div class="body bg-white">
                     <div class="form-group" :class='{ "has-error":validar}'>
-                        <b-input type="text" name="val" :state="validar" v-model="user.username" class="form-control" placeholder="User ID"/>
+                        <b-input type="text" name="val" @keyup.enter="sendLogin" :disabled="cargando" :state="validar" v-model="user.username" class="form-control" placeholder="Nombre de Usuario"/>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="val2"  :state="validar" v-model="user.password" class="form-control" placeholder="Password"/>
+                        <input type="password" name="val2" @keyup.enter="sendLogin" :disabled="cargando"  :state="validar" v-model="user.password" class="form-control" placeholder="Contraseña"/>
                         <b-form-invalid-feedback :state="validar" class="text-center">
                            {{error}}
                         </b-form-invalid-feedback>
@@ -20,9 +20,12 @@
                     <div class="form-group">
                         <input type="checkbox" name="remember_me"/> Recordar
                     </div>
+                    <div v-if="cargando" class="text-center">
+                        <b-img src="/assets/images/loader.gif"></b-img>
+                    </div>
                 </div>
                 <div class="footer">                                                               
-                    <button type="button" @click="sendLogin" class="btn bg-olive btn-block">Entrar</button>  
+                    <button type="button" :disabled="cargando" @click="sendLogin" class="btn bg-olive btn-block">Entrar</button>  
                     
                     <router-link :to="{ name:'home' }" class="text-center">Registrar <code class="text-warning">solo para desarrollo</code></router-link>
                 </div>
@@ -42,7 +45,8 @@ export default {
     data() {
         return {
             user:{username:null,password:null},
-            error:null
+            error:null,
+            cargando:false
         }
     },
     computed: {
@@ -50,29 +54,28 @@ export default {
         validar()
         {
             return !this.error;
+        },
+        cargar()
+        {
+            this.cargando=!this.cargando;
         }
 
     },
     methods: {
         ...mapActions(['sigin']),
         sendLogin(){
-            console.log(this.user);
+            this.cargar;
             this.$api.post('login',this.user).then(res=>{
-                console.log(res.status);
-                // if(res.data.status)
-                // {
-                //     this.error=res.data.msg;
-                //     this.$swal({title:"Error",type:'error',text:this.error,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
-                // }
-                // else
-                // {
-                //     let tkn=res.headers.secret;
-                //     let user=res.data.data.user;
-                //     user.token=tkn;
-                //     this.sigin(user);
-                //     this.$router.go('/home');
-                //     this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
-                // }
+                    this.cargar;
+                    this.$router.go('/home');
+                    let tkn=res.headers.secret;
+                    let user=res.data.data.user;
+                    user.token=tkn;
+                    this.sigin(user);
+                    this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+            }).catch((error)=> {
+                    this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    this.cargando=false;
             })
             
         }

@@ -49,10 +49,10 @@ export default new Vuex.Store({
         },
         signout({commit})
         {
-            commit('actionLogout');
             sessionStorage.removeItem('ctenpa-user');  
             sessionStorage.removeItem('ctenpa-secret');  
             router.go('/');
+            commit('actionLogout');
         }
     }
 })

@@ -21,16 +21,10 @@ module.exports = app => {
         .then(user => {
           // console.log(user);
           if (user === null) {
-            return res.json({
-              status: 401,
-              msg: "Usuario incorrecta"
-            }).status(401).send();
+              return res.status(400).send("Usuario incorrecto");
           } else {
             if (!bcrypt.compareSync(password, user.password))
-              return res.json({
-                status: 401,
-                msg: "Contraseña incorrecta"
-              }).status(401).send();
+              return res.status(400).send("Usuario incorrecto");
             else {
               console.log("*** comienza generacion token***");
               const payload = {
