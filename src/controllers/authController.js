@@ -45,12 +45,12 @@ module.exports = app => {
                   algorithm: process.env.JWT_ALGORITHM
                 }
               );
-              return res.header('secret', token).json({
+              return res.status(200).header('secret', token).json({
                 data: {
                   user: user,
                   token: token
                 }
-              }).status(200).send('Autorizado Correctamente');
+              });
             }
           }
 
