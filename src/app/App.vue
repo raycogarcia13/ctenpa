@@ -14,7 +14,7 @@
 <script>
 import Sider from './views/Sider.vue'
 import Header from './views/Header.vue'
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
     name:'app',
     data() {
@@ -24,17 +24,22 @@ export default {
     },
     computed: {
         ...mapState(['autenticado','siderShow']),
-        mostrar(){
-            if(this.autenticado)
-                return 'block';
-            return 'none';
-        }
     },
     components:{
         Sider,Header
     },
-    mounted(){
-        // console.log(this.autenticado)
+    methods: {
+      ...mapActions(['verify']) 
+    },
+    created(){
+        this.verify().then((tkn)=>{
+            if(this.autenticado && this.$router.currentRoute.name=="login")
+                this.$router.push('/home');
+            else if(!this.autenticado && this.$router.currentRoute.name!="login")
+            {
+                this.$router.push('/');
+            }
+        });
     }
 }
 </script>
