@@ -20,7 +20,7 @@ module.exports = app => {
         })
         .then(user => {
           // console.log(user);
-          if (user.username === null) {
+          if (user === null) {
             return res.json({
               status: 401,
               msg: "Usuario incorrecta"
