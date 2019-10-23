@@ -6,13 +6,12 @@ module.exports = app => {
             return res.status(200).json(us);
         },
         getRolById: async (req, res) => {
-            console.log(req.body.id);
+            console.log(req.params.id);
             let currentRol = await rol.findByPk(req.body.id)
             return res.status(200).json(currentRol);
         },
-        createOrUpdateRol: async (req, res) => {
-            console.log(req.body.id);
-            let id = req.body.id;
+        UpdateRol: async (req, res) => {
+            let id = req.params.id;
             if (id) {
                 const updRol = await rol.update(req.body, {
                     where: {
@@ -21,11 +20,15 @@ module.exports = app => {
                 })
                 return res.status(200).json(updRol)
             }
+        },
+
+        createRol: async (req, res) => {
             const newRol = await rol.create(req.body)
             return res.status(200).json(newRol);
         },
+
         deleteRol: async (req, res) => {
-            let id = req.body.id;
+            let id = req.params.id;
             const deletedTask = await rol.destroy({
                 where: {
                     id: id
