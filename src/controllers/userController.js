@@ -17,7 +17,7 @@ module.exports = app => {
         },
         UpdateUser: async (req, res) => {
             try {
-                const salt = await bcrypt.genSalt(16);
+                const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
 
                 let insertUser = {
@@ -46,7 +46,7 @@ module.exports = app => {
 
         createUser: async (req, res) => {
             try {
-                const salt = await bcrypt.genSalt(16);
+                const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
 
                 let insertUser = {
