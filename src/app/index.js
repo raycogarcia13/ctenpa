@@ -5,7 +5,9 @@ import store from './store';
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'sweetalert2/dist/sweetalert2.min.css';
 import axios from 'axios'
+import VueSweetalert2 from 'vue-sweetalert2';;
 
 Vue.use({
     install (Vue) {
@@ -16,6 +18,8 @@ Vue.use({
 })
 
 Vue.use(BootstrapVue);
+ 
+Vue.use(VueSweetalert2);
 
 
 Vue.config.productionTip = false;

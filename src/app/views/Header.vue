@@ -31,7 +31,7 @@
                     
                     <b-nav-item-dropdown text="Usuario" right>
                         <b-dropdown-item href="#">Perfil</b-dropdown-item>
-                        <b-dropdown-item href="#">Salir</b-dropdown-item>
+                        <b-dropdown-item @click="signout">Salir</b-dropdown-item>
                     </b-nav-item-dropdown>
                             <!-- Menu Footer-->
                 </b-navbar-nav>
@@ -39,7 +39,7 @@
     </header>
 </template>
 <script>
-import { mapState , mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 export default {
     name:"Header",
     data() {
@@ -51,7 +51,8 @@ export default {
         ...mapState(['siderShow']),
     },
     methods: {
-        ...mapMutations(['toogleSidebar'])        
+        ...mapMutations(['toogleSidebar']),
+        ...mapActions(['signout']),
     },
 }
 </script>
