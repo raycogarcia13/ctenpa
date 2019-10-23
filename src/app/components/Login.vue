@@ -56,22 +56,23 @@ export default {
     methods: {
         ...mapActions(['sigin']),
         sendLogin(){
+            console.log(this.user);
             this.$api.post('login',this.user).then(res=>{
-                console.log(res.data);
-                if(res.data.status)
-                {
-                    this.error=res.data.msg;
-                    this.$swal({title:"Error",type:'error',text:this.error,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
-                }
-                else
-                {
-                    let tkn=res.headers.secret;
-                    let user=res.data.data.user;
-                    user.token=tkn;
-                    this.sigin(user);
-                    this.$router.go('/home');
-                    this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
-                }
+                console.log(res.status);
+                // if(res.data.status)
+                // {
+                //     this.error=res.data.msg;
+                //     this.$swal({title:"Error",type:'error',text:this.error,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                // }
+                // else
+                // {
+                //     let tkn=res.headers.secret;
+                //     let user=res.data.data.user;
+                //     user.token=tkn;
+                //     this.sigin(user);
+                //     this.$router.go('/home');
+                //     this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                // }
             })
             
         }

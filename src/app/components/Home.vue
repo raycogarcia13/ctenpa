@@ -1,15 +1,15 @@
 <template>
     <div>
-        <b-container class="content-header">
+        <div class="content-header">
                     <h2>
                         Bienvenido
                         <small><code>Control panel</code></small>
                     </h2>
-        </b-container>
-        <b-container class="content">
-            
+        </div>
+        <div class="content">
+            asdasd
 
-        </b-container>
+        </div>
     </div>
 </template>
 
