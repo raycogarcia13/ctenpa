@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <Header v-if="autenticado"></Header>
-         <div v-if="autenticado" class="wrapper row-offcanvas row-offcanvas-left">
+         <div v-if="autenticado" class="wrapper row-offcanvas row-offcanvas-left" :class="{'relative active':!siderShow}" >
             <Sider ></Sider>
              <aside class="right-side" :class="{'strech':!siderShow}">                
                 <router-view></router-view>
@@ -54,5 +54,8 @@ export default {
 
 .cursor-pointer{
     cursor: pointer;
+}
+.content{
+    min-height: 100px;
 }
 </style>
