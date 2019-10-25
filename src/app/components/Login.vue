@@ -6,13 +6,13 @@
             </div>
             <br>
             <div class="header"><b>C</b>ontrol de <b>T</b>iempo Trabajado</div>
-            <form method="post">
+            <b-form>
                 <div class="body bg-white">
-                    <div class="form-group" :class='{ "has-error":validar}'>
-                        <b-input type="text" v-validate="'required'" @keyup.enter="sendLogin" :disabled="cargando" :state="validar" v-model="user.username" class="form-control" placeholder="Nombre de Usuario"/>
+                    <div class="form-group" :class='{ "has-error":errors.username.status}'>
+                        <b-input type="text" @keyup.enter="sendLogin" :disabled="cargando"  :state="errors.username.status"  v-model="user.username"  class="form-control" placeholder="Nombre de Usuario"/>
                     </div>
                     <div class="form-group">
-                        <input type="password" v-validate="'required|min:5'" @keyup.enter="sendLogin" :disabled="cargando"  :state="validar" v-model="user.password" class="form-control" placeholder="Contraseña"/>
+                        <input type="password" @keyup.enter="sendLogin" :disabled="cargando"  :state="errors.password.status" v-model="user.password"  class="form-control" placeholder="Contraseña"/>
                         <b-form-invalid-feedback :state="validar" class="text-center">
                            {{error}}
                         </b-form-invalid-feedback>
@@ -29,7 +29,7 @@
                     
                     <router-link :to="{ name:'home' }" class="text-center">Registrar <code class="text-warning">solo para desarrollo</code></router-link>
                 </div>
-            </form>
+            </b-form>
 
             <div class="margin text-center">
                 Desarrollado por <code>r@ncode</code> <b-img ></b-img>
@@ -47,6 +47,10 @@ export default {
         return {
             user:{username:null,password:null},
             error:null,
+            errors:{
+                username:{status:true,msg:""},
+                password:{status:true,msg:""}
+            },
             cargando:false
         }
     },
@@ -60,11 +64,13 @@ export default {
         {
             this.cargando=!this.cargando;
         }
-
     },
     methods: {
         ...mapActions(['sigin']),
         sendLogin(){
+            this.validateAll();
+            if(this.error)
+                return;
             this.cargar;
             this.$api.post('login',this.user).then(res=>{
                     this.cargar;
@@ -80,7 +86,40 @@ export default {
                     this.cargando=false;
             })
             
+        },
+        validateAll()
+        {
+            this.clear();
+            if(this.user.username=='')
+            {
+                this.errors.username.status=false;
+                this.errors.username.msg="Este campo es obligaorio";
+                this.error=true;
+            }
+            
+            if(this.user.password==''){
+                this.errors.password.status=false;
+                this.errors.password.msg="Este campo es obligaorio";
+                this.error=true;
+            }else if(this.password==''){
+                this.errors.password.status=false;
+                this.errors.password.msg="La conraseña debe tener al menos 3 caracteres";
+                this.error=true;
+            }
+
+            console.log(this.errors,this.error)
+        },
+        clear()
+        {
+           this.errors={
+            username:{status:true,msg:""},
+            password:{status:true,msg:""}
+            };
+            this.error=false; 
         }
+    },
+    created(){
+        this.clear();
     },
     mounted(){
         // this.$api.post('user',{
