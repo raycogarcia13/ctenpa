@@ -23,5 +23,7 @@ export default {
         }
     },
     computed: mapMutations(['logged']),
+    mounted() {
+    },
 }
 </script>

@@ -4,9 +4,9 @@ module.exports = app => {
     // const log = app.controllers.verifyController;
 
     // app.route('/user')
-    app.get('/user', (req, res) => {
-        res.send('akjsdka')
-    })
+    // app.get('/user', (req, res) => {
+    //     res.send('akjsdka')
+    // })
     // .delete(control.deleteUser)
     // .put(control.createOrUpdateUser)
     // .post(control.getUserById);
