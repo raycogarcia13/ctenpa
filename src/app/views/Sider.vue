@@ -12,19 +12,18 @@
                         </li>
                         <li>
                             <a href="pages/widgets.html">
-                                <i class="fa fa-th"></i> <span>Widgets</span> <small class="badge pull-right bg-green">new</small>
+                                <i class="fa fa-th"></i> <span>Rellenar CT</span> <small class="badge pull-right bg-green">Importante</small>
                             </a>
                         </li>
-                        <li class="treeview active">
-                            <a href="#">
-                                <i class="fa fa-bar-chart-o"></i>
-                                <span>Charts</span>
-                                <i class="fa fa-angle-left pull-right"></i>
+                        <li class="treeview" :class="{'active':showed=='user'}">
+                            <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
+                                <i class="fa fa-users"></i>
+                                <span>Usuarios</span>
+                                <i class="fa pull-right" :class="flechita('user')"></i>
                             </a>
-                            <ul class="treeview-menu">
-                                <li><a href="pages/charts/morris.html"><i class="fa fa-angle-double-right"></i> Morris</a></li>
-                                <li><a href="pages/charts/flot.html"><i class="fa fa-angle-double-right"></i> Flot</a></li>
-                                <li><a href="pages/charts/inline.html"><i class="fa fa-angle-double-right"></i> Inline charts</a></li>
+                            <ul class="treeview-menu" :style="{'display':mostrar('user')}" >
+                                <li><router-link :to="{name:'users'}"><i class="fa fa-table"></i> Listado</router-link></li>
+                                <li><router-link :to="{name:'add-user'}"><i class="fa fa-plus"></i> Nuevo</router-link></li>
                             </ul>
                         </li>
                     </ul>
@@ -35,14 +34,33 @@
 import { mapState } from 'vuex';
 export default {
     name:"Header",
+    data() {
+        return {
+            showed:null,
+        }
+    },
     computed: {
         ...mapState(['siderShow']),
     },
     methods: {
-        active(item)
-        {
+        active(item) {
             return item;
+        },
+        mostrarSubMenu(sub){
+            if(this.showed==sub)
+                this.showed=null;
+            else
+                this.showed=sub;
+        },
+        flechita(sub)
+        {
+            return (this.showed==sub)?"fa-angle-down":"fa-angle-left";
+        },
+        mostrar(sub)
+        {
+            return (this.showed==sub)?"block":"none";
         }
+
     },
     mounted(){
 

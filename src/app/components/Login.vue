@@ -73,7 +73,8 @@ export default {
                     let user=res.data.data.user;
                     user.token=tkn;
                     this.sigin(user);
-                    this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top',showConfirmButton:false,timer:3000});
+
             }).catch((error)=> {
                     this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                     this.cargando=false;

@@ -24,7 +24,6 @@ export default {
     },
     computed: mapMutations(['logged']),
     mounted() {
-        this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top',showConfirmButton:false,timer:3000});
     },
 }
 </script>

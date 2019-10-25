@@ -30,9 +30,8 @@
                     <b-dropdown-item href="#">FA</b-dropdown-item>
                 </b-nav-item-dropdown>
                 
-                <b-nav-item-dropdown :text="user_signed.username" right>
+                <b-nav-item-dropdown :text="capitalizeUs" right>
                     <b-dropdown-item href="#"><i class="fa fa-user"></i> Perfil</b-dropdown-item>
-                    <b-dropdown-item to="/user/add">Crear</b-dropdown-item>
                      <b-dropdown-divider></b-dropdown-divider>
                     <b-dropdown-item @click="signout"><i class="fa fa-ban"></i> Salir</b-dropdown-item>
                 </b-nav-item-dropdown>
@@ -47,19 +46,19 @@ export default {
     name:"Header",
     data() {
         return {
-            
+         
         }
     },
     computed: {
         ...mapState(['siderShow','user_signed']),
         capitalizeUs()
         {
-            return text.charAt(0).toUpperCase() + text.slice(1);
+            return this.user_signed.username.charAt(0).toUpperCase() + this.user_signed.username.slice(1);
         }
     },
     methods: {
         ...mapMutations(['toogleSidebar']),
-        ...mapActions(['signout']),
+        ...mapActions(['signout'])
     },
 }
 </script>
