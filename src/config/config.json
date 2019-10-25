@@ -19,7 +19,7 @@
   },
   "production": {
     "username": "postgres",
-    "password": "postgres",
+    "password": "many",
     "database": "ctenpa",
     "host": "127.0.0.1",
     "dialect": "postgres",

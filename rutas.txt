@@ -1,0 +1,8 @@
+// --------------------------Rutas-------------------
+ app.route('/api/user')
+         .get(obtienes todos los user)
+         .post(username,descripcion,password,email);
+ app.route('/api/user/:id')
+         .delete(log.authenticated, control.deleteUser)
+         .get(log.authenticated, control.getUserById)
+         .put(log.authenticated, control.UpdateUser)
