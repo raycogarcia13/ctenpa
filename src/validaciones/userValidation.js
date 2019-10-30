@@ -1,15 +1,21 @@
 import jwt from 'jsonwebtoken'
 
 module.exports = app =>{
-    return{
-         redireccionador:(token,rol, next)=>{
-           token = req.headers['secret'];          
+    
+      return{
+         HasRole(role) {          
+        return function(req, res, next) {
+          let token = req.headers['secret'];          
           // decode 
           let getToken = jwt.decode(token);
-           rol = getToken.rol;           
-         next()
-         }
-}
+          let rol = getToken.rol; 
+          if (role !== rol) res.status(400).send("No tiene acceso");
+          else next();
+        }
+      }
+      }
+         
+
 }
     
          

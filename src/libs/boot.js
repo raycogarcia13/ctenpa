@@ -6,5 +6,6 @@ module.exports = app => {
     app.listen(app.get('port'), () => {
         console.log('Servidor funcionando en puerto ', app.get('port'));
     });
-    // app.db.models.Usuario.create({username:"Many92",descripcion:"Administrador del sitio",password:"many92",email:"many@locol.cu",RolId:"98dd2980-f86f-11e9-afbb-71f5fc64a3b4"});
+    // app.db.models.Usuario.create({username:"Proyect100",descripcion:"El que proyecta jejeje",password:"many92full",email:"many@locol.cu",RolId:"220b9cf0-fb2c-11e9-954c-4bfb61125b6a"});
+    // app.db.models.Rol.create({rol:"proyectista",name:"Proyectista"});
 }

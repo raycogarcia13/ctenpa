@@ -3,8 +3,7 @@
     "username": "postgres",
     "password": "many92",
     "database": "ctenpa",
-    "host": "127.0.0.1",
-    "port":"5432",
+    "host": "127.0.0.1",    
     "dialect": "postgres",
     "operatorsAliases": false,
     "params": []
