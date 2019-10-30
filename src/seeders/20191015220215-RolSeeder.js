@@ -63,6 +63,13 @@ module.exports = {
           name: "Administrador",
           createdAt: new Date(),
           updatedAt: new Date()
+        },
+        {
+          id: uuid(),
+          rol: "director",
+          name: "Director",
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ], {}
     );

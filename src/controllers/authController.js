@@ -18,8 +18,7 @@ module.exports = app => {
             model: app.db.models.Rol,
           }]
         })
-        .then(user => {
-          // console.log(user);
+        .then(user => {         
           if (user === null) {
             return res.status(401).send("Usuario incorrecto");
           } else {

@@ -1,4 +1,6 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+const Joi = require('@hapi/joi');
+
 
 module.exports = app => {
     const user = app.db.models.Usuario;
@@ -26,7 +28,18 @@ module.exports = app => {
         },
 
         UpdateUser: async (req, res) => {
+
+            let schema = Joi.object().keys({
+                username: Joi.string().min(6).required(),
+                descripcion: Joi.string().required(),
+                password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required(),
+                email : Joi.string().required().email(),
+                RolId: Joi.required()
+              });   
             try {
+
+                const value = await schema.validateAsync(req.body);
+
                 const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
                 let insertUser = {
@@ -44,7 +57,8 @@ module.exports = app => {
                             id: id
                         }
                     })
-                    return res.status(201).json(updUser).send('Update Correcto')
+                    res.send('Update Correcto');
+                    return res.status(201).json(updUser);
                 }
             } catch (error) {
                 res.status(500).send('No se pudo actualizar');
@@ -52,7 +66,17 @@ module.exports = app => {
         },
 
         createUser: async (req, res) => {
-            try {
+                let schema = Joi.object().keys({
+                    username: Joi.string().min(6).required(),
+                    descripcion: Joi.string().required(),
+                    password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required(),
+                    email : Joi.string().required().email(),
+                    RolId: Joi.required()
+                  });                       
+            
+                try {
+                const value = await schema.validateAsync(req.body);
+    
                 const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
                 let insertUser = {
@@ -63,12 +87,16 @@ module.exports = app => {
                     RolId: req.body.RolId
                 }
                 const newUser = await user.create(insertUser)
-                console.log(insertUser, newUser);
-                return res.status(201).json(newUser).send('Creado correctamente');
+               
+                return res.status(201).send('Creado correctamente');
 
-            } catch (error) {
-                res.status(500).send('Hay errores a la hora de insertar los datos');
-            }
+                }
+                catch (err) {
+                    res.send(err.details[0].message);
+                 }
+
+               
+           
         },
         deleteUser: async (req, res) => {
             let id = req.params.id;
@@ -84,6 +112,44 @@ module.exports = app => {
             } catch (error) {
                 res.status(500).send('No se pudo eliminar');
 
+            }
+        },
+
+
+        changePass: async (req, res)=>{
+            
+            let schema = Joi.object().keys({                
+                password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required(),
+                oldpassword: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required()             
+              });   
+            try {
+
+                const value = await schema.validateAsync(req.body);
+                let id = req.params.id;
+                let user= await user.findByPk(id);
+                if(user)
+                {
+                    let oldpass=req.body.oldpassword;
+                    if (!bcrypt.compareSync(oldpass, user.password))
+                    {
+                        return res.status(400).send("password incorrecto");
+                    }
+    
+                    const salt = await bcrypt.genSalt(10);
+                    const hashed = await bcrypt.hashSync(req.body.password, salt);
+                    let pass = { password: hashed }
+                    //    actualizar en caso de q pase el id
+                    
+                    const updUser = await user.update(pass, {
+                        where: {
+                            id: id
+                        }
+                    });
+                    return res.status(201).send('Se ha restablecido su contraseña');
+                }
+               
+            } catch (err) {
+                res.status(500).send(err.details[0].message);
             }
         }
     }
