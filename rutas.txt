@@ -6,3 +6,5 @@
          .delete(id)
          .get(id)
          .put(body, id)
+app.route('/api/user/changePass/:id')
+        .put(oldpassword, newpassword);
