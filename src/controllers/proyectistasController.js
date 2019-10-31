@@ -1,5 +1,6 @@
 module.exports = app => {
     const proyec = app.db.models.Proyectista;
+    
     return {
         getProyectistas: async (req, res) => {
             let us = await proyec.findAll()

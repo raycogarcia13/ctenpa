@@ -2,7 +2,7 @@ import path from 'path'
 
 
 module.exports = app => {
-    const vali = app.validaciones.userValidation;
+  
     app.get('/api', (req, res) => {
         // res.json({
         //     status: "Api CtEnpa",

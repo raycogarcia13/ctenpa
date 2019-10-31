@@ -37,8 +37,8 @@ module.exports = app => {
                 RolId: Joi.required()
               });   
             try {
-
-                const value = await schema.validateAsync(req.body);
+                let id = req.params.id;
+                 await schema.validateAsync(req.body);
 
                 const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
@@ -49,16 +49,15 @@ module.exports = app => {
                     email: req.body.email,
                     RolId: req.body.RolId
                 }
-                //    actualizar en caso de q pase el id
-                let id = req.params.id;
+                //    actualizar en caso de q pase el id              
                 if (id) {
-                    const updUser = await user.update(insertUser, {
+                     await user.update(insertUser, {
                         where: {
                             id: id
                         }
                     })
-                    res.send('Update Correcto');
-                    return res.status(201).json(updUser);
+                   
+                    return res.status(201).res.send('Actualizado Correctamente');
                 }
             } catch (error) {
                 res.status(500).send('No se pudo actualizar');
@@ -75,7 +74,7 @@ module.exports = app => {
                   });                       
             
                 try {
-                const value = await schema.validateAsync(req.body);
+                 await schema.validateAsync(req.body);
     
                 const salt = await bcrypt.genSalt(10);
                 const hashed = await bcrypt.hashSync(req.body.password, salt);
@@ -86,7 +85,7 @@ module.exports = app => {
                     email: req.body.email,
                     RolId: req.body.RolId
                 }
-                const newUser = await user.create(insertUser)
+                 await user.create(insertUser)
                
                 return res.status(201).send('Creado correctamente');
 
@@ -124,7 +123,7 @@ module.exports = app => {
               });   
             try {
 
-                const value = await schema.validateAsync(req.body);
+                 await schema.validateAsync(req.body);
                 let id = req.params.id;
                 let user= await user.findByPk(id);
                 if(user)
@@ -138,9 +137,8 @@ module.exports = app => {
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hashSync(req.body.password, salt);
                     let pass = { password: hashed }
-                    //    actualizar en caso de q pase el id
-                    
-                    const updUser = await user.update(pass, {
+                    //    actualizar en caso de q pase el id                    
+                     await user.update(pass, {
                         where: {
                             id: id
                         }
