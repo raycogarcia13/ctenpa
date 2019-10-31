@@ -2,8 +2,7 @@
 
  module.exports = app => {
      return {
-         authenticated: async (req, res, next) => {
-             console.log(req.headers['secret']);
+         authenticated: async (req, res, next) => {            
              if (!req.headers['secret']) {
                  return res.status(401).send({
                      message: "No tienes acceso a este servicio"

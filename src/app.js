@@ -12,6 +12,7 @@ consign({
     .include('./libs/config.js')
     .then('./db.js')
     .then('./libs/middlewares.js')
+    .then('./validaciones')
     .then('./controllers')
     .then('./routes')
     .then('./libs/boot.js')
