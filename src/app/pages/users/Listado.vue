@@ -37,6 +37,7 @@
     <!-- Main table element -->
     <b-table
       show-empty
+      hover
       small
       stacked="md"
       :items="items"
@@ -52,11 +53,19 @@
         <strong class="text-success">Obteniendo datos...</strong>
       </div>
 <!-- botones -->
+      <template v-slot:cell(number)="row">
+        <span v-html="row.index+1"></span>
+      </template>
+      <template v-slot:cell(createdAt)="data">
+        <span v-html="formatedDate(data.value)"></span>
+      </template>
+      <template v-slot:cell(Rol.name)="data">
+        <span v-html="formatedROl(data.value)"></span>
+      </template>
       <template v-slot:cell(actions)="row">
-        <b-button size="sm" variant="warning" @click="info(row.item, row.index, $event.target)" class="mr-1"><i class="fa fa-key"></i> </b-button>
-        <b-button size="sm" variant="success" @click="info(row.item, row.index, $event.target)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
-        <b-button size="sm" variant="danger" @click="info(row.item, row.index, $event.target)" class="mr-1"><i class="fa fa-trash-o"></i> </b-button>
-        <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1"><i class="fa fa-info"></i> </b-button>
+        <b-button size="sm" variant="warning" @click="passwd(row.item)" class="mr-1"><i class="fa fa-key"></i> </b-button>
+        <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
+        <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash-o"></i> </b-button>
         <b-button size="sm" variant="primary" @click="row.toggleDetails">
           {{ row.detailsShowing ? '-' : '+' }} 
         </b-button>
@@ -85,8 +94,22 @@
     </b-row>
 
     <!-- Info modal -->
-    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-      <pre>{{ infoModal.content }}</pre>
+    <b-modal :id="infoModal.id" ok-variant="success" :title="infoModal.title" @ok="editarUser" @hide="resetInfoModal">
+      <pre v-if="infoModal.content!=''" >{{ infoModal.content }}</pre>
+      <div v-else>
+          <form>
+               <b-form-group> <b-form-input
+                v-model="user.username"
+                type="text"
+                placeholder="Usuario"
+                ></b-form-input></b-form-group><b-form-group>
+                <b-form-input
+                v-model="user.email"
+                type="text"
+                placeholder="correo"
+                ></b-form-input></b-form-group>
+          </form>
+      </div>
     </b-modal>
   </b-container>
 </template>
@@ -97,10 +120,11 @@
       return {
         items: [],
         fields: [
+          { key: 'number', label: '#' },
           { key: 'username', label: 'Usuario', sortable: true, sortDirection: 'desc' },
           { key: 'email', label: 'Correo', sortable: true, sortDirection: 'desc' },
           { key: 'createdAt', label: 'Fecha creado', sortable: true, sortDirection: 'desc' },
-          { key: 'RolId', label: 'Rol', sortable: true, sortDirection: 'desc' },
+          { key: 'Rol.name', label: 'Rol', sortable: true, sortDirection: 'desc' },
           { key: 'actions', label: 'Actions' }
         ],
         totalRows: 1,
@@ -112,7 +136,8 @@
           title: '',
           content: ''
         },
-        isBusy:false
+        isBusy:false,
+        user:{}
 
       }
     },
@@ -131,14 +156,103 @@
       this.getData();
     },
     methods: {
-      info(item, index, button) {
-        this.infoModal.title = `Row index: ${index}`
-        this.infoModal.content = JSON.stringify(item, null, 2)
-        this.$root.$emit('bv::show::modal', this.infoModal.id, button)
+      edit(item) {
+        this.infoModal.title = `Editar Usuario: ${item.username}`
+        this.infoModal.content = '';
+
+        this.user.username=item.username;
+        this.user.email=item.email;
+
+        this.$root.$emit('bv::show::modal', this.infoModal.id);
+      },
+      editarUser(event){
+        event.preventDefault();
+        // this.$root.$emit('bv::show::modal', this.infoModal.id);
+        console.log(this.$event);
+        // alert('si');
+      },
+      passwd(item,error='') {
+          this.$swal({
+          title: 'Cambiar contraseñas',
+          html:
+            '<form><input id="swal-input1" placeholder="Contraseña nueva" type="password" autocomplete="false" class="swal2-input">' +
+            '<input id="swal-input2" placeholder="Repita la contraseña nueva" type="password" autocomplete="false" class="swal2-input">'+
+            '<span class="text-center text-danger">'+error+'</span></form>',
+          focusConfirm: false,
+          preConfirm: () => {
+            return {
+              pass:document.getElementById('swal-input1').value,
+              pass2:document.getElementById('swal-input2').value
+            }
+          }
+        }).then(values=>{
+          if(values.dismiss)
+            return;
+          let pass=values.value.pass;
+          let pass2=values.value.pass2;
+          if(pass=='' || pass.length<3)
+          {
+            return this.passwd(item,'La contraseñas no puede estar en blanco o debe tener al menos 3 caracteres');
+          }
+          else if(pass!=pass2){
+            return this.passwd(item,'Las contraseñas no coinciden');
+          }
+
+           let url='/user/'+item.id;
+              this.$api.put(url,{
+                    username:item.username,
+                    descripcion:item.descripcion,
+                    password:pass,
+                    email:item.email,
+                    RolId:item.RolId
+                  },{
+                  headers:{
+                      'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+                  },
+                  
+              }).then(res=>{
+                  this.$swal({title:"Correcto",type:'success',text:'Contraseña actualizada correctamente',toast:true,position:'top',showConfirmButton:false,timer:3000});
+                  this.getData();
+              }).catch(error=>{
+                  this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+              })
+
+        })
+      },
+      deleteUser(item)
+      {
+        this.$swal({
+          title: 'Eliminar usuario?',
+          text: "Está seguro de querer eliminar al usuario "+item.username+"!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Eliminar!'
+        }).then((result) => {
+          if (result.value) {
+
+              let url='/user/'+item.id;
+              this.$api.delete(url,{
+                  headers:{
+                      'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+                  }
+              }).then(res=>{
+                  this.$swal({title:"Correcto",type:'success',text:'Usuario eliminado correctamente',toast:true,position:'top',showConfirmButton:false,timer:3000});
+                  this.getData();
+              }).catch(error=>{
+                  this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+              })
+          }
+        })
       },
       resetInfoModal() {
         this.infoModal.title = ''
         this.infoModal.content = ''
+      },
+      changePassword(item,index,button)
+      {
+
       },
       onFiltered(filteredItems) {
         // Trigger pagination to update the number of buttons/pages due to filtering
@@ -160,6 +274,23 @@
               this.isBusy=false;
               console.log(err); 
           })
+      },
+      formatedROl(data)
+      {
+        if(data=='Administrador')
+          return '<span class="badge badge-danger">'+data+'</span>';
+        if(data=='Jefe de Área')
+          return '<span class="badge badge-info">'+data+'</span>';
+        
+        return data;
+      },
+      formatedDate(data)
+      {
+        data=new Date(data);
+        let day=data.getDate();
+        let month=data.getMonth();
+        let year=data.getFullYear();
+        return `${day}/${month}/${year}`;
       }
     }
   }

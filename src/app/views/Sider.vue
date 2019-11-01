@@ -10,12 +10,12 @@
                                 <i class="fa fa-home"></i> <span>Incio</span>
                             </router-link>
                         </li>
-                        <li>
+                        <li v-if="hasPermission('proyectista')">
                             <a href="pages/widgets.html">
                                 <i class="fa fa-th"></i> <span>Rellenar CT</span> <small class="badge pull-right bg-green">Importante</small>
                             </a>
                         </li>
-                        <li class="treeview" :class="{'active':showed=='user'}">
+                        <li v-if="hasPermission('admin')" class="treeview" :class="{'active':showed=='user'}">
                             <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
                                 <i class="fa fa-users"></i>
                                 <span>Usuarios</span>
@@ -23,7 +23,7 @@
                             </a>
                             <ul class="treeview-menu" :style="{'display':mostrar('user')}" >
                                 <li><router-link :to="{name:'users'}"><i class="fa fa-table"></i> Listado</router-link></li>
-                                <li><router-link :to="{name:'add-user'}"><i class="fa fa-plus"></i> Nuevo</router-link></li>
+                                <li><router-link :to="{name:'add-user'}"><i class="fa fa-plus"></i> Crear Usuario</router-link></li>
                             </ul>
                         </li>
                     </ul>
@@ -40,7 +40,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['siderShow']),
+        ...mapState(['siderShow','user_signed']),
     },
     methods: {
         active(item) {
@@ -59,6 +59,12 @@ export default {
         mostrar(sub)
         {
             return (this.showed==sub)?"block":"none";
+        },
+        hasPermission(rol)
+        {
+            if(rol==this.user_signed.Rol.rol)
+                return true;
+            return false;
         }
 
     },

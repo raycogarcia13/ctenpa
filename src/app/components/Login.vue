@@ -9,25 +9,33 @@
             <b-form>
                 <div class="body bg-white">
                     <div class="form-group" :class='{ "has-error":errors.username.status}'>
-                        <b-input type="text" @keyup.enter="sendLogin" :disabled="cargando"  :state="errors.username.status"  v-model="user.username"  class="form-control" placeholder="Nombre de Usuario"/>
+                        <b-input type="text" @change="validateAll()" @keyup.enter="sendLogin" :disabled="cargando"  :state="errors.username.status"  v-model="user.username"  class="form-control" placeholder="Nombre de Usuario"/>
+                        <b-form-invalid-feedback v-if="!errors.username.status" :state="validar" class="text-center">
+                           {{errors.username.msg}}
+                        </b-form-invalid-feedback>
                     </div>
                     <div class="form-group">
-                        <input type="password" @keyup.enter="sendLogin" :disabled="cargando"  :state="errors.password.status" v-model="user.password"  class="form-control" placeholder="Contraseña"/>
-                        <b-form-invalid-feedback :state="validar" class="text-center">
-                           {{error}}
+                        <b-input type="password" autocomplete="false" @change="validateAll()" @keyup.enter="sendLogin" :disabled="cargando"  :state="errors.password.status"  v-model="user.password"  class="form-control" placeholder="Contraseña"/>
+                        <b-form-invalid-feedback v-if="!errors.password.status" :state="validar" class="text-center">
+                           {{errors.password.msg}}
                         </b-form-invalid-feedback>
                     </div>          
-                    <div class="form-group">
-                        <input type="checkbox" name="remember_me"/> Recordar
-                    </div>
+                    <b-form-checkbox
+                        id="checkbox-1"
+                        v-model="recordar"
+                        value=true
+                        unchecked-value=false
+                        >
+                        Recordarme
+                    </b-form-checkbox>
+
+
                     <div v-if="cargando" class="text-center">
                         <b-spinner class="align-middle text-success"></b-spinner>
                     </div>
                 </div>
                 <div class="footer">                                                               
-                    <button type="button" :disabled="cargando" @click="sendLogin" class="btn bg-olive btn-block">Entrar</button>  
-                    
-                    <router-link :to="{ name:'home' }" class="text-center">Registrar <code class="text-warning">solo para desarrollo</code></router-link>
+                    <button type="button" :disabled="cargando" @click="()=>{validateAll(); sendLogin()}" class="btn bg-olive btn-block">Entrar</button>  
                 </div>
             </b-form>
 
@@ -45,11 +53,12 @@ export default {
     name:'login',
     data() {
         return {
-            user:{username:null,password:null},
+            user:{username:'',password:''},
+            recordar:false,
             error:null,
             errors:{
-                username:{status:true,msg:""},
-                password:{status:true,msg:""}
+                username:{status:null,msg:""},
+                password:{status:null,msg:""}
             },
             cargando:false
         }
@@ -68,9 +77,12 @@ export default {
     methods: {
         ...mapActions(['sigin']),
         sendLogin(){
-            this.validateAll();
             if(this.error)
+            {
+                this.$swal({title:"Error ",type:'error',text:"El formulario contiene errores, por favor revís   elo.",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                 return;
+            }
+
             this.cargar;
             this.$api.post('login',this.user).then(res=>{
                     this.cargar;
@@ -101,21 +113,17 @@ export default {
                 this.errors.password.status=false;
                 this.errors.password.msg="Este campo es obligaorio";
                 this.error=true;
-            }else if(this.password==''){
+            }else if(this.user.password.length<3){
                 this.errors.password.status=false;
                 this.errors.password.msg="La conraseña debe tener al menos 3 caracteres";
                 this.error=true;
             }
-
-            console.log(this.errors,this.error)
         },
         clear()
         {
-           this.errors={
-            username:{status:true,msg:""},
-            password:{status:true,msg:""}
-            };
-            this.error=false; 
+           this.errors.username.status=true;
+           this.errors.password.status=true;
+           this.error=false; 
         }
     },
     created(){
