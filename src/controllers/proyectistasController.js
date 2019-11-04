@@ -73,7 +73,6 @@ module.exports = app => {
                  salario_hora:req.body.salario_hora,
                  UsuarioId:userId.id,
                  AreaId:req.body.areaId
-
              }
 
              await proyec.create(inserProyect);          
