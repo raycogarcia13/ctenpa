@@ -35,7 +35,7 @@ export default {
         this.verify().then((tkn)=>{
             if(this.autenticado && this.$router.currentRoute.name=="login")
                 this.$router.push('/home');
-            else if(!this.autenticado && this.$router.currentRoute.name!="login")
+             else if(!this.autenticado && this.$router.currentRoute.name!="login")
             {
                 this.$router.push('/');
             }
