@@ -24,7 +24,10 @@ module.exports = app => {
         });
 
         Object.keys(db.models).forEach(key => {
-            db.models[key].associate(db.models);
+            // db.models[key].associate(db.models);
+            if (db.models[key].hasOwnProperty('associate')) {
+                db.models[key].associate(db.models);
+            }
 
         })
     }
