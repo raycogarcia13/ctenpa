@@ -5,6 +5,16 @@
  app.route('/api/user/:id')
          .delete(id)
          .get(id)
-         .put(body, id)
+         .put(username,descripcion,password,email, id)
 app.route('/api/user/changePass/:id')
         .put(oldpassword, newpassword);
+app.route('/api/proyectista')
+        
+        .post(username,descripcion,password,email,RolId, nombre,apellidos,escala_salarial,
+                 cargo,salario_basico,salario_hora,UsuarioId(este ya esta por defecto no tienes q ponerlo),
+                 AreaId);
+app.route('/api/proyectista/:id')
+        .delete(id)
+        .get(id)
+        .put(nombre,apellidos,escala_salarial,cargo,salario_basico,salario_hora,UsuarioId(este ya esta por defecto no tienes q ponerlo),
+                 AreaId);

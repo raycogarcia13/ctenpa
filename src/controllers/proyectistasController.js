@@ -60,26 +60,28 @@ module.exports = app => {
                 }
             });           
             if(currentProyec){ return res.send("El usuario ya existe por favor eliga otro")}
-            await user.create(insertUser);
-            let userId = user.hasOne(Proyectista);
-                console.log(userId);
+            let getId = await user.create(insertUser);
+            let userId = getId;
+               
              let inserProyect = 
              {
-                 id:userId,
                  nombre:req.body.nombre,
                  apellidos:req.body.apellidos,
                  escala_salarial:req.body.escala_salarial,
                  cargo:req.body.cargo,
                  salario_basico:req.body.salario_basico,
-                 salario_hora:req.body.salario_hora
+                 salario_hora:req.body.salario_hora,
+                 UsuarioId:userId.id,
+                 AreaId:req.body.areaId
+
              }
 
              await proyec.create(inserProyect);          
-             return res.status(201).send('Creado correctamente');
+             return res.status(201).send("Insertado Correctamente");
 
             }
             catch (err) {
-                res.send("una mierda error vallaaaaa");
+                res.send(err.details[0].message);
              }         
         },
 

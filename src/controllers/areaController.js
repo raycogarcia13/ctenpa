@@ -1,5 +1,5 @@
 module.exports = app => {
-    const area = app.db.models.Proyectista;
+    const area = app.db.models.Area;
     return {
         getAreas: async (req, res) => {
             let us = await area.findAll()
