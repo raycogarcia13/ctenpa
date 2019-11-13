@@ -10,7 +10,7 @@ module.exports = app => {
                 let us = await user.findAll();
                 return res.status(200).json(us);
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(500).send(err.details);
             }
 
         },
@@ -23,7 +23,7 @@ module.exports = app => {
                 });
                 return res.status(200).json(currentUser);
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(500).send(err.details);
             }
         },
 
@@ -40,12 +40,12 @@ module.exports = app => {
                 await schema.validateAsync(req.body);
 
                 let insertUser = {
-                        username: req.body.username,
-                        descripcion: req.body.descripcion,
-                        email: req.body.email,
-                        RolId: req.body.RolId
-                    };
-                    //    actualizar en caso de q pase el id              
+                    username: req.body.username,
+                    descripcion: req.body.descripcion,
+                    email: req.body.email,
+                    RolId: req.body.RolId
+                };
+                //    actualizar en caso de q pase el id
                 if (id) {
                     await user.update(insertUser, {
                         where: {
@@ -56,7 +56,7 @@ module.exports = app => {
                     return res.status(201).res.send('Actualizado Correctamente');
                 }
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(500).send(err.details);
             }
         },
 
@@ -87,7 +87,7 @@ module.exports = app => {
                 return res.status(201).json(insertUser);
 
             } catch (err) {
-                res.status(400).json(err.details[0]);
+                res.status(400).json(err.details);
             }
 
 
@@ -105,7 +105,7 @@ module.exports = app => {
                 return res.status(200).json(deletedTask)
 
             } catch (err) {
-                res.status(400).send(err.details[0].message);
+                res.status(400).send(err.details);
 
             }
         },
@@ -120,17 +120,17 @@ module.exports = app => {
 
                 await schema.validateAsync(req.body);
                 let id = req.params.id;
-                let user = await user.findByPk(id);
-                if (user) {
+                let usuario = await user.findByPk(id);
+                if (usuario) {
                     let oldpass = req.body.oldpassword;
-                    if (!bcrypt.compareSync(oldpass, user.password)) {
+                    if (!bcrypt.compareSync(oldpass, usuario.password)) {
                         return res.status(400).send("password incorrecto");
                     }
 
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hashSync(req.body.password, salt);
                     let pass = { password: hashed };
-                        //    actualizar en caso de q pase el id                    
+                    //    actualizar en caso de q pase el id
                     await user.update(pass, {
                         where: {
                             id: id
@@ -140,7 +140,7 @@ module.exports = app => {
                 }
 
             } catch (err) {
-                res.status(400).send(err.details[0].message);
+                res.status(500).send(err.details);
             }
         },
 
@@ -153,12 +153,13 @@ module.exports = app => {
 
                 await schema.validateAsync(req.body);
                 let id = req.params.id;
-                let user = await user.findByPk(id);
-                if (user) {
+                let usuario = await user.findByPk(id);
+                if (usuario) {
+
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hashSync(req.body.password, salt);
                     let pass = { password: hashed };
-                        //    actualizar en caso de q pase el id                    
+                    //    actualizar en caso de q pase el id
                     await user.update(pass, {
                         where: {
                             id: id
@@ -166,9 +167,8 @@ module.exports = app => {
                     });
                     return res.status(201).send('Se ha restablecido su contraseña');
                 }
-
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(500).json(err.details);
             }
         }
     }
