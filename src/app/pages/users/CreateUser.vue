@@ -136,7 +136,7 @@ export default {
         getRol(){
             this.$api.get("/rol").then(res=>{
                 this.roles=res.data;
-                // this.usuario.RolId=this.roles[0].id;
+                     // this.usuario.RolId=this.roles[0].id;
                 this.usuario.RolId=null;
             }).catch(err=>{
 
@@ -169,7 +169,7 @@ export default {
                 this.cargando=false;
                 this.$swal({title:"Correcto",type:'success',text:'Usuario insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
             }).catch(error=>{
-                 this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                 this.$swal({title:"Error ",type:'error',text:"Existen errores en el formulario",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                 this.cargando=false;
             })
         },

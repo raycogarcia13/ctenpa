@@ -67,8 +67,9 @@ module.exports = app => {
         createUser: async(req, res) => {
             let schema = Joi.object().keys({
                 username: Joi.string().min(6).required(),
-                descripcion: Joi.string().required(),
-                password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required(),
+                descripcion: Joi.string(),
+                password: Joi.string().required(),
+                password_confirm: Joi.string().required(),
                 email: Joi.string().required().email(),
                 RolId: Joi.required()
             });
@@ -87,10 +88,10 @@ module.exports = app => {
                 }
                 await user.create(insertUser)
 
-                return res.status(201).send('Creado correctamente');
+                return res.status(201).json(insertUser);
 
             } catch (err) {
-                res.send(err.details[0].message);
+                res.status(400).json(err.details[0]);
             }
 
 
