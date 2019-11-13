@@ -45,7 +45,7 @@ module.exports = app => {
                     email: req.body.email,
                     RolId: req.body.RolId
                 };
-                //    actualizar en caso de q pase el id
+                //    actualizar en caso de q pase el id              
                 if (id) {
                     await user.update(insertUser, {
                         where: {
