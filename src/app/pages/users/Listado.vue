@@ -198,13 +198,9 @@
             return this.passwd(item,'Las contraseñas no coinciden');
           }
 
-           let url='/user/'+item.id;
+           let url='/user/changePassAdmin/'+item.id;
               this.$api.put(url,{
-                    username:item.username,
-                    descripcion:item.descripcion,
                     password:pass,
-                    email:item.email,
-                    RolId:item.RolId
                   },{
                   headers:{
                       'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))

@@ -40,12 +40,12 @@ module.exports = app => {
                 await schema.validateAsync(req.body);
 
                 let insertUser = {
-                        username: req.body.username,
-                        descripcion: req.body.descripcion,
-                        email: req.body.email,
-                        RolId: req.body.RolId
-                    };
-                    //    actualizar en caso de q pase el id              
+                    username: req.body.username,
+                    descripcion: req.body.descripcion,
+                    email: req.body.email,
+                    RolId: req.body.RolId
+                };
+                //    actualizar en caso de q pase el id              
                 if (id) {
                     await user.update(insertUser, {
                         where: {
@@ -120,10 +120,10 @@ module.exports = app => {
 
                 await schema.validateAsync(req.body);
                 let id = req.params.id;
-                let user = await user.findByPk(id);
-                if (user) {
+                let usuario = await user.findByPk(id);
+                if (usuario) {
                     let oldpass = req.body.oldpassword;
-                    if (!bcrypt.compareSync(oldpass, user.password)) {
+                    if (!bcrypt.compareSync(oldpass, usuario.password)) {
                         return res.status(400).send("password incorrecto");
                     }
 
@@ -153,8 +153,8 @@ module.exports = app => {
 
                 await schema.validateAsync(req.body);
                 let id = req.params.id;
-                let user = await user.findByPk(id);
-                if (user) {
+                let usuario = await user.findByPk(id);
+                if (usuario) {
 
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hashSync(req.body.password, salt);
@@ -167,9 +167,8 @@ module.exports = app => {
                     });
                     return res.status(201).send('Se ha restablecido su contraseña');
                 }
-
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(500).json(err.details);
             }
         }
     }
