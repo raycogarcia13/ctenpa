@@ -1,29 +1,29 @@
 {
-  "development": {
-    "username": "postgres",
-    "password": "ray",
-    "database": "ctenpa",
-    "host": "127.0.0.1",    
-    "dialect": "postgres",
-    "operatorsAliases": false,
-    "params": []
-  },
-  "test": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "ctenpa",
-    "host": "127.0.0.1",
-    "dialect": "postgres",
-    "operatorsAliases": false,
-    "params": []
-  },
-  "production": {
-    "username": "postgres",
-    "password": "many",
-    "database": "ctenpa",
-    "host": "127.0.0.1",
-    "dialect": "postgres",
-    "operatorsAliases": false,
-    "params": []
-  }
+    "development": {
+        "username": "postgres",
+        "password": "many92",
+        "database": "ctenpa",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "operatorsAliases": false,
+        "params": []
+    },
+    "test": {
+        "username": "postgres",
+        "password": "postgres",
+        "database": "ctenpa",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "operatorsAliases": false,
+        "params": []
+    },
+    "production": {
+        "username": "postgres",
+        "password": "many",
+        "database": "ctenpa",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "operatorsAliases": false,
+        "params": []
+    }
 }

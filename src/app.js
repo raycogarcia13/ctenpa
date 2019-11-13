@@ -4,7 +4,7 @@ import consign from 'consign';
 
 const app = express();
 
-app.use("/app",express.static(__dirname + '/public'))
+app.use("/app",express.static(__dirname + '/public'));
 
 consign({
         cwd: __dirname
