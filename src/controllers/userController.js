@@ -105,7 +105,7 @@ module.exports = app => {
                 return res.status(200).json(deletedTask)
 
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(400).send(err.details[0].message);
 
             }
         },
@@ -129,7 +129,7 @@ module.exports = app => {
 
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hashSync(req.body.password, salt);
-                    let pass = { password: hashed }
+                    let pass = { password: hashed };
                         //    actualizar en caso de q pase el id                    
                     await user.update(pass, {
                         where: {
@@ -140,7 +140,7 @@ module.exports = app => {
                 }
 
             } catch (err) {
-                res.status(500).send(err.details[0].message);
+                res.status(400).send(err.details[0].message);
             }
         },
 
@@ -155,10 +155,9 @@ module.exports = app => {
                 let id = req.params.id;
                 let user = await user.findByPk(id);
                 if (user) {
-
                     const salt = await bcrypt.genSalt(10);
                     const hashed = await bcrypt.hashSync(req.body.password, salt);
-                    let pass = { password: hashed }
+                    let pass = { password: hashed };
                         //    actualizar en caso de q pase el id                    
                     await user.update(pass, {
                         where: {
