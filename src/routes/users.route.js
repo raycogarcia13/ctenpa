@@ -14,4 +14,6 @@ module.exports = app => {
         .put(log.authenticated, vali('admin'), control.changePass);
     app.route('/api/user/changePassAdmin/:id')
         .put(log.authenticated, vali('admin'), control.changePassAdmin);
+    app.route('/api/user/count')
+        .post(log.authenticated, vali('admin'), control.countalluser);
 }

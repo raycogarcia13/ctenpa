@@ -17,12 +17,4 @@ module.exports = app => {
         next()
     })
 
-    // rutas
-    // app.use('/api', auth);
-
-    // comprobar token
-
-
-
-
 }

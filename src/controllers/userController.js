@@ -14,6 +14,18 @@ module.exports = app => {
             }
 
         },
+        countalluser: async(req, res) => {
+            try {
+                let all = await user.findAndCountAll()
+                    // .then(result => {
+                console.log(all.count);
+                // });
+                return res.status(200).json(all.count);
+
+            } catch (error) {
+                res.status(500).send(error);
+            }
+        },
         getUserById: async(req, res) => {
             try {
                 let currentUser = await user.findByPk(req.params.id, {
