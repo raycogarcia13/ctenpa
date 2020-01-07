@@ -95,30 +95,38 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from 'vuex';
 export default {
   name: "Home",
   data() {
     return {
-      alluser: ""
+      alluser: ''
     };
   },
   methods: {
     countUsers() {
-      this.$api
-        .post("user/count")
-        .then(res => {
-          // this.alluser = res.data;
-          this.alluser = 56;
-        })
-        .catch(err => {});
-    }
+     this.$api.post('user/count',{
+              headers:{
+                  'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+              }}).then(res=>{
+                this.alluser=res.data;
+                // this.alluser=res.send('hello')
+               console.log('locol');           
+                        
+            }).catch(err=>{
+              console.log(err)
+            })
+    },
+
+  
   },
   computed: {
     ...mapMutations(["logged"])
   },
   mounted() {
     this.countUsers();
+    console.log('baff');
   }
+    
 };
 </script>

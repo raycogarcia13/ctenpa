@@ -4,7 +4,8 @@ module.exports = app => {
     const vali = app.validaciones.userValidation.HasRole;
     app.route('/api/user')
         .get(log.authenticated, vali('admin'), control.getUsers)
-        .post(log.authenticated, vali('admin'), control.createUser);
+        // .post(log.authenticated, vali('admin'), control.createUser);
+        .post(control.createUser);
     app.route('/api/user/:id')
         .delete(log.authenticated, vali('admin'), control.deleteUser)
         .get(log.authenticated, vali('admin'), control.getUserById)
@@ -15,5 +16,7 @@ module.exports = app => {
     app.route('/api/user/changePassAdmin/:id')
         .put(log.authenticated, vali('admin'), control.changePassAdmin);
     app.route('/api/user/count')
-        .post(log.authenticated, vali('admin'), control.countalluser);
+        .post(control.countalluser);
+    app.route('/api/user/ver')
+        .post(log.authenticated, log.ver);
 }

@@ -4,7 +4,7 @@ module.exports = app => {
 
     app.route('/api/proyecto')
         .get(log.authenticated, control.getProyectos)
-        .post(log.authenticated, control.createProyecto);
+        .post( control.createProyecto);
     app.route('/api/proyecto/:id')
         .delete(log.authenticated, control.deleteProyecto)
         .get(log.authenticated, control.getProyectosById)

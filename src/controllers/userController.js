@@ -4,6 +4,7 @@ const Joi = require('@hapi/joi');
 
 module.exports = app => {
     const user = app.db.models.Usuario;
+    const log = app.controllers.verifyController;
     return {
         getUsers: async(req, res) => {
             try {
@@ -12,7 +13,6 @@ module.exports = app => {
             } catch (err) {
                 res.status(500).send(err.details);
             }
-
         },
         countalluser: async(req, res) => {
             try {
@@ -74,7 +74,7 @@ module.exports = app => {
 
         createUser: async(req, res) => {
             let schema = Joi.object().keys({
-                username: Joi.string().min(6).required(),
+                username: Joi.string().min(5).required(),
                 descripcion: Joi.string(),
                 password: Joi.string().required(),
                 password_confirm: Joi.string().required(),

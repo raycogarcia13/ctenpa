@@ -20,6 +20,10 @@ module.exports = (sequelize , DataTypes) =>{
         descripcion:{
             type:DataTypes.TEXT,
             allowNull:true
+        },
+        terminado:{
+            type:DataTypes.BOOLEAN,
+            allowNull:true
         }
     },{
         tableName:'proyecto'
