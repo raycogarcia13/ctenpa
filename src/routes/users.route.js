@@ -3,7 +3,7 @@ module.exports = app => {
     const log = app.controllers.verifyController;
     const vali = app.validaciones.userValidation.HasRole;
     app.route('/api/user')
-        .get(log.authenticated, vali('admin'), control.getUsers)
+        .get(vali('rhuman'), control.getUsers)
         // .post(log.authenticated, vali('admin'), control.createUser);
         .post(control.createUser);
     app.route('/api/user/:id')

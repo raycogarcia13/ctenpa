@@ -70,7 +70,8 @@ module.exports = app => {
                     salario_basico: req.body.salario_basico,
                     salario_hora: req.body.salario_hora,
                     UsuarioId: userId.id,
-                    AreaId: req.body.areaId
+                    AreaId: req.body.areaId,
+                    EspecialidadId: req.body.especialidadId
                 }
 
                 await proyec.create(inserProyect);

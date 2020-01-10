@@ -3,10 +3,10 @@ module.exports = app => {
     const log = app.controllers.verifyController;
 
     app.route('/api/subproyecto')
-        .get(log.authenticated, control.getSubProyectos)
-        .post(log.authenticated, control.createSubProyecto);
+        .get(control.getSubProyectos)
+        .post(control.createSubProyecto);
     app.route('/api/subproyecto/:id')
-        .delete(log.authenticated, control.deleteSubProyecto)
-        .get(log.authenticated, control.getSubProyectosById)
-        .put(log.authenticated, control.UpdateSubProyecto)
+        .delete(control.deleteSubProyecto)
+        .get(control.getSubProyectosById)
+        .put(control.UpdateSubProyecto)
 }

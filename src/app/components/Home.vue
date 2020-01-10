@@ -23,7 +23,7 @@
                   <i class="ion ion-bag"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  More info
+                  INformación
                   <i class="fas fa-arrow-circle-right"></i>
                 </a>
               </div>
@@ -36,7 +36,7 @@
                 <div class="inner">
                   <h3>65</h3>
 
-                  <p>Unique Visitors</p>
+                  <p>Proyectos</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>
@@ -54,7 +54,7 @@
               <div class="small-box bg-danger">
                 <div class="inner">
                   <h3>{{alluser}}</h3>
-                  <p>Unique Visitors</p>
+                  <p>Contratos</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-pie-graph"></i>

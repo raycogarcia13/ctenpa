@@ -37,6 +37,41 @@
             </li>
           </ul>
         </li>
+
+        <li v-if="hasPermission('rhuman')" class="treeview" :class="{'active':showed=='user'}">
+          <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
+            <i class="fa fa-users"></i>
+            <span>Men&uacute;- RH</span>
+            <i class="fa pull-right" :class="flechita('user')"></i>
+          </a>
+          <ul class="treeview-menu" :style="{'display':mostrar('user')}">
+            <li>
+              <router-link :to="{name:'users'}">
+                <i class="fa fa-table"></i> Control de Actividades
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'rhumans'}">
+                <i class="fa fa-plus"></i> Agregar Área
+              </router-link>
+            </li>
+          </ul>
+        </li>
+            <!-- Jefe de Area -->
+        <li v-if="hasPermission('jArea')" class="treeview" :class="{'active':showed=='user'}">
+          <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
+            <i class="fa fa-users"></i>
+            <span>Men&uacute;- RH</span>
+            <i class="fa pull-right" :class="flechita('user')"></i>
+          </a>
+          <ul class="treeview-menu" :style="{'display':mostrar('user')}">
+              <li>
+              <router-link :to="{name:'rhumans'}">
+                <i class="fa fa-plus"></i> C&aacute;lculo de Tiempo
+              </router-link>
+            </li>
+          </ul>
+        </li>
       </ul>
     </section>
   </aside>

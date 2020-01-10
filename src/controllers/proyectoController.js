@@ -35,19 +35,19 @@ module.exports = app => {
                 })
                 var a = (currentProyec.length == 1) ? currentProyec[0].valor : null;
                 let contador;
-                if (a == null) {
-                    contador = '001';
+                if (a == null || a == 999) {
+                    contador = '000';
                 } else {
                     console.log(a.substr(-3))
                     let trim = a.substr(-3)
                     var tor = parseInt(trim, 10)
                     tor += 1;
-                    contador = ("0000" + tor).slice(-3);
+                    contador = ("000" + tor).slice(-3);
                 }
 
 
                 console.log(contador)
-                let codigo = req.body.area + req.body.lol + contador
+                let codigo = req.body.cod_servicio + req.body.num_contrato + req.body.anno_contrato + contador
 
                 let insertProyecto = {
                     codigo: codigo,
