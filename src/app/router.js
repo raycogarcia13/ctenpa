@@ -9,8 +9,10 @@ import UsListado from './pages/users/Listado.vue'
 import CreateUser from './pages/users/CreateUser.vue'
 import Rhuman from './views/RHuman.vue'
 import JArea from './views/JArea.vue'
-import CreateProyectista from './pages/RecursosHumanos/CreateProyectista.vue'
+import ViewRecursos from './pages/RecursosHumanos/Listado.vue'
+import ViewAreas from './pages/RecursosHumanos/ListadoXareas.vue'
 import Proyectos from './pages/JArea/Proyectos.vue'
+import CreateProyectista from './pages/RecursosHumanos/CreateProyectista.vue'
 
 let routes = [{
         path: '/',
@@ -34,8 +36,9 @@ let routes = [{
         path: '/rhuman/',
         component: Rhuman,
         children: [
-            { path: "/", name: 'rhumans', component: CreateProyectista },
-            // { path: "add", name: 'add-user', component: CreateUser }
+            { path: "/", name: 'rhumans', component: ViewRecursos },
+            { path: "ver", name: 'verXareas', component: ViewAreas },
+            { path: "add", name: 'add-proyectista', component: CreateProyectista }
         ]
     },
     {
@@ -43,7 +46,7 @@ let routes = [{
         component: JArea,
         children: [
             { path: "/", name: 'jarea', component: Proyectos },
-            // { path: "add", name: 'add-user', component: CreateUser }
+
         ]
     }
 ]

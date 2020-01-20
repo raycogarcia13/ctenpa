@@ -1,7 +1,6 @@
 <template>
     <div>
-        <b-form>            
-                <h1>Insertar Proyectista</h1>
+        <b-form>
             <b-row >
     <div class="col-md-6">
     <b-form-group
@@ -21,26 +20,6 @@
                 ></b-form-input>
                 <b-form-invalid-feedback v-if="!errors.username.status" :state="validar" class="text-center">
                     {{errors.username.msg}}
-                </b-form-invalid-feedback>
-            </b-form-group>
-
-            <b-form-group
-                label="Descripción:"
-                label-for="descripcion"
-                :class='{ "has-error":errors.descripcion.status==false}'
-                >
-                <b-form-input
-                id="descripcion"
-                v-model="usuario.descripcion"
-                type="text"
-                required
-                placeholder="Breve descripción del usuario"
-                @change="validateAll()"
-                :disabled="cargando"
-                :state="errors.descripcion.status"
-                ></b-form-input>
-                <b-form-invalid-feedback v-if="!errors.descripcion.status" :state="validar" class="text-center">
-                    {{errors.descripcion.msg}}
                 </b-form-invalid-feedback>
             </b-form-group>
              <b-form-group
@@ -139,28 +118,8 @@
                 <b-form-invalid-feedback v-if="!errors.apellidos.status" :state="validar" class="text-center">
                     {{errors.apellidos.msg}}
                 </b-form-invalid-feedback>
-            </b-form-group>    
-            <b-form-group
-                label="Perfeccionamiento Empresarial:"
-                label-for="perfec_empresarial"
-                :class='{ "has-error":errors.perfec_empresarial.status==false}'
-                >
-                <b-form-input
-                id="perfec_empresarial"
-                v-model="usuario.perfec_empresarial"
-                type="text"
-                required
-                placeholder="Perfeccionamiento"
-                @change="validateAll()"
-                :disabled="cargando"
-                :state="errors.perfec_empresarial.status"
-                ></b-form-input>
-                <b-form-invalid-feedback v-if="!errors.perfec_empresarial.status" :state="validar" class="text-center">
-                    {{errors.perfec_empresarial.msg}}
-                </b-form-invalid-feedback>
-            </b-form-group>        
-          </div>
-    <div class="col-md-6">
+            </b-form-group>
+
             <b-form-group
                 label="Cargo:"
                 label-for="cargo"
@@ -180,26 +139,9 @@
                     {{errors.cargo.msg}}
                 </b-form-invalid-feedback>
             </b-form-group>
+                </div>
+    <div class="col-md-6">
             
-            <b-form-group
-                label="coeficiente:"
-                label-for="coeficiente"
-                :class='{ "has-error":errors.coeficiente.status==false}'
-                >
-                <b-form-input
-                id="cargo"
-                v-model="usuario.coeficiente"
-                type="text"
-                required
-                placeholder="coeficiente"
-                @change="validateAll()"
-                :disabled="cargando"
-                :state="errors.coeficiente.status"
-                ></b-form-input>
-                <b-form-invalid-feedback v-if="!errors.coeficiente.status" :state="validar" class="text-center">
-                    {{errors.coeficiente.msg}}
-                </b-form-invalid-feedback>
-            </b-form-group>
             <b-form-group
                 label="Escala Salarial:"
                 label-for="escala_salarial"
@@ -219,8 +161,6 @@
                     {{errors.escala_salarial.msg}}
                 </b-form-invalid-feedback>
             </b-form-group>
-
-            
             <b-form-group
                 label="Salario Básico:"
                 label-for="salario_basico"
@@ -277,7 +217,7 @@
     <b-form-group id="input-group-3" label="Area:" label-for="area" :class='{ "has-error":errors.areaId.status==false}'>
                 <b-form-select
                 id="areas"
-                v-model="usuario.areaId"
+                v-model="usuario.AreaId"
                 :options="areaSelect()"
                 @change="validateAll()"
                 :state="errors.areaId.status"
@@ -291,7 +231,7 @@
     <b-form-group id="input-group-3" label="Especialidad:" label-for="especialidad" :class='{ "has-error":errors.especialidadId.status==false}'>
                 <b-form-select
                 id="especialidad"
-                v-model="usuario.especialidadId"
+                v-model="usuario.EspecialidadId"
                 :options="especialidadSelect()"
                 @change="validateAll()"
                 :state="errors.especialidadId.status"
@@ -321,22 +261,19 @@ export default {
  name:"CreateProyectista",
     data() {
         return {
-            usuario:{username:'',descripcion:'',password:'',password_confirm:'',email:'',RolId:'',nombre:'',apellidos:'',perfec_empresarial:'',coeficiente:'',escala_salarial:'',cargo:'',salario_basico:'',salario_hora:'',areaId:'',especialidadId:''},
+            usuario:{username:'',password:'',password_confirm:'',email:'',RolId:'',nombre:'',apellidos:'',escala_salarial:'',cargo:'',salario_basico:'',salario_hora:'',AreaId:'',EspecialidadId:''},
             roles:[],
             especialidades:[],
             areas:[],
             error:null,
             errors:{
                 username:{status:null,msg:""},
-                descripcion:{status:null,msg:""},
                 password:{status:null,msg:""},
                 password_confirm:{status:null,msg:""},
                 email:{status:null,msg:""},
                 rol:{status:null,msg:""},
                 nombre:{status:null,msg:""},
                 apellidos:{status:null,msg:""},
-                perfec_empresarial:{status:null,msg:""},
-                coeficiente:{status:null,msg:""},
                 escala_salarial:{status:null,msg:""},
                 cargo:{status:null,msg:""},
                 salario_basico:{status:null,msg:""},
@@ -369,13 +306,13 @@ export default {
             this.$api.get("/especialidad").then(res=>{
                 this.especialidades=res.data;  
                  console.log(res.data)               
-                this.usuario.especialidadId=null;
+                this.usuario.EspecialidadId=null;
             }).catch(err=>{})
         },
         getArea(){
             this.$api.get("/area").then(res=>{
                 this.areas=res.data;                           
-                this.usuario.areaId=null;
+                this.usuario.AreaId=null;
             }).catch(err=>{})
         },
         rolSelect(){
@@ -389,7 +326,7 @@ export default {
           especialidadSelect(){
             let opt=[];
                 opt.push({text:'Escoja un elemento',value:null});
-            this.especialidades.forEach(function(element) {
+            this.areas.forEach(function(element) {
                 opt.push({text:element.especialidad,value:element.id});
             });
             return opt;
@@ -412,18 +349,17 @@ export default {
             }
 
             this.cargando=true;
-            this.$api.post('/proyectista',this.usuario,{
+            this.$api.post("/proyectista",this.usuario,{
                 // data:this.usuario,
                 headers:{
                   'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                 }
             }).then(res=>{
                 this.cargando=false;
-                console.log(this.usuario)
-                this.$swal({title:"Correcto",type:'success',text:'Proyectista insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                this.$swal({title:"Correcto",type:'success',text:'Usuario insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
             }).catch(error=>{
                  this.$swal({title:"Error ",type:'error',text:"Existen errores en el formulario",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
-                 this.cargando=false;
+                this.cargando=false;
             })
         },
         validateAll()
@@ -433,13 +369,6 @@ export default {
             {
                 this.errors.username.status=false;
                 this.errors.username.msg="Este campo es obligaorio";
-                this.error=true;
-            }
-
-           if(this.usuario.descripcion=='')
-            {
-                this.errors.descripcion.status=false;
-                this.errors.descripcion.msg="Este campo es obligaorio";
                 this.error=true;
             }
             
@@ -484,21 +413,6 @@ export default {
                 this.errors.apellidos.msg="Este campo es obligaorio";
                 this.error=true;
             }
-            
-            if(this.usuario.perfec_empresarial=='')
-            {
-                this.errors.perfec_empresarial.status=false;
-                this.errors.perfec_empresarial.msg="Este campo es obligaorio";
-                this.error=true;
-            }
-            
-            if(this.usuario.coeficiente=='')
-            {
-                this.errors.coeficiente.status=false;
-                this.errors.coeficiente.msg="Este campo es obligaorio";
-                this.error=true;
-            }
-            
             if(this.usuario.escala_salarial=='')
             {
                 this.errors.escala_salarial.status=false;
@@ -519,7 +433,6 @@ export default {
                 this.errors.salario_basico.msg="Este campo es obligaorio";
                 this.error=true;
             }
-
             if(this.usuario.salario_hora=='')
             {
                 this.errors.salario_hora.status=false;
@@ -535,14 +448,13 @@ export default {
             }
 
 
-          if(this.usuario.especialidadId==null)
+            if(this.usuario.especialidadId==null)
             {
                 this.errors.especialidadId.status=false;
                 this.errors.especialidadId.msg="Debe escoger una especialidad";
                 this.error=true;
             }
-
-          if(this.usuario.areaId==null)
+               if(this.usuario.areaId==null)
             {
                 this.errors.areaId.status=false;
                 this.errors.areaId.msg="Debe escoger un área";
@@ -552,21 +464,15 @@ export default {
         clear()
         {
            this.errors.username.status=true;
-           this.errors.descripcion.status=true;
            this.errors.password.status=true;
            this.errors.password_confirm.status=true;
            this.errors.email.status=true;
            this.errors.nombre.status=true;
            this.errors.apellidos.status=true;
-           this.errors.perfec_empresarial.status=true;
-           this.errors.coeficiente.status=true;
            this.errors.cargo.status=true;
-           this.errors.escala_salarial.status=true;
            this.errors.salario_basico.status=true;
            this.errors.salario_hora.status=true;
            this.errors.rol.status=true;
-           this.errors.areaId.status=true;
-           this.errors.especialidadId.status=true;
            this.error=false; 
         }
     },

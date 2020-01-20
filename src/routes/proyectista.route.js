@@ -5,8 +5,13 @@ module.exports = app => {
     app.route('/api/proyectista')
         .get(control.getProyectistas)
         .post(control.createProyectista);
+
     app.route('/api/proyectista/:id')
-        .delete(log.authenticated, control.deleteProyectista)
-        .get(log.authenticated, control.getProyectistaById)
-        .put(log.authenticated, control.UpdateProyectista);
+        .delete(control.deleteProyectista)
+        .get(control.getProyectistaById)
+        .put(control.UpdateProyectista);
+
+    app.route('/api/proyectista/getXarea/:id')
+        .get(control.getProyectistasXarea);
+
 }

@@ -3,10 +3,15 @@ module.exports = app => {
     const log = app.controllers.verifyController;
 
     app.route('/api/area')
-        .get(log.authenticated, control.getAreas)
-        .post(log.authenticated, control.createArea);
+        .get(control.getAreas)
+        .post(control.createArea);
+
     app.route('/api/area/:id')
-        .delete(log.authenticated, control.deleteArea)
-        .get(log.authenticated, control.getAreaById)
-        .put(log.authenticated, control.UpdateArea)
+        .delete(control.deleteArea)
+        .get(control.getAreaById)
+        .put(control.UpdateArea);
+
+    app.route('/api/area/getOne')
+        .post(control.getOne);
+
 }

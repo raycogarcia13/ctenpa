@@ -1,4 +1,4 @@
-let dias=[
+let dias = [
     'Domingo',
     'Lunes',
     'Martes',
@@ -8,10 +8,8 @@ let dias=[
     'Sábado',
 ];
 
-function cantDaysMonth(mes,anno)
-{
-    switch(mes)
-    {
+function cantDaysMonth(mes, anno) {
+    switch (mes) {
         case 1:
         case 3:
         case 5:
@@ -26,70 +24,73 @@ function cantDaysMonth(mes,anno)
         case 11:
             return 30;
         case 2:
-            if(anno % 100 == 0 )
-                if(anno % 400==0)
+            if (anno % 100 == 0)
+                if (anno % 400 == 0)
                     return 29;
                 else
-                    return 28; 
-            else if(anno%4==0)
+                    return 28;
+            else if (anno % 4 == 0)
                 return 29
             else
                 return 28;
     }
+    return 0;
 }
 // dia de la semana
-function dayOfWeekP(dt){
-    let fecha=new Date(dt);
+function dayOfWeekP(dt) {
+    let fecha = new Date(dt);
     return fecha.getDay();
 }
-function countHourDayP(dt){
-    let fecha=new Date(dt);
-    let d=fecha.getDay();
+
+function countHourDayP(dt) {
+    let fecha = new Date(dt);
+    let d = fecha.getDay();
     let cant;
-    switch(d)
-    {
+    switch (d) {
         case 5:
-            cant=8;
+            cant = 8;
             break;
         case 6:
         case 0:
-            cant=0;
+            cant = 0;
             break;
         default:
-            cant=9;
+            cant = 9;
             break;
     }
     return cant;
 }
 
-module.exports =  {
-    dayOfWeek:(req,res)=>{
-        let d=dayOfWeekP(req.body.fecha);
-        res.json({dia:d,name:dias[d]});
+module.exports = {
+
+    dayOfWeek: (req, res) => {
+        let d = dayOfWeekP(req.body.fecha);
+        res.json({ dia: d, name: dias[d] });
     },
-    countHourDay:att=>{
+    countHourDay: att => {
         return countHourDayP(att);
     },
-    countHourMonth:(mes,anno)=>{
-        let cantMont=cantDaysMonth(mes,anno);
-        if(!cantMont)
-          return null;
-        let cant=0;
-        for(let i=1;i<=cantMont;i++)
-        {
-        let date=new Date(anno+'/'+mes+'/'+i);
-        cant+=countHourDayP(date);
+    countHourMonth: (mes, anno) => {
+        let cantMont = cantDaysMonth(mes, anno);
+        if (!cantMont)
+            return null;
+        let cant = 0;
+        for (let i = 1; i <= cantMont; i++) {
+            let date = new Date(anno + '/' + mes + '/' + i);
+            cant += countHourDayP(date);
         }
         return cant;
     },
-    diasFeriados:async (mes,anno,app)=>{
-        let end=cantDaysMonth(parseInt(mes),parseInt(anno));
-        if(parseInt(mes)<10)
-            mes='0'+mes;
-        let dayI = '01/'+mes+'/'+anno;
-        let dayEnd = end+'/'+mes+'/'+anno;
-        let all=await app.db.sequelize.query("Select * from dias_feriados where fecha>= '"+dayI+"' and fecha<= '"+dayEnd+"'", { type: app.db.sequelize.QueryTypes.SELECT});
+    diasFeriados: async(mes, anno, app) => {
+        let end = cantDaysMonth(parseInt(mes), parseInt(anno));
+        if (parseInt(mes) < 10)
+            mes = '0' + mes;
+        let dayI = '01/' + mes + '/' + anno;
+        let dayEnd = end + '/' + mes + '/' + anno;
+        let all = await app.db.sequelize.query("Select * from dias_feriados where fecha>= '" + dayI + "' and fecha<= '" + dayEnd + "'", { type: app.db.sequelize.QueryTypes.SELECT });
         return all;
     }
+
+
 
 }

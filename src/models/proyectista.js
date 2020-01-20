@@ -14,7 +14,15 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         escala_salarial: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
+            allowNull: false
+        },
+        perfec_empresarial: {
+            type: DataTypes.FLOAT,
+            allowNull: false
+        },
+        coeficiente: {
+            type: DataTypes.FLOAT,
             allowNull: false
         },
         cargo: {

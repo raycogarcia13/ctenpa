@@ -157,3 +157,99 @@
     </div>
   
 </template>
+
+<script>
+import { mapState, mapMutations, mapActions } from 'vuex';
+export default {
+name:"rhuman",
+data(){
+    return{
+        items:[],
+        fields:[
+            { key: 'number', label: '#' },
+            { key:'nombre', labels:'Nombre',sortable: true, sortDirection: 'desc'},
+            { key:'apellidos', labels:'Apellidos',sortable: true, sortDirection: 'desc'},
+            { key:'apellidos', labels:'Proyectos',sortable: true, sortDirection: 'desc'},
+            { key:'AreaId', labels:'Especialidad',sortable: true, sortDirection: 'desc'},
+            { key:'actions', labels:'Acciones',sortable: true, sortDirection: 'desc'}
+        ],
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 10,
+        filter: null,
+        infoModal: {
+          id: 'info-modal',
+          title: '',
+          content: ''
+        },
+        isBusy:false,
+        user:{}
+    };
+    },
+    computed: {
+        ...mapState(['siderShow','user_signed']),
+        capitalizeUs()
+        {
+            return this.user_signed.username.charAt(0).toUpperCase() + this.user_signed.username.slice(1);
+        },
+        sortOptions() {
+        // Create an options list from our fields
+        return this.fields
+          .filter(f => f.sortable)
+          .map(f => {
+            return { text: f.label, value: f.key }
+          })
+      }
+    },
+    methods: {
+        ...mapMutations(['toogleSidebar']),
+        ...mapActions(['signout']),
+
+        onFiltered(filteredItems) {
+        // Trigger pagination to update the number of buttons/pages due to filtering
+        this.totalRows = filteredItems.length
+        this.currentPage = 1
+      },
+      getData()
+      {
+          this.isBusy=true;
+          this.$api.get("/proyectista",{
+              headers:{
+                  'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+              }
+          }).then(res=>{
+              this.isBusy=false;
+              this.items=res.data;
+              this.totalRows = this.items.length
+          }).catch(err=>{
+              this.isBusy=false;
+              console.log(err); 
+          })
+      },
+      formatedROl(data)
+      {
+        if(data=='Administrador')
+          return '<span class="badge badge-danger">'+data+'</span>';
+        if(data=='Jefe de Área')
+          return '<span class="badge badge-info">'+data+'</span>';
+        if(data=='Proyectista')
+          return '<span class="badge badge-success">'+data+'</span>';
+        
+        return data;
+      },
+      formatedDate(data)
+      {
+        data=new Date(data);
+        let day=data.getDate();
+        let month=data.getMonth();
+        let year=data.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+    },
+  mounted() {
+    // this.countUsers();
+    this.getData();
+  }
+    
+}
+</script>

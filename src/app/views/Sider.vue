@@ -31,8 +31,8 @@
               </router-link>
             </li>
             <li>
-              <router-link :to="{name:'add-user'}">
-                <i class="fa fa-plus"></i> Crear Usuario
+              <router-link :to="{name:'add-proyectista'}">
+                <i class="fa fa-plus"></i> Insertar Proyectista
               </router-link>
             </li>
           </ul>
@@ -46,13 +46,17 @@
           </a>
           <ul class="treeview-menu" :style="{'display':mostrar('user')}">
             <li>
-              <router-link :to="{name:'users'}">
+              <router-link :to="{name:'rhumans'}">
                 <i class="fa fa-table"></i> Control de Actividades
               </router-link>
             </li>
             <li>
-              <router-link :to="{name:'rhumans'}">
+              <router-link :to="{name:'add-proyectista'}">
                 <i class="fa fa-plus"></i> Agregar Área
+              </router-link>
+            </li><li>
+              <router-link :to="{name:'verXareas'}">
+                <i class="fa fa-plus"></i> Ver por Áreas
               </router-link>
             </li>
           </ul>
@@ -61,15 +65,16 @@
         <li v-if="hasPermission('jArea')" class="treeview" :class="{'active':showed=='user'}">
           <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
             <i class="fa fa-users"></i>
-            <span>Men&uacute;- RH</span>
+            <span>Men&uacute;-Jefe de Área</span>
             <i class="fa pull-right" :class="flechita('user')"></i>
           </a>
           <ul class="treeview-menu" :style="{'display':mostrar('user')}">
               <li>
-              <router-link :to="{name:'rhumans'}">
+              <router-link :to="{name:'jarea'}">
                 <i class="fa fa-plus"></i> C&aacute;lculo de Tiempo
               </router-link>
             </li>
+            
           </ul>
         </li>
       </ul>
