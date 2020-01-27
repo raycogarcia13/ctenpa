@@ -1,25 +1,25 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Mensaje', {
+    const tabla = sequelize.define('Temporal', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        remitente: {
+        codigo: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
-        destino: {
+        valor: {
             type: DataTypes.STRING,
-            allowNull: false
-        },
-        cuerpo: {
-            type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         }
+
     }, {
-        tableName: 'mensaje'
+        tableName: 'temporal'
     });
+    tabla.associate = (models) => {
+
+    }
 
     return tabla;
 }

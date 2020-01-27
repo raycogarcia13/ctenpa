@@ -1,38 +1,38 @@
-module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Cierre',{
-        id:{
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV1,
-            primaryKey:true,
+module.exports = (sequelize, DataTypes) => {
+    const tabla = sequelize.define('Cierre', {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        codigo:{
-            type:DataTypes.STRING,
-            allowNull:false
+        codigo: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        nombre:{
-            type:DataTypes.STRING,
-            allowNull:false
+        nombre: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        dia:{
-            type:DataTypes.INTEGER,
-            allowNull:false
+        dia: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        mes:{
-            type:DataTypes.INTEGER,
-            allowNull:false
+        mes: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        tiempo:{
-            type:DataTypes.FLOAT,
-            allowNull:false
+        tiempo: {
+            type: DataTypes.FLOAT,
+            allowNull: false
         },
-        prod_bruta:{
-            type:DataTypes.FLOAT,
-            allowNull:false
+        prod_bruta: {
+            type: DataTypes.FLOAT,
+            allowNull: false
         },
-    },{
-        tableName:'cierre'
+    }, {
+        tableName: 'cierre'
     });
-    tabla.associate = (models)=>{
+    tabla.associate = (models) => {
         tabla.belongsTo(models.Proyecto);
         tabla.hasMany(models.Cierre_proyecto);
     }

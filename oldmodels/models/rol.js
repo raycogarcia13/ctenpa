@@ -2,9 +2,10 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define(
         "Rol", {
             id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV1,
                 primaryKey: true,
-                autoIncrement: true
+
             },
             rol: {
                 type: DataTypes.STRING,

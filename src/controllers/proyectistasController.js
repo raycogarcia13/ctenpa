@@ -55,7 +55,6 @@ module.exports = app => {
                 perfec_empresarial: Joi.number().required(),
                 coeficiente: Joi.number().required(),
                 cargo: Joi.string().required(),
-                salario_basico: Joi.number().required(),
                 salario_hora: Joi.number().required(),
                 areaId: Joi.required(),
                 especialidadId: Joi.required()
@@ -87,7 +86,6 @@ module.exports = app => {
                     coeficiente: req.body.coeficiente,
                     escala_salarial: req.body.escala_salarial,
                     cargo: req.body.cargo,
-                    salario_basico: req.body.salario_basico,
                     salario_hora: req.body.salario_hora,
                     UsuarioId: userId.id,
                     AreaId: req.body.areaId,

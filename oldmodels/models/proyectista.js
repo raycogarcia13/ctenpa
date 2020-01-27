@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Proyectista', {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey: true,
-            autoIncrement: true
         },
         nombre: {
             type: DataTypes.STRING,
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         salario_basico: {
             type: DataTypes.FLOAT,
-            allowNull: true
+            allowNull: false
         },
         salario_hora: {
             type: DataTypes.FLOAT,

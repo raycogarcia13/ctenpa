@@ -1,41 +1,37 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Auditoria', {
+    const tabla = sequelize.define('Salario', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        ip: {
+        mes: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        action: {
-            type: DataTypes.STRING,
+        salario: {
+            type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
-        metodo: {
-            type: DataTypes.STRING,
+        salario_descuento: {
+            type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
-        qry: {
-            type: DataTypes.TEXT,
+        salario_resultado: {
+            type: DataTypes.DECIMAL(10, 2),
             allowNull: false
         },
-        url: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        nombre: {
-            type: DataTypes.STRING,
+        anno: {
+            type: DataTypes.INTEGER,
             allowNull: false
         }
 
     }, {
-        tableName: 'auditoria'
+        tableName: 'salario'
     });
     tabla.associate = (models) => {
-        tabla.belongsTo(models.Usuario);
-    }
-
+            tabla.belongsTo(models.Proyectista);
+        }
+        //mas de una factura del mismo proyecto cada mes
     return tabla;
 }

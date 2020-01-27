@@ -219,27 +219,7 @@
                     {{errors.escala_salarial.msg}}
                 </b-form-invalid-feedback>
             </b-form-group>
-
-            
-            <b-form-group
-                label="Salario Básico:"
-                label-for="salario_basico"
-                :class='{ "has-error":errors.salario_basico.status==false}'
-                >
-                <b-form-input
-                id="salario_basico"
-                v-model="usuario.salario_basico"
-                type="text"
-                required
-                placeholder="Salario basico"
-                @change="validateAll()"
-                :disabled="cargando"
-                :state="errors.salario_basico.status"
-                ></b-form-input>
-                <b-form-invalid-feedback v-if="!errors.salario_basico.status" :state="validar" class="text-center">
-                    {{errors.salario_basico.msg}}
-                </b-form-invalid-feedback>
-            </b-form-group>
+           
        <b-form-group
                 label="Salario por Hora:"
                 label-for="salario_hora"
@@ -321,7 +301,7 @@ export default {
  name:"CreateProyectista",
     data() {
         return {
-            usuario:{username:'',descripcion:'',password:'',password_confirm:'',email:'',RolId:'',nombre:'',apellidos:'',perfec_empresarial:'',coeficiente:'',escala_salarial:'',cargo:'',salario_basico:'',salario_hora:'',areaId:'',especialidadId:''},
+            usuario:{username:'',descripcion:'',password:'',password_confirm:'',email:'',RolId:'',nombre:'',apellidos:'',perfec_empresarial:'',coeficiente:'',escala_salarial:'',cargo:'',salario_hora:'',areaId:'',especialidadId:''},
             roles:[],
             especialidades:[],
             areas:[],
@@ -338,8 +318,7 @@ export default {
                 perfec_empresarial:{status:null,msg:""},
                 coeficiente:{status:null,msg:""},
                 escala_salarial:{status:null,msg:""},
-                cargo:{status:null,msg:""},
-                salario_basico:{status:null,msg:""},
+                cargo:{status:null,msg:""},                
                 salario_hora:{status:null,msg:""},
                 areaId:{status:null,msg:""},
                 especialidadId:{status:null,msg:""},
@@ -512,14 +491,7 @@ export default {
                 this.errors.cargo.msg="Este campo es obligaorio";
                 this.error=true;
             }
-
-            if(this.usuario.salario_basico=='')
-            {
-                this.errors.salario_basico.status=false;
-                this.errors.salario_basico.msg="Este campo es obligaorio";
-                this.error=true;
-            }
-
+          
             if(this.usuario.salario_hora=='')
             {
                 this.errors.salario_hora.status=false;
@@ -561,8 +533,7 @@ export default {
            this.errors.perfec_empresarial.status=true;
            this.errors.coeficiente.status=true;
            this.errors.cargo.status=true;
-           this.errors.escala_salarial.status=true;
-           this.errors.salario_basico.status=true;
+           this.errors.escala_salarial.status=true;       
            this.errors.salario_hora.status=true;
            this.errors.rol.status=true;
            this.errors.areaId.status=true;

@@ -1,39 +1,39 @@
-module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Control_Obra',{
-        id:{
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV1,
-            primaryKey:true,
+module.exports = (sequelize, DataTypes) => {
+    const tabla = sequelize.define('Control_Obra', {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        dia:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-            validate:{
-                min:1,
-                max:31
+        dia: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                min: 1,
+                max: 31
             }
         },
-        mes:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-            validate:{
-                min:1,
-                max:12
+        mes: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                min: 1,
+                max: 12
             }
         },
-        anno:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
+        anno: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
-        
-        tiempo:{
-            type:DataTypes.FLOAT,
-            allowNull:false
+
+        tiempo: {
+            type: DataTypes.FLOAT,
+            allowNull: false
         }
-    },{
-        tableName:'control_obra'
+    }, {
+        tableName: 'control_obra'
     });
-    tabla.associate = (models)=>{
+    tabla.associate = (models) => {
         tabla.belongsTo(models.Equipo);
     }
 

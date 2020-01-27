@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Notificacion', {
         id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV1,
+            type: DataTypes.INTEGER,
             primaryKey: true,
+            autoIncrement: true
         },
         remitente: {
             type: DataTypes.STRING,

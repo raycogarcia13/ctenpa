@@ -5,12 +5,12 @@
           <!-- Custom Tabs (Pulled to the right) -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right">
-              <li class="pull-left header"><i class="fa fa-th"></i> Custom Tabs</li>
-             <b-nav-item-dropdown html="<i class='fa fa-warning'></i> <span class='badge bg-orange'>10</span>" right>
+              <li class="pull-left header"><i class="fa fa-th"></i> Plan Total: {{getTotales}}</li>
+             <b-nav-item-dropdown html="<i class='fa fa-university'> Áreas</i>" right>
                     <b-dropdown-item v-for="(item) in areas " 
                     :key="item.id"
                     @click="getProyecXarea(item.id)"  
-                    href="#">{{item.nombre}}
+                    href="#">{{item.nombre}} | {{item.codigo}}
                     </b-dropdown-item>                   
               </b-nav-item-dropdown>
             </ul>
@@ -176,6 +176,22 @@ computed: {
             return { text: f.label, value: f.key }
           })
       },
+      getTotales(){
+        let semi=0;
+        let salpordes=0;
+        let salporResult=0;
+        let salTotal=0;
+        let total =this.items;
+        for (let i = 0; i < total.length; i++) {
+          const element = total[i];
+          salpordes= Math.round(((element.salario_basico/190.6)*180*100))/100;
+          salporResult= salpordes * element.coeficiente;
+          salTotal= Math.round((salporResult + salpordes)*100)/100;
+          semi +=salTotal
+        }
+        
+        return semi
+      }
     },
 methods:{
    

@@ -144,6 +144,7 @@
             <li> Especialidad: {{ row.item.Especialidad.especialidad }}</li>
             <li> Area: {{ row.item.Area.nombre }}</li>
             <li> Coeficiente: {{ row.item.coeficiente }}</li>
+            <li> Salario Basico: ${{ row.item.salario_basico }}</li>
             <li> Salario con descuento: ${{ salpordes= Math.round(((row.item.salario_basico/190.6)*horasXmes*100))/100 }}</li>
             <li> Salario por resultado: ${{salporResult= Math.round((salpordes * row.item.coeficiente)*100)/100 }}</li>
             <li> Salario Total: ${{ Math.round((salporResult + salpordes)*100)/100 }}</li>

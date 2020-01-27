@@ -1,29 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Cierre_proyecto', {
+    const tabla = sequelize.define('Plan_anual', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        codigo: {
+        plan: {
+            type: DataTypes.FLOAT,
+            allowNull: false
+        },
+        plan_real: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        prod_mercantil: {
-            type: DataTypes.FLOAT,
+        anno: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
-        prod_cuc: {
+        salario_anual: {
             type: DataTypes.FLOAT,
             allowNull: false
-        },
+        }
+
     }, {
-        tableName: 'cierre_proyecto'
+        tableName: 'plan_anual'
     });
     tabla.associate = (models) => {
-        tabla.belongsTo(models.Proyecto);
-        tabla.hasMany(models.Cierre_proyectista);
-    }
 
+        }
+        //mas de una factura del mismo proyecto cada mes
     return tabla;
 }
