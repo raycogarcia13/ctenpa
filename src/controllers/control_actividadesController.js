@@ -1,19 +1,23 @@
 module.exports = app => {
-    const cliente = app.db.models.Cliente;
-    const temp = app.db.models.Temporal;
+    const ctrl = app.db.models.Control_actividades;
+
     return {
-        getClientes: async(req, res) => {
-            let us = await cliente.findAll();
+        getControlAct: async(req, res) => {
+            let us = await ctrl.findAll();
             return res.status(200).json(us);
         },
-        getClienteById: async(req, res) => {
-            let currentProyec = await cliente.findByPk(req.body.id);
+        getOne: async(req, res) => {
+            let one = await ctrl.findOne();
+            return res.status(200).json(one);
+        },
+        getControlActById: async(req, res) => {
+            let currentProyec = await ctrl.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
-        UpdateCliente: async(req, res) => {
+        UpdateControlAct: async(req, res) => {
             let id = req.params.id;
             if (id) {
-                const updcontrato = await cliente.update(req.body, {
+                const updcontrato = await ctrl.update(req.body, {
                     where: {
                         id: id
                     }
@@ -23,13 +27,10 @@ module.exports = app => {
         },
 
 
-        createCliente: async(req, res) => {
+        createControlAct: async(req, res) => {
             try {
-                let insertClient={
-                    nombre:req.body.nombre,
-                    programa:req.body.programa,
-                };
-                const newproyec = await cliente.create(insertClient);
+
+                const newproyec = await ctrl.create(req.body);
                 return res.status(200).json(newproyec);
 
             } catch (error) {
@@ -38,9 +39,9 @@ module.exports = app => {
 
         },
 
-        deleteCliente: async(req, res) => {
+        deleteControlAct: async(req, res) => {
             let id = req.params.id;
-            const deletedTask = await cliente.destroy({
+            const deletedTask = await ctrl.destroy({
                 where: {
                     id: id
                 }
@@ -50,4 +51,4 @@ module.exports = app => {
         }
     }
 
-}
+};

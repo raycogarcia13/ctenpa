@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Usuario', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -19,17 +20,28 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.STRING,
+            allowNull: false
+        },
+        RolId: {
+            type: DataTypes.INTEGER,
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
             allowNull: false,
-            validate: {
-                isEmail: true
+            references: {
+                model: 'rol',
+                key: 'id'
             }
-        }
+        },
+
+
     }, {
-        tableName: 'usuario'
+        tableName: 'usuario',
+        timestamps: false,
     });
     tabla.associate = (models) => {
         tabla.belongsTo(models.Rol);
-    }
+        tabla.belongsTo(models.Area);
+    };
 
     return tabla;
-}
+};

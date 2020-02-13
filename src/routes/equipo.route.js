@@ -8,5 +8,9 @@ module.exports = app => {
     app.route('/api/equipo/:id')
         .delete(log.authenticated, control.deleteEquipo)
         .get(log.authenticated, control.getEquipoById)
-        .put(log.authenticated, control.UpdateEquipo)
-}
+        .put(log.authenticated, control.UpdateEquipo);
+    app.route('/api/equipo/ct/:id')
+        .post(control.getCT);
+    app.route('/api/equipo/ct')
+        .post(control.getCT);
+};

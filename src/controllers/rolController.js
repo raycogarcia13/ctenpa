@@ -2,12 +2,11 @@ module.exports = app => {
     const rol = app.db.models.Rol;
     return {
         getRoles: async (req, res) => {
-            let us = await app.db.models.Rol.findAll()
+            let us = await rol.findAll();
             return res.status(200).json(us);
         },
         getRolById: async (req, res) => {
-            console.log(req.params.id);
-            let currentRol = await rol.findByPk(req.body.id)
+            let currentRol = await rol.findByPk(req.body.id);
             return res.status(200).json(currentRol);
         },
         UpdateRol: async (req, res) => {
@@ -17,13 +16,13 @@ module.exports = app => {
                     where: {
                         id: id
                     }
-                })
+                });
                 return res.status(200).json(updRol)
             }
         },
 
         createRol: async (req, res) => {
-            const newRol = await rol.create(req.body)
+            const newRol = await rol.create(req.body);
             return res.status(200).json(newRol);
         },
 
@@ -33,11 +32,11 @@ module.exports = app => {
                 where: {
                     id: id
                 }
-            })
+            });
             res.send('se elimino');
             return res.status(200).json(deletedTask)
 
         }
     }
 
-}
+};

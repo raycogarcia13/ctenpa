@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Trabajador', {
+    const tabla = sequelize.define('Contratos', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -10,71 +10,35 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        apellidos: {
-            type: DataTypes.STRING,
+        numero: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
-        perfec_empresarial: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        coeficiente: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        salario_basico: {
-            type: DataTypes.FLOAT,
-            allowNull: true
-        },
-        salario_hora: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        cargo_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
+        fecha_inicio: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
-            references: {
-                model: 'cargo',
-                key: 'id'
-            }
+            defaultValue: sequelize.NOW
         },
-        especialidad_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
+        fecha_cierre: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
-            references: {
-                model: 'especialidad',
-                key: 'id'
-            }
-        },
-        area_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'area',
-                key: 'id'
-            }
-        },
-        denominacion_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'denominaciones',
-                key: 'id'
-            }
+            defaultValue: sequelize.NOW
         },
 
+        codigo_tratos: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        activo: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        }
     }, {
-        tableName: 'trabajador',
+        tableName: 'contratos',
         timestamps: false,
     });
-
+    tabla.associate = (models)=>{
+        tabla.belongsTo(models.Cliente);
+    };
     return tabla;
 };

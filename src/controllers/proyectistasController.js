@@ -1,32 +1,60 @@
 import bcrypt from 'bcrypt';
 const Joi = require('@hapi/joi');
 module.exports = app => {
-    const proyec = app.db.models.Proyectista;
+    const proyec = app.db.models.Trabajador;
     const user = app.db.models.Usuario;
     const area = app.db.models.Area;
     const especialidad = app.db.models.Especialidad;
+    const actividad = app.db.models.Actividades;
+    const ctrl_act = app.db.models.Control_actividades;
+    const equipo = app.db.models.Equipo;
+    const subp = app.db.models.Sub_proyecto;
 
+    // { model:subp },
+    // { model:equipo },
+    // { model:actividad },
+    // { model:area },
     return {
+        getCT: async(req,res)=>{
+            let us = await proyec.findAll({
+                where:[{
+                    id:req.params.id
+                }],
+                include: [
+                    { model:ctrl_act, include:[{model:actividad}] },
+                    { model:equipo, include:[{model:subp}] }
+                ]
+            });
+            return res.status(200).json(us);
+        },
         getProyectistasXarea: async(req, res) => {
             let us = await proyec.findAll({
                 where: [{
                     AreaId: req.params.id
                 }],
                 include: [{ model: area }, { model: especialidad }]
-            })
+            });
             return res.status(200).json(us);
+        },
+        countallproyec: async(req, res) => {
+            try {
+                let all = await proyec.findAndCountAll();
+                return res.status(200).json(all.count);
+            } catch (error) {
+                res.status(500).send(error);
+            }
         },
         getProyectistas: async(req, res) => {
             let us = await proyec.findAll({
                 include: [{ model: especialidad },
                     { model: area }
                 ]
-            })
+            });
             return res.status(200).json(us);
         },
         getProyectistaById: async(req, res) => {
             console.log(req.params.id);
-            let currentProyec = await proyec.findByPk(req.body.id)
+            let currentProyec = await proyec.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
         UpdateProyectista: async(req, res) => {
@@ -36,7 +64,7 @@ module.exports = app => {
                     where: {
                         id: id
                     }
-                })
+                });
                 return res.status(200).json(updproyect)
             }
         },
@@ -54,10 +82,11 @@ module.exports = app => {
                 escala_salarial: Joi.number().required(),
                 perfec_empresarial: Joi.number().required(),
                 coeficiente: Joi.number().required(),
-                cargo: Joi.string().required(),
                 salario_hora: Joi.number().required(),
                 areaId: Joi.required(),
-                especialidadId: Joi.required()
+                especialidadId: Joi.required(),
+                CargoId: Joi.required(),
+                DenominacionId: Joi.required()
             });
 
             try {
@@ -69,14 +98,15 @@ module.exports = app => {
                     descripcion: req.body.descripcion,
                     password: hashed,
                     email: req.body.email,
-                    RolId: req.body.RolId
-                }
+                    RolId: req.body.RolId,
+                    AreaId: req.body.areaId
+                };
                 let currentProyec = await user.findOne({
                     where: {
                         username: req.body.username
                     }
                 });
-                if (currentProyec) { return res.send("El usuario ya existe por favor eliga otro") }
+                if (currentProyec) { return res.status(403).send("El usuario ya existe por favor eliga otro") }
                 let getId = await user.create(insertUser);
                 let userId = getId;
                 let inserProyect = {
@@ -85,12 +115,14 @@ module.exports = app => {
                     perfec_empresarial: req.body.perfec_empresarial,
                     coeficiente: req.body.coeficiente,
                     escala_salarial: req.body.escala_salarial,
-                    cargo: req.body.cargo,
+                    salario_basico: req.body.escala_salarial + req.body.perfec_empresarial,
                     salario_hora: req.body.salario_hora,
                     UsuarioId: userId.id,
                     AreaId: req.body.areaId,
-                    EspecialidadId: req.body.especialidadId
-                }
+                    EspecialidadId: req.body.especialidadId,
+                    CargoId:req.body.CargoId,
+                    DenominacioneId:req.body.DenominacionId
+                };
 
                 await proyec.create(inserProyect);
                 return res.status(201).send("Insertado Correctamente");
@@ -106,10 +138,10 @@ module.exports = app => {
                 where: {
                     id: id
                 }
-            })
+            });
             res.send('se elimino');
             return res.status(200).json(deletedTask)
         }
     }
 
-}
+};

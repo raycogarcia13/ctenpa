@@ -1,17 +1,13 @@
 module.exports = app => {
-    const control = app.controllers.areaController;
-    const log = app.controllers.verifyController;
+    const control = app.controllers.empresaController;
 
-    app.route('/api/area')
-        .get(control.getAreas)
-        .post(control.createArea);
 
-    app.route('/api/area/:id')
-        .delete(control.deleteArea)
-        .get(control.getAreaById)
-        .put(control.UpdateArea);
+    app.route('/api/empresa')
+        .get(control.getEmpresa)
+        .post(control.createEmpresa);
 
-    app.route('/api/area/getOne')
-        .post(control.getOne);
-
-}
+    app.route('/api/empresa/:id')
+        .delete(control.deleteEmpresa)
+        .get(control.getEmpresaById)
+        .put(control.UpdateEmpresa);
+};

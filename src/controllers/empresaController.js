@@ -1,29 +1,20 @@
 module.exports = app => {
-    const escala = app.db.models.Escalas;
-    const cargo = app.db.models.Cargo;
+    const empresa = app.db.models.Empresa;
 
     return {
-        getEscala: async(req, res) => {
-            let us = await escala.findAll({
-                include:{
-                    model:cargo
-                }
-            });
+        getEmpresa: async(req, res) => {
+            let us = await empresa.findAll();
             return res.status(200).json(us);
         },
-        getOneEscala: async(req, res) => {
-            let one = await escala.findOne();
-            return res.status(200).json(one);
-        },
-        getEscalaById: async(req, res) => {
+        getEmpresaById: async(req, res) => {
             console.log(req.params.id);
-            let currentProyec = await escala.findByPk(req.body.id);
+            let currentProyec = await empresa.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
-        UpdateEscala: async(req, res) => {
+        UpdateEmpresa: async(req, res) => {
             let id = req.params.id;
             if (id) {
-                const updproyect = await escala.update(req.body, {
+                const updproyect = await empresa.update(req.body, {
                     where: {
                         id: id
                     }
@@ -32,19 +23,18 @@ module.exports = app => {
             }
         },
 
-        createEscala: async(req, res) => {
-            const newproyec = await escala.create(req.body);
+        createEmpresa: async(req, res) => {
+            const newproyec = await empresa.create(req.body);
             return res.status(200).json(newproyec);
         },
 
-        deleteEscala: async(req, res) => {
+        deleteEmpresa: async(req, res) => {
             let id = req.params.id;
-            const deletedTask = await escala.destroy({
+            const deletedTask = await empresa.destroy({
                 where: {
                     id: id
                 }
             });
-            res.send('se elimino');
             return res.status(200).json(deletedTask)
 
         }

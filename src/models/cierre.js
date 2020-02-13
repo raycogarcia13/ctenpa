@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Cierre', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -13,29 +14,27 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        dia: {
+        mes:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        anno:{
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        mes: {
-            type: DataTypes.INTEGER,
+        produccion_bruta: {
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
-        },
-        tiempo: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        prod_bruta: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
+        }
     }, {
-        tableName: 'cierre'
+        tableName: 'cierre',
+        timestamps: false,
     });
-    tabla.associate = (models) => {
-        tabla.belongsTo(models.Proyecto);
+    tabla.associate = (models)=>{
+        tabla.belongsTo(models.Trabajador);
+        tabla.belongsTo(models.Empresa);
         tabla.hasMany(models.Cierre_proyecto);
-    }
+    };
 
     return tabla;
-}
+};

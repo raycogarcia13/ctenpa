@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Roles', {
+    const tabla = sequelize.define('Rol', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -16,9 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         },
 
     }, {
-        tableName: 'roles',
+        tableName: 'rol',
         timestamps: false,
     });
+    tabla.associate = models => {
+        tabla.hasMany(models.Usuario);
+    };
 
     return tabla;
 };

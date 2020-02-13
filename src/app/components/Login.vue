@@ -79,7 +79,7 @@ export default {
         sendLogin(){
             if(this.error)
             {
-                this.$swal({title:"Error ",type:'error',text:"El formulario contiene errores, por favor revís   elo.",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                this.$swal({title:"Error ",type:'error',text:"El formulario contiene errores, por favor revíselo.",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                 return;
             }
 

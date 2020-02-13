@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Area', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -12,13 +13,26 @@ module.exports = (sequelize, DataTypes) => {
         nombre: {
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+        EmpresaId: {
+            type: DataTypes.INTEGER,
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+            allowNull: false,
+            references: {
+                model: 'empresa',
+                key: 'id'
+            }
+        },
+
     }, {
-        tableName: 'area'
+        tableName: 'area',
+        timestamps: false,
     });
     tabla.associate = (models) => {
-        tabla.belongsTo(models.Usuario);
-    }
+        tabla.belongsTo(models.Empresa);
+        tabla.hasMany(models.Usuario);
+    };
 
     return tabla;
-}
+};

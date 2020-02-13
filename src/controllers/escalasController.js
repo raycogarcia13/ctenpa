@@ -1,25 +1,29 @@
 module.exports = app => {
+    const escala = app.db.models.Escalas;
     const cargo = app.db.models.Cargo;
-    const user = app.db.models.Usuario;
 
     return {
-        getCargos: async(req, res) => {
-            let us = await cargo.findAll();
+        getEscala: async(req, res) => {
+            let us = await escala.findAll({
+                include:{
+                    model:cargo
+                }
+            });
             return res.status(200).json(us);
         },
-        getOneCargo: async(req, res) => {
-            let one = await cargo.findOne();
+        getOneEscala: async(req, res) => {
+            let one = await escala.findOne();
             return res.status(200).json(one);
         },
-        getCargoById: async(req, res) => {
+        getEscalaById: async(req, res) => {
             console.log(req.params.id);
-            let currentProyec = await cargo.findByPk(req.body.id);
+            let currentProyec = await escala.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
-        UpdateCargo: async(req, res) => {
+        UpdateEscala: async(req, res) => {
             let id = req.params.id;
             if (id) {
-                const updproyect = await cargo.update(req.body, {
+                const updproyect = await escala.update(req.body, {
                     where: {
                         id: id
                     }
@@ -28,14 +32,14 @@ module.exports = app => {
             }
         },
 
-        createCargo: async(req, res) => {
-            const newproyec = await cargo.create(req.body);
+        createEscala: async(req, res) => {
+            const newproyec = await escala.create(req.body);
             return res.status(200).json(newproyec);
         },
 
-        deleteCargo: async(req, res) => {
+        deleteEscala: async(req, res) => {
             let id = req.params.id;
-            const deletedTask = await cargo.destroy({
+            const deletedTask = await escala.destroy({
                 where: {
                     id: id
                 }

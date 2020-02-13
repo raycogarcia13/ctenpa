@@ -31,8 +31,8 @@
               </router-link>
             </li>
             <li>
-              <router-link :to="{name:'add-proyectista'}">
-                <i class="fa fa-plus"></i> Insertar Proyectista
+              <router-link :to="{name:'add-trabajador'}">
+                <i class="fa fa-plus"></i> Agregar Trabajador
               </router-link>
             </li>
           </ul>
@@ -46,19 +46,81 @@
           </a>
           <ul class="treeview-menu" :style="{'display':mostrar('user')}">
             <li>
-              <router-link :to="{name:'rhumans'}">
-                <i class="fa fa-table"></i> Control de Actividades
+              <router-link :to="{name:'add-planAnual'}">
+                <i class="fa fa-table"></i> Plan de Produccion Anual
               </router-link>
             </li>
             <li>
-              <router-link :to="{name:'add-proyectista'}">
-                <i class="fa fa-plus"></i> Agregar Área
+              <router-link :to="{name:'add-cliente'}">
+                <i class="fa fa-plus"></i> Agregar Cliente
               </router-link>
-            </li><li>
+            </li>
+            <li>
+              <router-link :to="{name:'add-contrato'}">
+                <i class="fa fa-plus"></i> Agregar Contrato
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-proyecto'}">
+                <i class="fa fa-plus"></i> Agregar Proyecto
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-subproyecto'}">
+                <i class="fa fa-plus"></i> Agregar SubProyecto
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-trabajador'}">
+                <i class="fa fa-plus"></i> Agregar Trabajador
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-equipo'}">
+                <i class="fa fa-plus"></i> Agregar Equipo
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-actividades'}">
+                <i class="fa fa-plus"></i> Agregar Actividad
+              </router-link>
+            </li>
+            <li>
               <router-link :to="{name:'verXareas'}">
                 <i class="fa fa-plus"></i> Ver por Áreas
               </router-link>
             </li>
+            <li>
+              <router-link :to="{name:'add-planmes'}">
+                <i class="fa fa-plus"></i> Plan del mes
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-ct'}">
+                <i class="fa fa-plus"></i> CT
+              </router-link>
+            </li>
+          </ul>
+          <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
+            <i class="fa fa-users"></i>
+            <span>Insertar</span>
+            <i class="fa pull-right" :class="flechita('user')"></i>
+          </a>
+          <ul class="treeview-menu" :style="{'display':mostrar('user')}">
+            <li>
+              <router-link :to="{name:'add-areas'}">
+                <i class="fa fa-table"></i> Insertar Áreas
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-especialidad'}">
+                <i class="fa fa-plus"></i> Insertar Especialidad
+              </router-link>
+            </li><li>
+            <router-link :to="{name:'add-proyectista'}">
+              <i class="fa fa-plus"></i> Insertar Proyectistas
+            </router-link>
+          </li>
           </ul>
         </li>
             <!-- Jefe de Area -->
@@ -75,6 +137,22 @@
               </router-link>
             </li>
             
+          </ul>
+        </li>
+<!--        trabajador-->
+        <li v-if="hasPermission('trabajador')" class="treeview" :class="{'active':showed=='user'}">
+          <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
+            <i class="fa fa-users"></i>
+            <span>Men&uacute;-Proyectista</span>
+            <i class="fa pull-right" :class="flechita('user')"></i>
+          </a>
+          <ul class="treeview-menu" :style="{'display':mostrar('user')}">
+            <li>
+              <router-link :to="{name:'add-ct'}">
+                <i class="fa fa-plus"></i> CT
+              </router-link>
+            </li>
+
           </ul>
         </li>
       </ul>

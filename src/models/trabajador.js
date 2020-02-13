@@ -29,52 +29,20 @@ module.exports = (sequelize, DataTypes) => {
         salario_hora: {
             type: DataTypes.FLOAT,
             allowNull: false
-        },
-        cargo_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'cargo',
-                key: 'id'
-            }
-        },
-        especialidad_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'especialidad',
-                key: 'id'
-            }
-        },
-        area_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'area',
-                key: 'id'
-            }
-        },
-        denominacion_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'denominaciones',
-                key: 'id'
-            }
-        },
-
+        }
     }, {
         tableName: 'trabajador',
         timestamps: false,
     });
+    tabla.associate = (models) => {
+        tabla.belongsTo(models.Cargo);
+        tabla.belongsTo(models.Especialidad);
+        tabla.belongsTo(models.Area);
+        tabla.belongsTo(models.Denominaciones);
+        tabla.belongsTo(models.Usuario);
+        tabla.hasMany(models.Control_actividades);
+        tabla.hasMany(models.Equipo);
+    };
 
     return tabla;
 };

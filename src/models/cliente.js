@@ -2,9 +2,11 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Cliente', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
+
         nombre: {
             type: DataTypes.STRING,
             allowNull: false
@@ -14,11 +16,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         }
     }, {
-        tableName: 'cliente'
+        tableName: 'cliente',
+        timestamps: false,
     });
-    tabla.associate = (models) => {
-        tabla.hasMany(models.Contrato)
-    }
+    tabla.associate = (models)=>{
+        tabla.hasMany(models.Contratos)
+    };
 
     return tabla;
-}
+};

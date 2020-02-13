@@ -1,15 +1,15 @@
 module.exports = app => {
-    const rol = app.db.models.Rol;
+    const rol = app.db.models.Denominaciones;
     return {
-        getRoles: async (req, res) => {
+        getDenominaciones: async (req, res) => {
             let us = await rol.findAll();
             return res.status(200).json(us);
         },
-        getRolById: async (req, res) => {
+        getDenominacionesById: async (req, res) => {
             let currentRol = await rol.findByPk(req.body.id);
             return res.status(200).json(currentRol);
         },
-        UpdateRol: async (req, res) => {
+        UpdateDenominaciones: async (req, res) => {
             let id = req.params.id;
             if (id) {
                 const updRol = await rol.update(req.body, {
@@ -21,12 +21,12 @@ module.exports = app => {
             }
         },
 
-        createRol: async (req, res) => {
+        createDenominaciones: async (req, res) => {
             const newRol = await rol.create(req.body);
             return res.status(200).json(newRol);
         },
 
-        deleteRol: async (req, res) => {
+        deleteDenominaciones: async (req, res) => {
             let id = req.params.id;
             const deletedTask = await rol.destroy({
                 where: {

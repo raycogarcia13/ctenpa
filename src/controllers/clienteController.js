@@ -3,12 +3,11 @@ module.exports = app => {
     const temp = app.db.models.Temporal;
     return {
         getClientes: async(req, res) => {
-            let us = await cliente.findAll()
+            let us = await cliente.findAll();
             return res.status(200).json(us);
         },
         getClienteById: async(req, res) => {
-            console.log(req.params.id);
-            let currentProyec = await cliente.findByPk(req.body.id)
+            let currentProyec = await cliente.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
         UpdateCliente: async(req, res) => {
@@ -18,7 +17,7 @@ module.exports = app => {
                     where: {
                         id: id
                     }
-                })
+                });
                 return res.status(200).json(updcontrato)
             }
         },
@@ -26,8 +25,11 @@ module.exports = app => {
 
         createCliente: async(req, res) => {
             try {
-
-                const newproyec = await cliente.create(req.body)
+                let insertClient={
+                    nombre:req.body.nombre,
+                    programa:req.body.programa,
+                };
+                const newproyec = await cliente.create(insertClient);
                 return res.status(200).json(newproyec);
 
             } catch (error) {
@@ -42,8 +44,7 @@ module.exports = app => {
                 where: {
                     id: id
                 }
-            })
-            res.send('se elimino');
+            });
             return res.status(200).json(deletedTask)
 
         }

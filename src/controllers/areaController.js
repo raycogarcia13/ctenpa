@@ -10,7 +10,7 @@ module.exports = app => {
             return res.status(200).json(us);
         },
         getOne: async(req, res) => {
-            let one = await area.findOne()
+            let one = await area.findOne();
             return res.status(200).json(one);
         },
         getAreaById: async(req, res) => {
@@ -31,7 +31,11 @@ module.exports = app => {
         },
 
         createArea: async(req, res) => {
-            const newproyec = await area.create(req.body);
+            let insertArea = {
+                codigo:req.body.codigo,
+                nombre:req.body.nombre,
+                EmpresaId:1 };
+            const newproyec = await area.create(insertArea);
             return res.status(200).json(newproyec);
         },
 

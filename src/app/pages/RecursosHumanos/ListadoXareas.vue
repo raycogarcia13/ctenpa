@@ -6,6 +6,7 @@
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right">
               <li class="pull-left header"><i class="fa fa-th"></i> Plan Total: {{getTotales}}</li>
+
              <b-nav-item-dropdown html="<i class='fa fa-university'> Áreas</i>" right>
                     <b-dropdown-item v-for="(item) in areas " 
                     :key="item.id"
@@ -81,7 +82,11 @@
         <span v-html="formatedROl(data.value)"></span>
       </template> -->
       <template v-slot:cell(actions)="row">
-        <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
+        <b-button size="sm" variant="success"  class="mr-1">
+            <router-link :to="{name:'add-ct'}">
+                <i class="fa fa-eye"></i>
+            </router-link>
+        </b-button>
         <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button>
         <b-button size="sm" variant="primary" @click="row.toggleDetails">
           {{ row.detailsShowing ? '-' : '+' }} 
@@ -96,7 +101,7 @@
             <li> Especialidad: {{ row.item.Especialidad.especialidad }}</li>
             <li> Area: {{ row.item.Area.nombre }}</li>
             <li> Coeficiente: {{ row.item.coeficiente }}</li>
-            <li> Salario con descuento: {{ salpordes= Math.round(((row.item.salario_basico/190.6)*180*100))/100 }}</li>
+            <li> Salario con descuento: {{ salpordes= Math.round(((row.item.salario_basico/190.6)*this.horasXmes*100))/100 }}</li>
             <li> Salario por resultado: {{salporResult= salpordes * row.item.coeficiente }}</li>
             <li> Salario Total: {{ Math.round((salporResult + salpordes)*100)/100 }}</li>
           </ul>
@@ -143,9 +148,9 @@ data(){
         fields:[
             { key: 'number', label: '#' },
             { key:'nombre', labels:'Nombre',sortable: true, sortDirection: 'desc'},
-            { key:'cargo', labels:'Cargo',sortable: true, sortDirection: 'desc'},
-            { key:'escala_salarial', labels:'Escala Salarial',sortable: true, sortDirection: 'desc'},
-            { key:'salario_basico', labels:'Salario Básico',sortable: true, sortDirection: 'desc'},            
+            { key:'apellidos', labels:'Apellidos',sortable: true, sortDirection: 'desc'},
+            { key:'perfec_empresarial', labels:'Perfeccionamiento Empresarial',sortable: true, sortDirection: 'desc'},
+            { key:'salario_basico', labels:'Salario Básico',sortable: true, sortDirection: 'desc'},
             { key:'actions', labels:'Acciones',sortable: true, sortDirection: 'desc'}
         ],
         totalRows: 1,
@@ -181,10 +186,11 @@ computed: {
         let salpordes=0;
         let salporResult=0;
         let salTotal=0;
+        let horas = this.horasXmes;
         let total =this.items;
         for (let i = 0; i < total.length; i++) {
           const element = total[i];
-          salpordes= Math.round(((element.salario_basico/190.6)*180*100))/100;
+          salpordes= Math.round(((element.salario_basico/190.6)*horas*100))/100;
           salporResult= salpordes * element.coeficiente;
           salTotal= Math.round((salporResult + salpordes)*100)/100;
           semi +=salTotal
@@ -200,13 +206,13 @@ methods:{
 
         onFiltered(filteredItems) {
         // Trigger pagination to update the number of buttons/pages due to filtering
-        this.totalRows = filteredItems.length
+        this.totalRows = filteredItems.length;
         this.currentPage = 1
       },
   gethoras(mes,anno){
         let em =this;
-        let month =new Date().getMonth()
-        let year =new Date().getFullYear()
+        let month =new Date().getMonth();
+        let year =new Date().getFullYear();
         this.$api.post('fechas/month_hours',{mes:month+1,anno:year}).then(function (response) {
               em.horasXmes=response.data.hours
         })

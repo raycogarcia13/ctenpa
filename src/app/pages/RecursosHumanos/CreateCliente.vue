@@ -1,29 +1,9 @@
 <template>
     <div>
         <b-form>
-            <h1>Insertar area</h1>
+            <h1>Insertar Cliente</h1>
             <b-row >
                 <div class="col-md-6">
-                    <b-form-group
-                            label="Código del Área:"
-                            label-for="codigo"
-                            :class='{ "has-error":errors.codigo.status==false}'
-                    >
-                        <b-form-input
-                                id="codigo"
-                                v-model="area.codigo"
-                                type="text"
-                                required
-                                placeholder="Código"
-                                @change="validateAll()"
-                                :disabled="cargando"
-                                :state="errors.codigo.status"
-                        ></b-form-input>
-                        <b-form-invalid-feedback v-if="!errors.codigo.status" :state="validar" class="text-center">
-                            {{errors.codigo.msg}}
-                        </b-form-invalid-feedback>
-                    </b-form-group>
-
                     <b-form-group
                             label="Nombre:"
                             label-for="nombre"
@@ -31,7 +11,7 @@
                     >
                         <b-form-input
                                 id="nombre"
-                                v-model="area.nombre"
+                                v-model="cliente.nombre"
                                 type="text"
                                 required
                                 placeholder="Breve descripción del usuario"
@@ -43,6 +23,26 @@
                             {{errors.nombre.msg}}
                         </b-form-invalid-feedback>
                     </b-form-group>
+                    <b-form-group
+                            label="Programa:"
+                            label-for="programa"
+                            :class='{ "has-error":errors.programa.status==false}'
+                    >
+                        <b-form-input
+                                id="programa"
+                                v-model="cliente.programa"
+                                type="text"
+                                required
+                                placeholder="Programa"
+                                @change="validateAll()"
+                                :disabled="cargando"
+                                :state="errors.programa.status"
+                        ></b-form-input>
+                        <b-form-invalid-feedback v-if="!errors.programa.status" :state="validar" class="text-center">
+                            {{errors.programa.msg}}
+                        </b-form-invalid-feedback>
+                    </b-form-group>
+
                     <hr>
                     <b-button @click="$router.back()" class="btn-danger">Atrás</b-button>
                     <b-button @click="crear" class="btn-success pull-right">Crear Área</b-button>
@@ -116,8 +116,8 @@
                             <b-card>
                                 <ul>
                                     <!-- <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li> -->
-                                    <li> Código: {{ row.item.codigo }}</li>
                                     <li> Nombre: {{ row.item.nombre }}</li>
+                                    <li> Programa: {{ row.item.programa }}</li>
                                 </ul>
                             </b-card>
                         </template>
@@ -151,14 +151,15 @@
 <script>
     import { mapState, mapMutations, mapActions } from 'vuex';
     export default {
-        name: "CreateAreas",
+        name: "CreateCliente",
         data() {
             return {
                 items:[],
+                cliente:{nombre:'',programa:''},
                 fields:[
                     { key: 'number', label: '#' },
-                    { key:'codigo', labels:'Código',sortable: true, sortDirection: 'desc'},
                     { key:'nombre', labels:'Nombre del Área',sortable: true, sortDirection: 'desc'},
+                    { key:'programa', labels:'Programa',sortable: true, sortDirection: 'desc'},
                     { key:'actions', labels:'Acciones',sortable: true, sortDirection: 'desc'}
                 ],
                 totalRows: 1,
@@ -171,10 +172,9 @@
                     content: ''
                 },
                 isBusy:false,
-                area:{codigo:'',nombre:'',},
                 error:null,
                 errors:{
-                    codigo:{status:null,msg:""},
+                    programa:{status:null,msg:""},
                     nombre:{status:null,msg:""},
                 },
                 cargando:false
@@ -213,10 +213,10 @@
                 this.totalRows = filteredItems.length;
                 this.currentPage = 1
             },
-            getAreas()
+            getClientes()
             {
                 this.isBusy=true;
-                this.$api.get("/area/",{
+                this.$api.get("/cliente",{
                     headers:{
                         'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                     }
@@ -240,16 +240,16 @@
                 // }
 
                 this.cargando=true;
-                this.$api.post('/area',this.area,{
+                this.$api.post('/cliente/',this.cliente,{
                     // data:this.usuario,
                     headers:{
                         'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                     }
                 }).then(res=>{
                     this.cargando=false;
-                    console.log(this.area);
+                    console.log(this.cliente);
                     this.$swal({title:"Correcto",type:'success',text:'Área insertada correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
-                    this.getAreas();
+                    this.getClientes();
                 }).catch(error=>{
                     this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                     this.cargando=false;
@@ -258,14 +258,14 @@
 
             validateAll(){
                 this.clear();
-                if(this.area.codigo==='')
+                if(this.cliente.programa==='')
                 {
-                    this.errors.codigo.status=false;
-                    this.errors.codigo.msg="Este campo  es obligaorio y deben ser mas de 3 caracteres";
+                    this.errors.programa.status=false;
+                    this.errors.programa.msg="Este campo  es obligaorio y deben ser mas de 3 caracteres";
                     this.error=true;
                 }
 
-                if(this.area.nombre==='')
+                if(this.cliente.nombre==='')
                 {
                     this.errors.nombre.status=false;
                     this.errors.nombre.msg="Este campo  es obligaorio y deben ser mas de 63 caracteres";
@@ -274,10 +274,10 @@
             },
 
             clear(){
-                this.errors.codigo.status=true;
+                this.errors.programa.status=true;
                 this.errors.nombre.status=true;
-                this.nombre='';
-                this.codigo='';
+                // this.cliente.nombre='';
+                // this.cliente.programa='';
             },
             deleteUser(item)
             {
@@ -291,14 +291,14 @@
                     confirmButtonText: 'Eliminar!'
                 }).then((result) => {
                     if (result.value) {
-                        let url='/area/'+item.id;
+                        let url='/cliente/'+item.id;
                         this.$api.delete(url,{
                             headers:{
                                 'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                             }
                         }).then(res=>{
                             this.$swal({title:"Correcto",type:'success',text:'Especialidad eliminada correctamente',toast:true,position:'top',showConfirmButton:false,timer:3000});
-                            this.getAreas();
+                            this.getClientes();
                         }).catch(error=>{
                             this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                         })
@@ -309,7 +309,7 @@
         },
         // terminan los metodos
         mounted() {
-            this.getAreas();
+            this.getClientes();
         }
 
     }

@@ -1,14 +1,11 @@
 module.exports = app => {
     const control = app.controllers.clienteController;
-    const log = app.controllers.verifyController;
-    const vali = app.validaciones.userValidation.HasRole;
     app.route('/api/cliente')
-        .get(log.authenticated, vali('admin'), control.getClientes)
-        // .post(log.authenticated, vali('admin'), control.createCliente);
+        .get(control.getClientes)
         .post(control.createCliente);
     app.route('/api/cliente/:id')
-        .delete(log.authenticated, vali('admin'), control.deleteCliente)
-        .get(log.authenticated, vali('admin'), control.getClienteById)
-        .put(log.authenticated, control.UpdateCliente);
+        .delete(control.deleteCliente)
+        .get(control.getClienteById)
+        .put(control.UpdateCliente);
 
-}
+};

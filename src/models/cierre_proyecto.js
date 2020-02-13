@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Cierre_proyecto', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -9,21 +10,23 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        prod_mercantil: {
-            type: DataTypes.FLOAT,
+        produccion_mercantil: {
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
-        prod_cuc: {
-            type: DataTypes.FLOAT,
+        produccion_cuc: {
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
+
     }, {
-        tableName: 'cierre_proyecto'
+        tableName: 'cierre_proyecto',
+        timestamps: false,
     });
-    tabla.associate = (models) => {
-        tabla.belongsTo(models.Proyecto);
+    tabla.associate = (models)=>{
+        tabla.belongsTo(models.Trabajador);
         tabla.hasMany(models.Cierre_proyectista);
     }
 
     return tabla;
-}
+};

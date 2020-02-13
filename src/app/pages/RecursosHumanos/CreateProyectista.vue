@@ -1,7 +1,7 @@
 <template>
     <div>
-        <b-form>            
-                <h1>Insertar Proyectista</h1>
+        <b-form>
+                <h1>Insertar Trabajador</h1>
             <b-row >
     <div class="col-md-6">
     <b-form-group
@@ -161,33 +161,21 @@
             </b-form-group>        
           </div>
     <div class="col-md-6">
-            <b-form-group
-                label="Cargo:"
-                label-for="cargo"
-                :class='{ "has-error":errors.cargo.status==false}'
-                >
-                <b-form-input
-                id="cargo"
-                v-model="usuario.cargo"
-                type="text"
-                required
-                placeholder="Cargo"
-                @change="validateAll()"
-                :disabled="cargando"
-                :state="errors.cargo.status"
-                ></b-form-input>
-                <b-form-invalid-feedback v-if="!errors.cargo.status" :state="validar" class="text-center">
-                    {{errors.cargo.msg}}
-                </b-form-invalid-feedback>
-            </b-form-group>
-            
-            <b-form-group
+        <b-form-group id="input-group-5" label="Cargo:" label-for="cargo" >
+            <b-form-select
+                    id="cargo"
+                    v-model="usuario.cargo_id"
+                    :options="cargoSelect()"
+                    :disabled="cargando"
+            ></b-form-select>
+        </b-form-group>
+        <b-form-group
                 label="coeficiente:"
                 label-for="coeficiente"
                 :class='{ "has-error":errors.coeficiente.status==false}'
                 >
                 <b-form-input
-                id="cargo"
+                id="coeficiente"
                 v-model="usuario.coeficiente"
                 type="text"
                 required
@@ -200,25 +188,15 @@
                     {{errors.coeficiente.msg}}
                 </b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group
-                label="Escala Salarial:"
-                label-for="escala_salarial"
-                :class='{ "has-error":errors.escala_salarial.status==false}'
-                >
-                <b-form-input
-                id="escala_salarial"
-                v-model="usuario.escala_salarial"
-                type="text"
-                required
-                placeholder="Escala Salarial"
-                @change="validateAll()"
-                :disabled="cargando"
-                :state="errors.escala_salarial.status"
-                ></b-form-input>
-                <b-form-invalid-feedback v-if="!errors.escala_salarial.status" :state="validar" class="text-center">
-                    {{errors.escala_salarial.msg}}
-                </b-form-invalid-feedback>
-            </b-form-group>
+        <b-form-group id="input-group-4" label="Escala Salarial:" label-for="escala" >
+            <b-form-select
+                    id="cargo"
+                    v-model="escala_salarial"
+                    :options="escalaSelect()"
+                    :disabled="cargando"
+            ></b-form-select>
+
+        </b-form-group>
            
        <b-form-group
                 label="Salario por Hora:"
@@ -254,7 +232,7 @@
                 </b-form-invalid-feedback>
             </b-form-group>
 
-    <b-form-group id="input-group-3" label="Area:" label-for="area" :class='{ "has-error":errors.areaId.status==false}'>
+    <b-form-group id="input-group-8" label="Area:" label-for="area" :class='{ "has-error":errors.areaId.status==false}'>
                 <b-form-select
                 id="areas"
                 v-model="usuario.areaId"
@@ -268,7 +246,7 @@
                 </b-form-invalid-feedback>
             </b-form-group>
 
-    <b-form-group id="input-group-3" label="Especialidad:" label-for="especialidad" :class='{ "has-error":errors.especialidadId.status==false}'>
+    <b-form-group id="input-group-7" label="Especialidad:" label-for="especialidad" :class='{ "has-error":errors.especialidadId.status==false}'>
                 <b-form-select
                 id="especialidad"
                 v-model="usuario.especialidadId"
@@ -281,6 +259,14 @@
                     {{errors.especialidadId.msg}}
                 </b-form-invalid-feedback>
     </b-form-group>
+        <b-form-group id="input-group-6" label="Denominacion:" label-for="denominacion" >
+            <b-form-select
+                    id="denominacion"
+                    v-model="usuario.denominacion_id"
+                    :options="denominacionSelect()"
+                    :disabled="cargando"
+            ></b-form-select>
+        </b-form-group>
     </div>
             </b-row>
          
@@ -301,8 +287,12 @@ export default {
  name:"CreateProyectista",
     data() {
         return {
-            usuario:{username:'',descripcion:'',password:'',password_confirm:'',email:'',RolId:'',nombre:'',apellidos:'',perfec_empresarial:'',coeficiente:'',escala_salarial:'',cargo:'',salario_hora:'',areaId:'',especialidadId:''},
+            usuario:{username:'',descripcion:'',password:'',password_confirm:'',email:'',RolId:'',nombre:'',apellidos:'',perfec_empresarial:'',coeficiente:'',escala_salarial:'',cargo:'',salario_hora:'',areaId:'',especialidadId:'',CargoId:'',DenominacionId:''},
             roles:[],
+            escalas:[],
+            escala_salarial:[],
+            cargos:[],
+            denominacion:[],
             especialidades:[],
             areas:[],
             error:null,
@@ -344,10 +334,29 @@ export default {
                 this.usuario.RolId=null;            
             }).catch(err=>{})
         },
+        getEscalas(){
+            this.$api.get("/escala").then(res=>{
+                console.log(res.data);
+                this.escalas=res.data;
+                this.usuario.escala_salarial=null;
+            }).catch(err=>{})
+        },
+        getCargos(){
+            this.$api.get("/cargo").then(res=>{
+                this.cargos=res.data;
+                this.usuario.CargoId=null;
+            }).catch(err=>{})
+        },
+        getDenominacion(){
+            this.$api.get("/denominacion").then(res=>{
+                this.denominacion=res.data;
+                this.usuario.DenominacionId=null;
+            }).catch(err=>{})
+        },
         getEspecialidad(){
             this.$api.get("/especialidad").then(res=>{
                 this.especialidades=res.data;  
-                 console.log(res.data)               
+                 console.log(res.data);
                 this.usuario.especialidadId=null;
             }).catch(err=>{})
         },
@@ -362,6 +371,14 @@ export default {
                 opt.push({text:'Escoja un elemento',value:null});
             this.roles.forEach(function(element) {
                 opt.push({text:element.name,value:element.id});
+            });
+            return opt;
+        },
+        cargoSelect(){
+            let opt=[];
+                opt.push({text:'Escoja un elemento',value:null});
+            this.cargos.forEach(function(element) {
+                opt.push({text:element.cargo,value:element.id});
             });
             return opt;
         },
@@ -381,9 +398,27 @@ export default {
             });
             return opt;
         },
+        escalaSelect(){
+            let opt=[];
+            let em = this;
+            opt.push({text:'Escoja un elemento',value:null});
+            this.escalas.forEach(function(element) {
+                opt.push({text:element.escala  +  element.Cargo.cargo,value:element.id});
+            });
+            return opt;
+        },
+        denominacionSelect(){
+            let opt=[];
+            opt.push({text:'Escoja un elemento',value:null});
+            this.denominacion.forEach(function(element) {
+                opt.push({text:element.denominacion,value:element.id});
+            });
+            return opt;
+        },
         crear()
         {
             this.validateAll();
+            console.log(this.error);
             if(this.error)
             {
                 this.$swal({title:"Error ",type:'error',text:"El formulario contiene errores, por favor revíselo.",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
@@ -392,13 +427,12 @@ export default {
 
             this.cargando=true;
             this.$api.post('/proyectista',this.usuario,{
-                // data:this.usuario,
-                headers:{
+               headers:{
                   'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                 }
             }).then(res=>{
                 this.cargando=false;
-                console.log(this.usuario)
+                console.log(this.usuario);
                 this.$swal({title:"Correcto",type:'success',text:'Proyectista insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
             }).catch(error=>{
                  this.$swal({title:"Error ",type:'error',text:"Existen errores en el formulario",toast:true,position:'top-end',showConfirmButton:false,timer:3000});
@@ -408,21 +442,21 @@ export default {
         validateAll()
         {
             this.clear();
-            if(this.usuario.username=='')
+            if(this.usuario.username==='')
             {
                 this.errors.username.status=false;
-                this.errors.username.msg="Este campo es obligaorio";
+                this.errors.username.msg="Este campo es obligaorio y deben ser mas de 6 caracteres";
                 this.error=true;
             }
 
-           if(this.usuario.descripcion=='')
+           if(this.usuario.descripcion==='')
             {
                 this.errors.descripcion.status=false;
                 this.errors.descripcion.msg="Este campo es obligaorio";
                 this.error=true;
             }
             
-            if(this.usuario.password==''){
+            if(this.usuario.password===''){
                 this.errors.password.status=false;
                 this.errors.password.msg="Este campo es obligaorio";
                 this.error=true;
@@ -430,16 +464,16 @@ export default {
                 this.errors.password.status=false;
                 this.errors.password.msg="La conraseña debe tener al menos 3 caracteres";
                 this.error=true;
-            }else if(this.usuario.password!=this.usuario.password_confirm){
+            }else if(this.usuario.password!==this.usuario.password_confirm){
                 this.errors.password.status=false;
                 this.errors.password_confirm.status=false;
                 this.errors.password.msg="Las conraseñas no coinciden";
-                this.errors.password_confirm.msg="Las conraseñas no coinciden";
+                this.errors.password_confirm.msg="Las contraseñas no coinciden";
                 this.error=true;
             }
 
             var ermail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if(this.usuario.email==''){
+            if(this.usuario.email===''){
                 this.errors.email.status=false;
                 this.errors.email.msg="Este campo es obligaorio";
                 this.error=true;
@@ -450,49 +484,49 @@ export default {
                 this.error=true;
             }
 
-           if(this.usuario.nombre=='')
+           if(this.usuario.nombre==='')
             {
                 this.errors.nombre.status=false;
                 this.errors.nombre.msg="Este campo es obligaorio";
                 this.error=true;
             }
 
-            if(this.usuario.apellidos=='')
+            if(this.usuario.apellidos==='')
             {
                 this.errors.apellidos.status=false;
                 this.errors.apellidos.msg="Este campo es obligaorio";
                 this.error=true;
             }
             
-            if(this.usuario.perfec_empresarial=='')
+            if(this.usuario.perfec_empresarial==='')
             {
                 this.errors.perfec_empresarial.status=false;
                 this.errors.perfec_empresarial.msg="Este campo es obligaorio";
                 this.error=true;
             }
             
-            if(this.usuario.coeficiente=='')
+            if(this.usuario.coeficiente==='')
             {
                 this.errors.coeficiente.status=false;
                 this.errors.coeficiente.msg="Este campo es obligaorio";
                 this.error=true;
             }
             
-            if(this.usuario.escala_salarial=='')
-            {
-                this.errors.escala_salarial.status=false;
-                this.errors.escala_salarial.msg="Este campo es obligaorio";
-                this.error=true;
-            }
+            // if(this.usuario.escala_salarial==='')
+            // {
+            //     this.errors.escala_salarial.status=false;
+            //     this.errors.escala_salarial.msg="Este campo es obligaorio";
+            //     this.error=true;
+            // }
 
-            if(this.usuario.cargo=='')
-            {
-                this.errors.cargo.status=false;
-                this.errors.cargo.msg="Este campo es obligaorio";
-                this.error=true;
-            }
+            // if(this.usuario.cargo==='')
+            // {
+            //     this.errors.cargo.status=false;
+            //     this.errors.cargo.msg="Este campo es obligaorio";
+            //     this.error=true;
+            // }
           
-            if(this.usuario.salario_hora=='')
+            if(this.usuario.salario_hora==='')
             {
                 this.errors.salario_hora.status=false;
                 this.errors.salario_hora.msg="Este campo es obligaorio";
@@ -532,8 +566,8 @@ export default {
            this.errors.apellidos.status=true;
            this.errors.perfec_empresarial.status=true;
            this.errors.coeficiente.status=true;
-           this.errors.cargo.status=true;
-           this.errors.escala_salarial.status=true;       
+           // this.errors.cargo.status=true;
+           // this.errors.escala_salarial.status=true;
            this.errors.salario_hora.status=true;
            this.errors.rol.status=true;
            this.errors.areaId.status=true;
@@ -545,6 +579,9 @@ export default {
         this.getRol();
         this.getEspecialidad();
         this.getArea();
+        this.getEscalas();
+        this.getDenominacion();
+        this.getCargos();
     }
     
 }

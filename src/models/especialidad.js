@@ -2,23 +2,26 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Especialidad', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
         especialidad: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: false
         },
-        codigo: {
-            type: DataTypes.FLOAT,
-            allowNull: true
-        },
+        codigo:{
+            type:DataTypes.STRING,
+            allowNull:true
+        }
+
     }, {
-        tableName: 'especialidad'
+        tableName: 'especialidad',
+        timestamps: false,
     });
     tabla.associate = (models) => {
-        tabla.hasMany(models.Proyectista);
-    }
+        tabla.hasMany(models.Trabajador);
+    };
 
     return tabla;
-}
+};

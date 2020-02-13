@@ -1,41 +1,35 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Control_Obra', {
+    const tabla = sequelize.define('Control_obra', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
         dia: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            validate: {
-                min: 1,
-                max: 31
-            }
+            type: DataTypes.STRING,
+            allowNull: false
         },
         mes: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            validate: {
-                min: 1,
-                max: 12
-            }
+            type: DataTypes.STRING,
+            allowNull: false
         },
         anno: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
-
         tiempo: {
             type: DataTypes.FLOAT,
             allowNull: false
         }
+
     }, {
-        tableName: 'control_obra'
+        tableName: 'control_obra',
+        timestamps: false,
     });
-    tabla.associate = (models) => {
+    tabla.associate = (models)=>{
         tabla.belongsTo(models.Equipo);
-    }
+    };
 
     return tabla;
-}
+};

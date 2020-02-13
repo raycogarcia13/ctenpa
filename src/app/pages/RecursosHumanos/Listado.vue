@@ -1,15 +1,19 @@
 <template>
   <div>  
      <b-container fluid>
-        <b-row>             
+        <b-row>                   
+
+          <!-- <datepicker :format="customFormatter"  @click="getSalarios(date)"> <span slot="afterDateInput" class="animated-placeholder"> -->
+           <!-- Choose a Date  -->
+          <!-- </span></datepicker> -->
           <b-col lg="4">
             <div>
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3>{{salarios[0].plan}}</h3>
 
-                  <p>Cumplimiento</p>
+                  <p>Plan Anual</p>
                 </div>
                 <div class="icon">
                   <i class="fa fa-calendar"></i>
@@ -26,7 +30,7 @@
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>4</h3>
+                  <h3 v-text="allproyec"></h3>
                   <p>Proyectistas</p>
                 </div>
                 <div class="icon">
@@ -68,8 +72,8 @@
         <h2> Producción según Plan del año Aprobado.</h2>
       </div>        
       <b-col lg="6" class="my-1">
-        <h3>Plan Mes : </h3>
-        <h3>Horas del mes:</h3><h4 v-html="horasXmes"></h4>
+        <h3>Plan Mes : {{ salarios[0].plan}}</h3>
+        <h3>Horas del mes: {{horasXmes}}</h3>
         <b-form-group
           label-cols-sm="3"
           label-align-sm="right"
@@ -204,12 +208,20 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-export default {
+import Datepicker from 'vuejs-datepicker';
+import moment from 'moment';
+export default { 
+  components: {
+    Datepicker
+  },
 name:"rhuman",
 data(){
     return{
         horasXmes:9,
         items:[],
+        fecha: '',
+        allproyec: '',
+        salarios:{},
         fields:[
             { key: 'number', label: '#' },
             { key:'nombre', labels:'Nombre',sortable: true, sortDirection: 'desc'},
@@ -254,8 +266,18 @@ data(){
 
         onFiltered(filteredItems) {
         // Trigger pagination to update the number of buttons/pages due to filtering
-        this.totalRows = filteredItems.length
+        this.totalRows = filteredItems.length;
         this.currentPage = 1
+      },
+      getSalarios(anno){         
+        let el =this;       
+        let year =new Date().getFullYear();
+        this.$api.post('/plan/'+year).then(res=> {
+              el.salarios=res.data
+              })
+        .catch(function (error) {
+        console.log(error);
+        });
       },
       getData()
       {
@@ -272,26 +294,11 @@ data(){
               this.isBusy=false;
               console.log(err); 
           })
-      },
-      getTotales()
-      {
-        // obtener todos los totales
-     
-             let con = this.items;
-            //  console.log(con)
-             var total=0;           
-             for (let index = 0; index < con.length; index++) {
-               const totalcon = con[index];
-              total += totalcon.coeficiente
-             }
-              // console.log(total)                  
-
-       
-      },
+      },     
       gethoras(mes,anno){
         let em =this;
-        let month =new Date().getMonth()
-        let year =new Date().getFullYear()
+        let month =new Date().getMonth();
+        let year =new Date().getFullYear();
         this.$api.post('fechas/month_hours',{mes:month+1,anno:year}).then(function (response) {
               em.horasXmes=response.data.hours
         })
@@ -353,17 +360,27 @@ data(){
         this.infoModal.title = ''
         this.infoModal.content = ''
       },
-      // sal_descuento(){
-      //     this.getData();
-      //     let salario = (salario_basico/190.6)*180
-      //     return salario
-      // }
+    customFormatter(date) {
+      let fecha = moment(date).format('YYYY');     
+      return fecha
+    },
+    countProyectistas() {
+     this.$api.post('proyectista/count',{
+              headers:{
+                  'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+              }}).then(res=>{
+                this.allproyec=res.data;                   
+                        
+            }).catch(err=>{
+              console.log(err)
+            })
+    },
     },
   mounted() {
      this.getData();
-     this.getTotales();
-    //  this.formatedDate();
+     this.countProyectistas();  
      this.gethoras();
+     this.getSalarios();
   }
     
 }

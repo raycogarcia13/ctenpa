@@ -1,15 +1,15 @@
 import Sequelize from 'sequelize'
 module.exports = app => {
-    const proyec = app.db.models.Proyecto;
+    const proyec = app.db.models.Proyectos;
     const temp = app.db.models.Temporal;
     return {
         getProyectos: async(req, res) => {
-            let us = await proyec.findAll()
+            let us = await proyec.findAll();
             return res.status(200).json(us);
         },
         getProyectosById: async(req, res) => {
             console.log(req.params.id);
-            let currentProyec = await proyec.findByPk(req.body.id)
+            let currentProyec = await proyec.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
         UpdateProyecto: async(req, res) => {
@@ -19,7 +19,7 @@ module.exports = app => {
                     where: {
                         id: id
                     }
-                })
+                });
                 return res.status(200).json(updproyect)
             }
         },
@@ -27,27 +27,28 @@ module.exports = app => {
 
         createProyecto: async(req, res) => {
             try {
-                let currentProyec = await temp.findAll({
+                let currentProyec = await proyec.findAll({
                     order: [
                         ['id', 'DESC']
                     ],
                     limit: 1
-                })
-                var a = (currentProyec.length == 1) ? currentProyec[0].valor : null;
+                });
+                var a = (currentProyec.length == 1) ? currentProyec[0].codigo : null;
                 let contador;
-                if (a == null || a == 999) {
+                if (a === null || a === 999) {
                     contador = '000';
                 } else {
-                    console.log(a.substr(-3))
-                    let trim = a.substr(-3)
-                    var tor = parseInt(trim, 10)
+                    console.log(a.substr(-3));
+                    let currentvalor = a.substr(-3);
+                    let tor = parseInt(currentvalor, 10);
                     tor += 1;
-                    contador = ("000" + tor).slice(-3);
+
+                    contador = ('000' + tor).slice(-3);
                 }
 
 
-                console.log(contador)
-                let codigo = req.body.cod_servicio + req.body.num_contrato + req.body.anno_contrato + contador
+                console.log(contador);
+                let codigo = req.body.num_contrato + req.body.anno_contrato + req.body.cod_ct;
 
                 let insertProyecto = {
                     codigo: codigo,
@@ -55,12 +56,13 @@ module.exports = app => {
                     valor_total: req.body.valor_total,
                     descripcion: req.body.descripcion,
                     terminado: req.body.terminado,
-                    ContratoId: req.body.contratoId
-                }
-                const newproyec = await proyec.create(insertProyecto)
-                console.log(newproyec.id)
-                let codId = { codigo: newproyec.id, valor: newproyec.codigo }
-                const newTemp = await temp.create(codId)
+                    ContratoId: req.body.ContratoId,
+                    EstadoId: req.body.EstadoId
+                };
+                const newproyec = await proyec.create(insertProyecto);
+                console.log(newproyec.id);
+                let codId = { codigo: newproyec.id, valor: newproyec.codigo };
+                const newTemp = await temp.create(codId);
                 return res.status(200).json(newproyec);
                 // return res.status(200).json(insertProyecto)
             } catch (error) {
@@ -75,11 +77,11 @@ module.exports = app => {
                 where: {
                     id: id
                 }
-            })
+            });
             res.send('se elimino');
             return res.status(200).json(deletedTask)
 
         }
     }
 
-}
+};

@@ -1,7 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Actividad', {
+    const tabla = sequelize.define('Actividades', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -11,24 +12,24 @@ module.exports = (sequelize, DataTypes) => {
         },
         tiempo_d: {
             type: DataTypes.FLOAT,
-            allowNull: true
+            allowNull: false
         },
         pro_ratea: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        productiva: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false
+        productiva:{
+          type:DataTypes.BOOLEAN,
+          allowNull:true
         }
+
     }, {
-        tableName: 'actividad'
+        tableName: 'actividades',
+        timestamps: false,
     });
     tabla.associate = (models) => {
-        // tabla.belongsTo(models.Usuario);
-    }
+
+    };
 
     return tabla;
-}
+};

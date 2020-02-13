@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Produccion_mes', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -14,23 +15,28 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         plan: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
         plan_real: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
         salario_mensual: {
+            type: DataTypes.DECIMAL(10,2),
+            allowNull: false
+        },
+        horas_mensual: {
             type: DataTypes.FLOAT,
             allowNull: false
         }
+
     }, {
-        tableName: 'produccion_mes'
+        tableName: 'produccion_mes',
+        timestamps: false,
     });
     tabla.associate = (models) => {
-            tabla.belongsTo(models.Area);
-        }
-        //mas de una factura del mismo proyecto cada mes
+        tabla.belongsTo(models.Area);
+    };
     return tabla;
-}
+};

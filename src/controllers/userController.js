@@ -1,14 +1,17 @@
 import bcrypt from 'bcrypt';
 const Joi = require('@hapi/joi');
-
-
 module.exports = app => {
     const user = app.db.models.Usuario;
+    const rol = app.db.models.Rol;
     const log = app.controllers.verifyController;
     return {
         getUsers: async(req, res) => {
             try {
-                let us = await user.findAll();
+                let us = await user.findAll({
+                    include: [{
+                        model: rol,
+                    }]
+                });
                 return res.status(200).json(us);
             } catch (err) {
                 res.status(500).send(err.details);
@@ -16,10 +19,8 @@ module.exports = app => {
         },
         countalluser: async(req, res) => {
             try {
-                let all = await user.findAndCountAll()
-                    // .then(result => {
+                let all = await user.findAndCountAll();
                 console.log(all.count);
-                // });
                 return res.status(200).json(all.count);
 
             } catch (error) {
@@ -33,6 +34,7 @@ module.exports = app => {
                         model: app.db.models.Rol,
                     }]
                 });
+                console.log(currentUser);
                 return res.status(200).json(currentUser);
             } catch (err) {
                 res.status(500).send(err.details);

@@ -5,12 +5,13 @@ dotenv.config();
 
 module.exports = app => {
     const User = app.db.models.Usuario;
+    const rol = app.db.models.Rol;
     return {
         login: (req, res, next) => {
             let params = req.body;
             let username = params.username;
             let password = params.password;
-            User.findOne({
+           let tk= User.findOne({
                     where: {
                         username: req.body.username
                     },
@@ -19,6 +20,7 @@ module.exports = app => {
                     }]
                 })
                 .then(user => {
+                    console.log(tk);
                     if (user === null) {
                         return res.status(401).send("Usuario incorrecto");
                     } else {

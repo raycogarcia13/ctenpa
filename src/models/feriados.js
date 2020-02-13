@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Feriados', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -13,11 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         motivo: {
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+
     }, {
-        tableName: 'dias_feriados'
+        tableName: 'feriados',
+        timestamps: false,
     });
-    tabla.associate = (models) => {}
 
     return tabla;
-}
+};

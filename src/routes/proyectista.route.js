@@ -13,5 +13,11 @@ module.exports = app => {
 
     app.route('/api/proyectista/getXarea/:id')
         .get(control.getProyectistasXarea);
+    app.route('/api/proyectista/count')
+        .post(control.countallproyec);
 
-}
+    app.route('/api/proyectista/ct')
+        .post(control.getCT);
+    app.route('/api/proyectista/ct/:id')
+        .post(control.getCT);
+};

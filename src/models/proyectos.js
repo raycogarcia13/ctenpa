@@ -1,80 +1,40 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Trabajador', {
+    const tabla = sequelize.define('Proyectos', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
+        codigo:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
         nombre: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        apellidos: {
+        valor_total: {
+            type: DataTypes.FLOAT,
+            allowNull: false
+        },
+        descripcion: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        perfec_empresarial: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        coeficiente: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        salario_basico: {
-            type: DataTypes.FLOAT,
-            allowNull: true
-        },
-        salario_hora: {
-            type: DataTypes.FLOAT,
-            allowNull: false
-        },
-        cargo_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'cargo',
-                key: 'id'
-            }
-        },
-        especialidad_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'especialidad',
-                key: 'id'
-            }
-        },
-        area_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'area',
-                key: 'id'
-            }
-        },
-        denominacion_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'denominaciones',
-                key: 'id'
-            }
-        },
-
+        terminado:{
+            type:DataTypes.BOOLEAN,
+            allowNull:true
+        }
     }, {
-        tableName: 'trabajador',
+        tableName: 'proyectos',
         timestamps: false,
     });
+    tabla.associate = (models)=>{
+        tabla.belongsTo(models.Contratos);
+        tabla.belongsTo(models.Estados);
+        tabla.hasMany(models.Sub_proyecto);
+    };
 
     return tabla;
 };

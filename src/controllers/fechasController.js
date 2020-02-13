@@ -30,7 +30,7 @@ function cantDaysMonth(mes, anno) {
                 else
                     return 28;
             else if (anno % 4 == 0)
-                return 29
+                return 29;
             else
                 return 28;
     }

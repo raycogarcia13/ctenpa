@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const tabla = sequelize.define('Auditoria', {
         id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
@@ -11,14 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         action: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         metodo: {
             type: DataTypes.STRING,
             allowNull: false
         },
         qry: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
             allowNull: false
         },
         url: {
@@ -29,13 +30,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         }
-
-    }, {
-        tableName: 'auditoria'
+        }, {
+        tableName: 'auditoria',
+        timestamps: false,
     });
-    tabla.associate = (models) => {
+    tabla.associate = (models)=>{
         tabla.belongsTo(models.Usuario);
-    }
+    };
 
     return tabla;
-}
+};

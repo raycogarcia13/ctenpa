@@ -1,34 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Escalas', {
+    const tabla = sequelize.define('Denominaciones', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        escala: {
-            type: DataTypes.DECIMAL(10, 2),
+        denominacion: {
+            type: DataTypes.STRING,
             allowNull: false
         },
-        fecha: {
-            type: DataTypes.DATEONLY,
-            allowNull: false,
-            defaultValue: '(now'
-        },
-
-        cargo_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'cargo',
-                key: 'id'
-            }
-        },
+        descripcion: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
 
     }, {
-        tableName: 'escalas',
+        tableName: 'denominaciones',
         timestamps: false,
     });
 

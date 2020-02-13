@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Cierre', {
+    const tabla = sequelize.define('Sub_proyecto', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -10,37 +10,28 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        nombre: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        mes:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        anno:{
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        produccion_bruta: {
+        sub_valor: {
             type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
-        empresa_id: {
-            type: DataTypes.INTEGER,
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            allowNull: false,
-            references: {
-                model: 'empresa',
-                key: 'id'
-            }
+        descripcion: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-
-    }, {
-        tableName: 'cierre',
+        terminado:{
+            type:DataTypes.BOOLEAN,
+            allowNull:true
+        }
+        }, {
+        tableName: 'sub_proyecto',
         timestamps: false,
     });
+    tabla.associate = (models)=>{
+        tabla.belongsTo(models.Area);
+        tabla.belongsTo(models.Proyectos);
+        tabla.hasMany(models.Equipo);
+        tabla.hasMany(models.Factura_subp);
+    };
 
     return tabla;
 };

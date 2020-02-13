@@ -1,16 +1,16 @@
 module.exports = app => {
-    const control = app.controllers.cargoController;
+    const control = app.controllers.escalasController;
 
-    app.route('/api/cargo')
-        .get(control.getCargos)
-        .post(control.createCargo);
+    app.route('/api/escala')
+        .get(control.getEscala)
+        .post(control.createEscala);
 
-    app.route('/api/cargo/:id')
-        .delete(control.deleteCargo)
-        .get(control.getCargoById)
-        .put(control.UpdateCargo);
+    app.route('/api/escala/:id')
+        .delete(control.deleteEscala)
+        .get(control.getEscalaById)
+        .put(control.UpdateEscala);
 
-    app.route('/api/cargo/getOne')
-        .post(control.getOneCargo);
+    app.route('/api/escala/getOne')
+        .post(control.getOneEscala);
 
 };

@@ -65,7 +65,7 @@
       <template v-slot:cell(actions)="row">
         <b-button size="sm" variant="warning" @click="passwd(row.item)" class="mr-1"><i class="fa fa-key"></i> </b-button>
         <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
-        <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash-o"></i> </b-button>
+        <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button>
         <b-button size="sm" variant="primary" @click="row.toggleDetails">
           {{ row.detailsShowing ? '-' : '+' }} 
         </b-button>
@@ -123,7 +123,7 @@
           { key: 'number', label: '#' },
           { key: 'username', label: 'Usuario', sortable: true, sortDirection: 'desc' },
           { key: 'email', label: 'Correo', sortable: true, sortDirection: 'desc' },
-          { key: 'createdAt', label: 'Fecha creado', sortable: true, sortDirection: 'desc' },
+          { key: 'descripcion', label: 'Descripcion', sortable: true, sortDirection: 'desc' },
           { key: 'Rol.name', label: 'Rol', sortable: true, sortDirection: 'desc' },
           { key: 'actions', label: 'Actions' }
         ],
@@ -159,7 +159,7 @@
       edit(item) {
         this.infoModal.title = `Editar Usuario: ${item.username}`
         this.infoModal.content = '';
-
+        
         this.user.username=item.username;
         this.user.email=item.email;
 
@@ -243,8 +243,8 @@
         })
       },
       resetInfoModal() {
-        this.infoModal.title = ''
-        this.infoModal.content = ''
+        this.infoModal.title = '';
+        this.infoModal.content = '';
       },
       changePassword(item,index,button)
       {
@@ -275,7 +275,7 @@
       {
         if(data=='Administrador')
           return '<span class="badge badge-danger">'+data+'</span>';
-        if(data=='Jefe de Área')
+        if(data=='RHumanos')
           return '<span class="badge badge-info">'+data+'</span>';
         
         return data;
@@ -286,6 +286,7 @@
         let day=data.getDate();
         let month=data.getMonth();
         let year=data.getFullYear();
+        console.log(data);
         return `${day}/${month}/${year}`;
       }
     }

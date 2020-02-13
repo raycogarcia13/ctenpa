@@ -1,27 +1,26 @@
 module.exports = app => {
-    const area = app.db.models.Area;
+    const cargo = app.db.models.Cargo;
     const user = app.db.models.Usuario;
 
+
     return {
-        getAreas: async(req, res) => {
-            let us = await area.findAll({
-                include: [{ model: user }]
-            });
+        getCargos: async(req, res) => {
+            let us = await cargo.findAll();
             return res.status(200).json(us);
         },
-        getOne: async(req, res) => {
-            let one = await area.findOne()
+        getOneCargo: async(req, res) => {
+            let one = await cargo.findOne();
             return res.status(200).json(one);
         },
-        getAreaById: async(req, res) => {
+        getCargoById: async(req, res) => {
             console.log(req.params.id);
-            let currentProyec = await area.findByPk(req.body.id);
+            let currentProyec = await cargo.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
-        UpdateArea: async(req, res) => {
+        UpdateCargo: async(req, res) => {
             let id = req.params.id;
             if (id) {
-                const updproyect = await area.update(req.body, {
+                const updproyect = await cargo.update(req.body, {
                     where: {
                         id: id
                     }
@@ -30,14 +29,14 @@ module.exports = app => {
             }
         },
 
-        createArea: async(req, res) => {
-            const newproyec = await area.create(req.body);
+        createCargo: async(req, res) => {
+            const newproyec = await cargo.create(req.body);
             return res.status(200).json(newproyec);
         },
 
-        deleteArea: async(req, res) => {
+        deleteCargo: async(req, res) => {
             let id = req.params.id;
-            const deletedTask = await area.destroy({
+            const deletedTask = await cargo.destroy({
                 where: {
                     id: id
                 }

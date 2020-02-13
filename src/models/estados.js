@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'estados',
         timestamps: false,
     });
+    tabla.associate = (models) => {
 
+    };
     return tabla;
 };
