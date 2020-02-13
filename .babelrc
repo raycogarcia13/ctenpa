@@ -1,0 +1,3 @@
+JWT_SECRET = RanCode
+JWT_ALGORITHM = HS256
+NODE_ENV = development

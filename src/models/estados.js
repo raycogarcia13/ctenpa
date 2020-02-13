@@ -1,18 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-    const tabla = sequelize.define('Cargo', {
+    const tabla = sequelize.define('Estados', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        cargo: {
+        estado: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        descripcion: {
             type: DataTypes.STRING,
             allowNull: false
         },
 
     }, {
-        tableName: 'cargo',
+        tableName: 'estados',
         timestamps: false,
     });
 
