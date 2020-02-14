@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         dia:{
-            type:DataTypes.STRING,
+            type:DataTypes.INTEGER,
             allowNull:true
         },
         mes: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         anno: {

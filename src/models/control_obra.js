@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         dia: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         mes: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         anno: {

@@ -1,5 +1,5 @@
 module.exports = app => {
-    const ctrl = app.db.models.Control_actividades;
+    const ctrl = app.db.models.Control_obra;
 
     return {
         getControlAct: async(req, res) => {
