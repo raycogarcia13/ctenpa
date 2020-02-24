@@ -62,6 +62,11 @@ function countHourDayP(dt) {
 }
 
 module.exports = {
+    getDiasmes:(req,res)=>{
+        let mes= new Date().getUTCMonth();
+        let anno = new Date().getUTCFullYear();
+        return cantDaysMonth(mes, anno);
+    },
 
     dayOfWeek: (req, res) => {
         let d = dayOfWeekP(req.body.fecha);

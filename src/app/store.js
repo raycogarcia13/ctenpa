@@ -8,7 +8,8 @@ export default new Vuex.Store({
     state:{
         autenticado:false,
         user_signed:null,
-        siderShow:true
+        trabajador:null,
+        siderShow:true,
     },
     mutations:{
         logged(state)
@@ -28,14 +29,16 @@ export default new Vuex.Store({
         {
             state.autenticado=false;
             state.user_signed=null;
-        }
+        },
     },
+
     actions:{
         sigin({commit},user){
             sessionStorage.setItem('ctenpa-secret',JSON.stringify(user.token));
             sessionStorage.setItem('ctenpa-user',JSON.stringify(user));
             commit('actionLogin',user);
         },
+
         verify({commit})
         {
             let user=sessionStorage.getItem('ctenpa-user');
@@ -53,6 +56,6 @@ export default new Vuex.Store({
             sessionStorage.removeItem('ctenpa-secret');  
             router.go('/');
             commit('actionLogout');
-        }
+        },
     }
 })

@@ -6,11 +6,13 @@ dotenv.config();
 module.exports = app => {
     const User = app.db.models.Usuario;
     const rol = app.db.models.Rol;
+    const trab = app.db.models.Trabajador;
     return {
         login: (req, res, next) => {
             let params = req.body;
             let username = params.username;
             let password = params.password;
+
            let tk= User.findOne({
                     where: {
                         username: req.body.username
@@ -27,12 +29,19 @@ module.exports = app => {
                         if (!bcrypt.compareSync(password, user.password))
                             return res.status(401).send("Contraseña incorrecta");
                         else {
+                            let idtrab = trab.findOne({
+                                include: [{ model: User }],
+                                where: [{
+                                    UsuarioId:user.id
+                                }]
+                            });
                             console.log("*** comienza generacion token***");
                             const payload = {
                                 sub: user.id,
                                 username: user.username,
                                 rolid: user.RolId,
-                                rol: user.Rol.rol
+                                rol: user.Rol.rol,
+                                trabajador:idtrab
                             };
                             const token = jwt.sign(
                                 JSON.stringify(payload),
@@ -44,6 +53,7 @@ module.exports = app => {
                             return res.status(200).header('secret', token).json({
                                 data: {
                                     user: user,
+                                    payload:payload,
                                     token: token
                                 }
                             });

@@ -13,4 +13,8 @@ module.exports = app => {
         .post(control.getCT);
     app.route('/api/equipo/ct')
         .post(control.getCT);
+    app.route('/api/equipo/trab/:id')
+        .get(control.getTrabXid);
+    app.route('/api/equipo/equixtrab/:id')
+        .get(control.getEquipXtrab);
 };

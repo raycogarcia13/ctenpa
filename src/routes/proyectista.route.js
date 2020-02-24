@@ -17,7 +17,7 @@ module.exports = app => {
         .post(control.countallproyec);
 
     app.route('/api/proyectista/ct')
-        .post(control.getCT);
+        .post(control.getCTProy);
     app.route('/api/proyectista/ct/:id')
-        .post(control.getCT);
+        .post(control.getCTProy);
 };

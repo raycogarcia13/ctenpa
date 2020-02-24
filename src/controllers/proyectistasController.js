@@ -9,13 +9,8 @@ module.exports = app => {
     const ctrl_act = app.db.models.Control_actividades;
     const equipo = app.db.models.Equipo;
     const subp = app.db.models.Sub_proyecto;
-
-    // { model:subp },
-    // { model:equipo },
-    // { model:actividad },
-    // { model:area },
     return {
-        getCT: async(req,res)=>{
+        getCTProy: async(req,res)=>{
             let us = await proyec.findAll({
                 where:[{
                     id:req.params.id

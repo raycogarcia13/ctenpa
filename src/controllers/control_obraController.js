@@ -27,12 +27,33 @@ module.exports = app => {
         },
 
 
-        createControlAct: async(req, res) => {
+        createControlObra: async(req, res) => {
             try {
+                var ida= await ctrl.findOne({
+                    where: {
+                        mes:req.body.mes,
+                        anno:req.body.anno,
+                        EquipoId:req.body.EquipoId
 
-                const newproyec = await ctrl.create(req.body);
-                return res.status(200).json(newproyec);
+                    }
+                });
+                // return res.json(ida.id);
+                if (Object.entries(ida).length===0){
+                    let ctrlAct;
+                    if(req.body.tiempo!=0)
+                        ctrlAct= await ctrl.create(req.body);
+                    return  res.status(200).json(ctrlAct)
 
+                }else
+                {
+                    let id =ida.id;
+                    const updcontrato = await ctrl.update(req.body, {
+                        where: {
+                            id: id
+                        }
+                    });
+                    return res.status(200).json(updcontrato)
+                }
             } catch (error) {
                 res.send(error)
             }

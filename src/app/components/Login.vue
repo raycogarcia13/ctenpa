@@ -89,6 +89,7 @@ export default {
                     this.$router.go('/home');
                     let tkn=res.headers.secret;
                     let user=res.data.data.user;
+                    // let userp=res.data.data.payload;
                     user.token=tkn;
                     this.sigin(user);
                     this.$swal({title:"Login",type:'success',text:'Bienvenido al sitio',toast:true,position:'top',showConfirmButton:false,timer:3000});

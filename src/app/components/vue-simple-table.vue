@@ -298,24 +298,24 @@ export default {
     resetCtxLocals(row) { this.context_menu_row = false },
 
     set_edit_row() {// context_menu_row when right click context menu onCtxOpen()
-    	this.toggle_edit_row = this.context_menu_row.id
+    	this.toggle_edit_row = this.context_menu_row.id;
     	this.$emit('edit_row_emit', this.context_menu_row)
     },
 
     cancel_edit_row(clearContext) { 
-    	this.toggle_edit_row = false
+    	this.toggle_edit_row = false;
     	if ( !clearContext) this.context_menu_row = false
     },
 
   	cancel_edit_cell() {
-  		this.h = false
+  		this.h = false;
   		this.v = false
   	},
 
   	close(clearContext) {
-  		this.toggle_edit_row = false
-    	this.h = false
-  		this.v = false
+  		this.toggle_edit_row = false;
+    	this.h = false;
+  		this.v = false;
   		// set tr-active class, after edit row
   		if ( !clearContext) this.context_menu_row = false
   	},
@@ -323,21 +323,21 @@ export default {
   	show_undo_cell(id, r, c) {
   		if (this.config.hasOwnProperty('undo_cell') && this.config.undo_cell === true)
 	  		return (this.row_undo && this.row_undo === id
-	  		 	&& this.uv === c && this.v !== r && this.h !== c)
+	  		 	&& this.uv === c && this.v !== r && this.h !== c);
 	  	else
 	  		return false
   	},
 
   	show_undo_row(id) {
   		if (this.config.hasOwnProperty('undo_row') && this.config.undo_row === true)
-  			return this.row_undo && this.row_undo === id && this.uv === false
+  			return this.row_undo && this.row_undo === id && this.uv === false;
   		else
   			return false
   	},
 
   	set_row_undo(row, v) {
-  		this.data_row_undo = row
-  		this.row_undo = row.id || false
+  		this.data_row_undo = row;
+  		this.row_undo = row.id || false;
   		if (v != undefined) {
   			this.uv = v
   		} else {
@@ -346,14 +346,14 @@ export default {
   	},
 
   	set_data_row_undo(index) {
-  		this.$set(this.data, index, this.data_row_undo)
-  		this.$emit('undo_row_emit', JSON.parse(JSON.stringify(this.data_row_undo)))
-  		this.data_row_undo = false
+  		this.$set(this.data, index, this.data_row_undo);
+  		this.$emit('undo_row_emit', JSON.parse(JSON.stringify(this.data_row_undo)));
+  		this.data_row_undo = false;
   		this.row_undo = false
   	},
 
     remove_row() {
-    	let remove_id = [], is_confirm = false, obj_id = []
+    	let remove_id = [], is_confirm = false, obj_id = [];
     	if (this.checkbox.length > 0) {
     		if (confirm(
     			`Remove ${this.checkbox.length} ${(
@@ -376,15 +376,15 @@ export default {
     						: index + 1 === 3 ? '3 RD' 
     						: (index + 1) + ' TH'
   					)}`;
-				remove_id.push(index)
+				remove_id.push(index);
     		if (confirm(confirmStr)) { 
-    			this.data.splice(index, 1) 
-    			is_confirm = true
+    			this.data.splice(index, 1) ;
+    			is_confirm = true;
     			obj_id.push(this.context_menu_row.id)
     		}
     	}
-    	this.context_menu_row = false
-    	this.checkbox = []
+    	this.context_menu_row = false;
+    	this.checkbox = [];
     	if (is_confirm) {
     		this.$emit('remove_row', remove_id, obj_id)
     	}
