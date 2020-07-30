@@ -1,34 +1,42 @@
 -- FUNCTION: public.ftg_cierreproyecto()
+--DROP TRIGGER "tg_cierreProyecto" ON public.cierre_proyectista;
+--DROP FUNCTION public.ftg_cierreproyecto();
 
--- DROP FUNCTION public.ftg_cierreproyecto();
-
-CREATE FUNCTION public.ftg_cierreproyecto()
+CREATE FUNCTION public.ftg_cierreproyectista()
     RETURNS trigger
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE NOT LEAKPROOF
 AS $BODY$
 declare tmp integer :=0 ;
-declare tmp1 integer :=0 ;
 
 BEGIN
-    select "ProyectoId" into tmp1 from sub_proyecto where id=new."SubProyectoId";
-	raise notice '%',tmp1;
-	select id into tmp from cierre_proyecto where anno=new.anno AND mes=new.mes AND "ProyectoId"=tmp1;
-	raise notice '%',tmp;
-	IF tmp!=0 then	
-		UPDATE public.cierre_proyecto
-			SET  horas_acumuladas=horas_acumuladas+ new.acumulado_obras
-			WHERE id=tmp;
+   
+	select id into tmp from cierre_proyectista 
+		where anno=new.anno AND mes=new.mes 
+		AND "SubProyectoId"=new."SubProyectoId" 
+		AND "TrabajadorId"=new."TrabajadorId";	
 		
+	IF TG_OP = 'INSERT' then
+		IF tmp!=0 then	
+			UPDATE public.cierre_proyectista
+				SET  acumulado_obras=acumulado_obras + new.acumulado_obras
+				WHERE id=tmp;		
+		ELSE 
+			INSERT INTO public.cierre_proyectista(
+				id, anno, mes, acumulado_obras, "SubProyectoId", "TrabajadorId")
+				VALUES (default,new.anno, new.mes, new.acumulado_obras,new."SubProyectoId",new."TrabajadorId");
+		END If;
 	ELSE 
-		INSERT INTO public.cierre_proyecto(
-			id, mes, anno, horas_acumuladas, produccion_bruta, produccion_mercantil, produccion_cuc, "ProyectoId")
-			VALUES (default,new.mes, new.anno, new.acumulado_obras,0,0,0, tmp1);
-	END If;
+		UPDATE public.cierre_proyectista
+			SET  acumulado_obras=acumulado_obras + (new.acumulado_obras - old.acumulado_obras)
+			WHERE id=tmp;
+	END IF;
+
 	RETURN new;
 END;
 $BODY$;
 
-ALTER FUNCTION public.ftg_cierreproyecto()
+ALTER FUNCTION public.ftg_cierreproyectista()
     OWNER TO postgres;
+

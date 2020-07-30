@@ -6,7 +6,11 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        funcion: {
+        nombre: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        codigo: {
             type: DataTypes.STRING,
             allowNull: false
         }
@@ -15,9 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Sub_proyecto);
-        tabla.belongsTo(models.Trabajador);
-        tabla.hasMany(models.Control_obra);
+        tabla.belongsToMany(models.Sub_proyecto,{
+            through: 'Asignacion',
+            as: 'asigSubproyecto',
+            foreignKey: 'SubProyectoId',
+        });
+        // tabla.belongsTo(models.Trabajador);
+        tabla.hasMany(models.Asignacion);
     };
 
     return tabla;

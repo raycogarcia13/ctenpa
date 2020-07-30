@@ -1,10 +1,12 @@
--- FUNCTION: public.ftg_totalhorasobras()
+-- FUNCTION: public.ftg_totalhorasactividades()
 
-DROP FUNCTION public.ftg_totalhorasActividades() CASCADE;
+ DROP  FUNCTION public.ftg_totalhorasactividades() CASCADE;
 
-CREATE FUNCTION public.ftg_totalhorasActividades()
+CREATE FUNCTION public.ftg_totalhorasactividades()
     RETURNS trigger
-    
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
 AS $BODY$
 declare tmp integer :=0 ;      
 BEGIN
@@ -23,7 +25,7 @@ BEGIN
 	END If;
 	RETURN new;
 END;
-$BODY$
-LANGUAGE 'plpgsql' 
+$BODY$;
 
-  
+ALTER FUNCTION public.ftg_totalhorasactividades()
+    OWNER TO postgres;

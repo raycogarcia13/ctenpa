@@ -34,7 +34,7 @@
                                 v-model="area.nombre"
                                 type="text"
                                 required
-                                placeholder="Breve descripción del usuario"
+                                placeholder="Nombre del área"
                                 @change="validateAll()"
                                 :disabled="cargando"
                                 :state="errors.nombre.status"
@@ -105,7 +105,7 @@
                             <span v-html="row.index+1"></span>
                         </template>
                         <template v-slot:cell(actions)="row">
-                            <!--                            <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>-->
+                            <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
                             <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button>
                             <b-button size="sm" variant="primary" @click="row.toggleDetails">
                                 {{ row.detailsShowing ? '-' : '+' }}
@@ -144,7 +144,24 @@
                 <b-spinner class="align-middle text-success"></b-spinner>
             </div>
         </b-form>
-
+        <!-- Info modal -->
+        <b-modal :id="infoModal.id" ok-variant="success" :title="infoModal.title" @ok="editarUser" @hide="resetInfoModal">
+            <pre v-if="infoModal.content!=''" >{{ infoModal.content }}</pre>
+            <div v-else>
+                <form>
+                    <b-form-group> <b-form-input
+                            v-model="area.codigo"
+                            type="text"
+                            placeholder="Nombre"
+                    ></b-form-input></b-form-group><b-form-group>
+                    <b-form-input
+                            v-model="area.nombre"
+                            type="text"
+                            placeholder="nombre"
+                    ></b-form-input></b-form-group>
+                </form>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -171,7 +188,7 @@
                     content: ''
                 },
                 isBusy:false,
-                area:{codigo:'',nombre:'',},
+                area:{id:'',codigo:'',nombre:'',},
                 error:null,
                 errors:{
                     codigo:{status:null,msg:""},
@@ -305,6 +322,35 @@
                     }
                 })
             },
+            edit(item) {
+                this.infoModal.title = `Editar Área: ${item.nombre}`;
+                this.infoModal.content = '';
+                this.area=item;
+                    this.$root.$emit('bv::show::modal', this.infoModal.id);
+            },
+            editarUser(event){
+                event.preventDefault();
+                // this.$root.$emit('bv::show::modal', this.infoModal.id);
+                this.$api.put('/area/'+this.area.id,this.area,{
+                    headers:{
+                        'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+                    }
+                }).then(res=>{
+                    this.cargando=false;
+                    this.getAreas();
+                    this.$swal({title:"Correcto",type:'success',text:'Área actualizado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                }).catch(error=>{
+                    this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    this.cargando=false;
+                });
+                console.log(event);
+                // alert('si');
+            },
+            resetInfoModal() {
+                this.infoModal.title = '';
+                this.infoModal.content = '';
+            },
+
 
         },
         // terminan los metodos

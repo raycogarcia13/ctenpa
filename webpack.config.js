@@ -1,5 +1,9 @@
 const {VueLoaderPlugin} = require('vue-loader');
+var nodeExternals = require('webpack-node-externals');
 module.exports = {
+    externals: [nodeExternals({
+    whitelist: ['commonjs', 'webpack/hot/dev-server', /^lodash/]
+})], // in order to ignore all modules in node_modules folder
     entry:'./src/app/index.js',
     output:{
         path: __dirname + '/src/public/js',
@@ -61,5 +65,6 @@ module.exports = {
     },
     plugins:[
      new VueLoaderPlugin   
-    ]
+    ],
+   devtool: 'source-map'
 };

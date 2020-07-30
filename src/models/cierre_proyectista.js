@@ -6,24 +6,26 @@ module.exports = (sequelize , DataTypes) =>{
             primaryKey: true,
             autoIncrement: true
         },
-        codigo:{
-            type:DataTypes.STRING,
+        anno:{
+            type:DataTypes.INTEGER,
             allowNull:false
         },
-        prod_mercantil:{
+        mes:{
+            type:DataTypes.INTEGER,
+            allowNull:false
+        },
+        acumulado_obras:{
             type:DataTypes.FLOAT,
             allowNull:false
         },
-        prod_cuc:{
-            type:DataTypes.FLOAT,
-            allowNull:false
-        },
+
     },{
-        tableName:'cierre_proyecto',
+        tableName:'cierre_proyectista',
         timestamps: false,
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Cierre_proyecto);
+        tabla.belongsTo(models.Sub_proyecto);
+        tabla.belongsTo(models.Trabajador);
     };
 
     return tabla;

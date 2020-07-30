@@ -34,7 +34,7 @@
               <!-- small box -->
               <div class="small-box bg-danger">
                 <div class="inner">
-                  <h3>65</h3>
+                  <h3>{{allProyecto}}</h3>
 
                   <p>Proyectos</p>
                 </div>
@@ -100,33 +100,42 @@ export default {
   name: "Home",
   data() {
     return {
-      alluser: ''
+      alluser: '',
+      allProyecto:''
     };
   },
   methods: {
     countUsers() {
-     this.$api.post('user/count',{
+     this.$api.post('/user/count',{
               headers:{
                   'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
               }}).then(res=>{
                 this.alluser=res.data;
-                // this.alluser=res.send('hello')
-               console.log('locol');           
-                        
             }).catch(err=>{
               console.log(err)
             })
     },
+    countProyectos(){
+      this.$api.post('/proyecto/count',{
+        headers:{
+          'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+        }}).then(res=>{
+        this.allProyecto=res.data;
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
 
-  
+
   },
   computed: {
     ...mapMutations(["logged"])
   },
   mounted() {
     this.countUsers();
-    console.log('baff');
+    this.countProyectos();
+
   }
-    
+
 };
 </script>

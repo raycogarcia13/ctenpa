@@ -77,45 +77,44 @@
         </b-row>
         <div class="pt-2">
             <el-button @click="visible = true" class="btn btn-outline-info">Insertar</el-button>
-            <el-dialog :visible.sync="visible" title="Insertar Integrante">
+            <el-dialog :visible.sync="visible" title="Insertar Proyectos al equipo">
                 <b-form>
                     <b-row>
                         <div class="col-md-6">
                             <b-form-group
-                                    label="Funcion que realiza:"
+                                    label="Insertar proyectos al equipo:"
                                     label-for="funcion"
                             >
-                                <b-form-input
-                                        id="funcion"
-                                        v-model="equipo.funcion"
-                                        type="text"
-                                        required
-                                        placeholder="Función que realiza"
-                                >
-                                </b-form-input>
                             </b-form-group>
 
                             <b-form-group
-                                    label="Elige el Proyectista:"
-                                    label-for="TrabajadorId">
+                                    label="Elige el Proyecto:"
+                                    label-for="SubProyectoId">
                                 <b-form-select
-                                        id="ContratoId"
-                                        v-model.number="equipo.TrabajadorId"
-                                        :options="trabajadorSelect()"
+                                        id="SubProyectoId"
+                                        v-model.number="asignacion.SubProyectoId"
+                                        :options="subproyectoSelect()"
+                                        required
                                 ></b-form-select>
                             </b-form-group>
                             <b-form-group
                                     label="Equipo al que Pertenece:"
-                                    label-for="AsignacionId">
+                                    label-for="EquipoId">
                                 <b-form-select
-                                        id="AsignacionId"
-                                        v-model.number="equipo.AsignacionId"
-                                        :options="asignacionSelect()"
+                                        id="EquipoId"
+                                        v-model.number="asignacion.EquipoId"
+                                        :options="equipoSelect()"
+                                        required
                                 ></b-form-select>
                             </b-form-group>
                             <hr>
                             <b-button @click="$router.back()" class="btn-danger">Atrás</b-button>
                             <b-button @click="crear" class="btn-success pull-right">Crear Equipo</b-button>
+                        </div>
+                        <div class="col-md-6 justify-content-center border-danger" v-if="enviado===true">
+                          <span class="text-red ">
+                                {{err[0]}}
+                          </span>
                         </div>
                     </b-row>
                 </b-form>
@@ -126,38 +125,41 @@
             <pre v-if="infoModal.content!=''" >{{ infoModal.content }}</pre>
             <div v-else>
                 <form>
-                    <b-form-group
-                            label="Funcion que realiza:"
-                            label-for="funcion"
-                    >
-                        <b-form-input
-                                id="funcion"
-                                v-model="equipo.funcion"
-                                type="text"
-                                required
-                                placeholder="Función que realiza"
-                        >
-                        </b-form-input>
-                    </b-form-group>
+                    <b-row>
+                        <div class="col-md-12">
+                            <b-form-group
+                                    label="Insertar proyectos al equipo:"
+                                    label-for="funcion"
+                            >
+                            </b-form-group>
 
-                    <b-form-group
-                            label="Elige el Proyectista:"
-                            label-for="TrabajadorId">
-                        <b-form-select
-                                id="ContratoId"
-                                v-model.number="equipo.TrabajadorId"
-                                :options="trabajadorSelect()"
-                        ></b-form-select>
-                    </b-form-group>
-                    <b-form-group
-                            label="Equipo al que Pertenece:"
-                            label-for="AsignacionId">
-                        <b-form-select
-                                id="AsignacionId"
-                                v-model.number="equipo.AsignacionId"
-                                :options="asignacionSelect()"
-                        ></b-form-select>
-                    </b-form-group>
+                            <b-form-group
+                                    label="Elige el Proyecto:"
+                                    label-for="SubProyectoId">
+                                <b-form-select
+                                        id="SubProyectoId"
+                                        v-model.number="asignacion.SubProyectoId"
+                                        :options="subproyectoSelect()"
+                                        required
+                                ></b-form-select>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Equipo al que Pertenece:"
+                                    label-for="EquipoId">
+                                <b-form-select
+                                        id="EquipoId"
+                                        v-model.number="asignacion.EquipoId"
+                                        :options="equipoSelect()"
+                                        required
+                                ></b-form-select>
+                            </b-form-group>
+                        </div>
+                        <div class="col-md-6 justify-content-center border-danger" v-if="enviado===true">
+                          <span class="text-red ">
+                                {{err[0]}}
+                          </span>
+                        </div>
+                    </b-row>
                 </form>
             </div>
         </b-modal>
@@ -171,15 +173,13 @@
         data(){
             return{
                 visible: false,
-                equipo:{id:'',funcion:'',AsignacionId:'',TrabajadorId:''},
+                asignacion:{id:'',EquipoId:'',SubProyectoId:''},
                 subproyecto:[],
-                asignacion:[],
-                trabajador:[],
+                listequipo:[],
                 items:[],
                 fields:[{key: 'number', label: '#'},
-                       { key:'funcion', labels:'Función que realiza',sortable: true, sortDirection: 'desc'},
                        { key:'equipo', labels:'Equipo',sortable: true, sortDirection: 'desc'},
-                       { key:'trabajador', labels:'Trabajadores',sortable: true, sortDirection: 'desc'},
+                       { key:'proyecto', labels:'Subproyectos',sortable: true, sortDirection: 'desc'},
                        { key:'actions', labels:'Acciones',sortable: true, sortDirection: 'desc'}],
                 totalRows: 1,
                 currentPage: 1,
@@ -191,6 +191,9 @@
                     title: '',
                     content: ''
                 },
+                enviado:false,
+                err:[],
+                llenado:false
             }
         },
         computed:{
@@ -211,6 +214,12 @@
         methods:{
             ...mapMutations(['toogleSidebar']),
             ...mapActions(['signout']),
+            validar(){
+                if (this.asignacion.EquipoId===null||this.asignacion.SubProyectoId===null)
+                    return this.llenado=true;
+                else
+                    return this.llenado=false;
+            },
 
             onFiltered(filteredItems) {
                 // Trigger pagination to update the number of buttons/pages due to filtering
@@ -220,7 +229,7 @@
             getData()
             {
                 this.isBusy=true;
-                this.$api.get("/integrantes/",{
+                this.$api.get("/asignacion/",{
                     headers:{
                         'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                     }
@@ -234,14 +243,29 @@
                 })
             },
             crear(){
-                this.$api.post('/integrantes/',this.equipo,{
+                console.log(this.asignacion);
+                this.validar();
+                if (this.llenado===true){
+                    this.$swal({title:"Incorrecto",type:'error',text:'Formulario incorrecto por favor corríjalo',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                } else
+                this.$api.post('/asignacion/',this.asignacion,{
                     headers:{
                         'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                     }
                 }).then(res=>{
+                    // return console.log(res.data);
                     this.cargando=false;
-                    this.getData();
-                    this.$swal({title:"Correcto",type:'success',text:'Contrato insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    if (res.data.errores==="SI") {
+                        this.enviado=true;
+                        this.err.push(res.data.nombre);
+                        this.$swal({title:"Incorrecto",type:'error',text:res.data.nombre,toast:true,position:'top-end',showConfirmButton:false,timer:5000});
+                    }
+                    else
+                    {
+                        this.getData();
+                        this.$swal({title:"Correcto",type:'success',text:'Asignación insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    }
+
                 }).catch(error=>{
                     this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                     this.cargando=false;
@@ -249,25 +273,32 @@
 
             },
             edit(item) {
-                this.infoModal.title = `Editar Equipo: ${item.funcion}`;
+                this.infoModal.title = `Editar Asignación: ${item.equipo}`;
                 this.infoModal.content = '';
-                this.equipo.id=item.id,
-                this.equipo.funcion=item.funcion,
-                this.equipo.AsignacionId=item.AsignacionId,
-                this.equipo.TrabajadorId=item.TrabajadorId,
+                this.asignacion=item;
                 this.$root.$emit('bv::show::modal', this.infoModal.id);
+                // return console.log(this.asignacion);
             },
             editarUser(event){
                 event.preventDefault();
+                // return console.log(this.asignacion);
                 // this.$root.$emit('bv::show::modal', this.infoModal.id);
-                this.$api.put('/integrantes/'+this.equipo.id,this.equipo,{
+                this.$api.put('/asignacion/'+this.asignacion.id,this.asignacion,{
                     headers:{
                         'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                     }
                         }).then(res=>{
                             this.cargando=false;
-                            this.getData();
-                            this.$swal({title:"Correcto",type:'success',text:'Integrante actualizado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    if (res.data.errores==="SI") {
+                        this.enviado=true;
+                        this.err.push(res.data.nombre);
+                        this.$swal({title:"Incorrecto",type:'error',text:res.data.nombre,toast:true,position:'top-end',showConfirmButton:false,timer:5000});
+                    }
+                    else
+                    {
+                        this.getData();
+                        this.$swal({title:"Correcto",type:'success',text:'Asignación insertado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    }
                         }).catch(error=>{
                             this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                             this.cargando=false;
@@ -279,46 +310,31 @@
                 this.infoModal.title = '';
                 this.infoModal.content = '';
             },
-
-            getTrabajador(){
-                this.$api.get("/proyectista").then(res=>{
-                    this.trabajador=res.data;
-                    this.equipo.TrabajadorId=null;
-                }).catch(err=>{})
-            },
             getSubProyecto(){
                 this.$api.get("/subproyecto").then(res=>{
                     this.subproyecto=res.data;
-                    this.equipo.SubProyectoId=null;
+                    this.asignacion.SubProyectoId=null;
                 }).catch(err=>{})
             },
-            getAsignacion(){
-                this.$api.get("/asignacion").then(res=>{
-                    this.asignacion=res.data;
-                    this.equipo.AsignacionId=null;
+            getEquipos(){
+                this.$api.get("/equipo").then(res=>{
+                    this.listequipo=res.data;
+                    this.asignacion.EquipoId=null;
                 }).catch(err=>{})
-            },
-            trabajadorSelect(){
-                let opt=[];
-                opt.push({text:'Escoja un elemento',value:null});
-                this.trabajador.forEach(function(element) {
-                    opt.push({text:element.nombre,value:element.id});
-                });
-                return opt;
             },
             subproyectoSelect(){
                 let opt=[];
                 opt.push({text:'Escoja un elemento',value:null});
                 this.subproyecto.forEach(function(element) {
-                    opt.push({text:element.codigo,value:element.id});
+                    opt.push({text:element.Proyecto.nombre +'-' + element.codigo,value:element.id});
                 });
                 return opt;
             },
-            asignacionSelect(){
+            equipoSelect(){
                 let opt=[];
                 opt.push({text:'Escoja un elemento',value:null});
-                this.asignacion.forEach(function(element) {
-                    opt.push({text:element.equipo,value:element.id});
+                this.listequipo.forEach(function(element) {
+                    opt.push({text:element.nombre,value:element.id});
                 });
                 return opt;
             },
@@ -326,7 +342,7 @@
             {
                 this.$swal({
                     title: 'Eliminar usuario?',
-                    text: "Está seguro de querer eliminar al usuario "+item.username+"!",
+                    text: "Está seguro de querer eliminar al usuario "+item.equipo+"!",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -334,7 +350,7 @@
                     confirmButtonText: 'Eliminar!'
                 }).then((result) => {
                     if (result.value) {
-                        let url='/integrantes/'+item.id;
+                        let url='/asignacion/'+item.id;
                         this.$api.delete(url,{
                             headers:{
                                 'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
@@ -351,10 +367,9 @@
 
         },
         created() {
-            this.getTrabajador();
             this.getSubProyecto();
             this.getData();
-            this.getAsignacion();
+            this.getEquipos();
         }
     }
 </script>

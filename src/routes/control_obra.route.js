@@ -1,7 +1,7 @@
 module.exports = app => {
     const control = app.controllers.control_obraController;
     app.route('/api/control_obra')
-        .get(control.getControlAct)
+        .get(control.getControlObra)
         .post(control.createControlObra);
 
     app.route('/api/control_obra/:id')
@@ -11,5 +11,7 @@ module.exports = app => {
 
     app.route('/api/control_obra/getOne')
         .post(control.getOne);
+    app.route('/api/control_obra/validar')
+        .post(control.validarTime);
 
 };

@@ -6,8 +6,20 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        codigo: {
-            type: DataTypes.STRING,
+        mes:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        anno:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        horas_acumuladas: {
+            type: DataTypes.DECIMAL(10,2),
+            allowNull: false
+        },
+        produccion_bruta: {
+            type: DataTypes.DECIMAL(10,2),
             allowNull: false
         },
         produccion_mercantil: {
@@ -24,9 +36,9 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Trabajador);
-        tabla.hasMany(models.Cierre_proyectista);
-    }
+        tabla.belongsTo(models.Proyectos);
+
+    };
 
     return tabla;
 };

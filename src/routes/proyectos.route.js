@@ -8,5 +8,7 @@ module.exports = app => {
     app.route('/api/proyecto/:id')
         .delete(control.deleteProyecto)
         .get(control.getProyectosById)
-        .put(control.UpdateProyecto)
+        .put(control.UpdateProyecto);
+    app.route('/api/proyecto/count')
+        .post(control.countallProyectos);
 };

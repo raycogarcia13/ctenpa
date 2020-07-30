@@ -105,7 +105,7 @@
                             <span v-html="row.index+1"></span>
                         </template>
                         <template v-slot:cell(actions)="row">
-<!--                            <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>-->
+                            <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
                             <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button>
                             <b-button size="sm" variant="primary" @click="row.toggleDetails">
                                 {{ row.detailsShowing ? '-' : '+' }}
@@ -148,7 +148,24 @@
             </div>
         </b-form>
         <hr>
-
+        <!-- Info modal -->
+        <b-modal :id="infoModal.id" ok-variant="success" :title="infoModal.title" @ok="editarUser" @hide="resetInfoModal">
+            <pre v-if="infoModal.content!=''" >{{ infoModal.content }}</pre>
+            <div v-else>
+                <form>
+                    <b-form-group> <b-form-input
+                            v-model="espec.especialidad"
+                            type="text"
+                            placeholder="Especialidad"
+                    ></b-form-input></b-form-group><b-form-group>
+                    <b-form-input
+                            v-model="espec.codigo"
+                            type="text"
+                            placeholder="Codigo"
+                    ></b-form-input></b-form-group>
+                </form>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -314,6 +331,35 @@
                     }
                 })
             },
+            edit(item) {
+                this.infoModal.title = `Editar Especialidad: ${item.especialidad}`;
+                this.infoModal.content = '';
+                this.espec=item;
+                this.$root.$emit('bv::show::modal', this.infoModal.id);
+            },
+            editarUser(event){
+                event.preventDefault();
+                // this.$root.$emit('bv::show::modal', this.infoModal.id);
+                this.$api.put('/especialidad/'+this.espec.id,this.espec,{
+                    headers:{
+                        'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+                    }
+                }).then(res=>{
+                    this.cargando=false;
+                    this.getEspecialidad();
+                    this.$swal({title:"Correcto",type:'success',text:'Equipo actualizado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                }).catch(error=>{
+                    this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    this.cargando=false;
+                });
+                console.log(event);
+                // alert('si');
+            },
+            resetInfoModal() {
+                this.infoModal.title = '';
+                this.infoModal.content = '';
+            },
+
         },
         // terminan los metodos
         mounted() {

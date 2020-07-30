@@ -64,9 +64,9 @@ module.exports = app => {
             }
         },
 
-        createProyectista: async(req, res) => {
+        createProyectista: async(req, res, err) => {
             let schema = Joi.object().keys({
-                username: Joi.string().min(6).required(),
+                username: Joi.string().min(6).required().error(new Error('Usuario Incorrecto')),
                 descripcion: Joi.string().required(),
                 password: Joi.string().min(6).required(),
                 password_confirm: Joi.string().required(),
@@ -118,12 +118,14 @@ module.exports = app => {
                     CargoId:req.body.CargoId,
                     DenominacioneId:req.body.DenominacionId
                 };
-
-                await proyec.create(inserProyect);
-                return res.status(201).send("Insertado Correctamente");
+                   await proyec.create(inserProyect);
+                   return res.status(201).send("Insertado Correctamente");
 
             } catch (err) {
-                res.send(err.details[0].message);
+                res.json({
+                    valor:err.message,
+                    errores:"SI"
+                })
             }
         },
 

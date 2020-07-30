@@ -105,7 +105,7 @@
                             <span v-html="row.index+1"></span>
                         </template>
                         <template v-slot:cell(actions)="row">
-                            <!--                            <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>-->
+                            <b-button size="sm" variant="success" @click="edit(row.item)" class="mr-1"><i class="fa fa-edit"></i> </b-button>
                             <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button>
                             <b-button size="sm" variant="primary" @click="row.toggleDetails">
                                 {{ row.detailsShowing ? '-' : '+' }}
@@ -144,7 +144,23 @@
                 <b-spinner class="align-middle text-success"></b-spinner>
             </div>
         </b-form>
-
+        <b-modal :id="infoModal.id" ok-variant="success" :title="infoModal.title" @ok="editarCliente" @hide="resetInfoModal">
+            <pre v-if="infoModal.content!=''" >{{ infoModal.content }}</pre>
+            <div v-else>
+                <form>
+                    <b-form-group> <b-form-input
+                            v-model="cliente.nombre"
+                            type="text"
+                            placeholder="Cliente"
+                    ></b-form-input></b-form-group><b-form-group>
+                    <b-form-input
+                            v-model="cliente.programa"
+                            type="text"
+                            placeholder="Programa"
+                    ></b-form-input></b-form-group>
+                </form>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -155,7 +171,7 @@
         data() {
             return {
                 items:[],
-                cliente:{nombre:'',programa:''},
+                cliente:{id:'',nombre:'',programa:''},
                 fields:[
                     { key: 'number', label: '#' },
                     { key:'nombre', labels:'Nombre del Área',sortable: true, sortDirection: 'desc'},
@@ -306,6 +322,38 @@
                 })
             },
 
+            edit(item) {
+                this.infoModal.title = `Editar Cliente: ${item.nombre}`;
+                this.infoModal.content = '';
+
+                this.cliente.id=item.id;
+                this.cliente.nombre=item.nombre;
+                this.cliente.programa=item.programa;
+                this.$root.$emit('bv::show::modal', this.infoModal.id);
+            },
+            editarCliente(event){
+                event.preventDefault();
+                // return alert(this.cliente.id);
+                this.$api.put('/cliente/'+this.cliente.id,this.cliente,{
+                    headers:{
+                        'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
+                    }
+                }).then(res=>{
+                    this.cargando=false;
+                    this.getClientes();
+                    this.$swal({title:"Correcto",type:'success',text:'Cliente actualizado correctamente',toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                }).catch(error=>{
+                    this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
+                    this.cargando=false;
+                });
+                console.log(event);
+                console.log(this.$event);
+                // alert('si');
+            },
+            resetInfoModal() {
+                this.infoModal.title = '';
+                this.infoModal.content = '';
+            },
         },
         // terminan los metodos
         mounted() {

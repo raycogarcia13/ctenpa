@@ -25,15 +25,27 @@ module.exports = (sequelize, DataTypes) => {
         produccion_bruta: {
             type: DataTypes.DECIMAL(10,2),
             allowNull: false
-        }
+        },
+        produccion_acumulada: {
+            type: DataTypes.DECIMAL(10,2),
+            allowNull: false
+        },
+        produccion_mercantil: {
+            type: DataTypes.DECIMAL(10,2),
+            allowNull: false
+        },
+        produccion_cuc: {
+            type: DataTypes.DECIMAL(10,2),
+            allowNull: false
+        },
     }, {
         tableName: 'cierre',
         timestamps: false,
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Trabajador);
-        tabla.belongsTo(models.Empresa);
-        tabla.hasMany(models.Cierre_proyecto);
+        // tabla.belongsTo(models.Equipo);
+        // tabla.belongsTo(models.Empresa);
+        // tabla.hasMany(models.Cierre_proyecto);
     };
 
     return tabla;

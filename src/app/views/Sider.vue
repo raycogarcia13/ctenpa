@@ -45,11 +45,11 @@
             <i class="fa pull-right" :class="flechita('user')"></i>
           </a>
           <ul class="treeview-menu" :style="{'display':mostrar('user')}">
-            <li>
-              <router-link :to="{name:'add-planAnual'}">
-                <i class="fa fa-table"></i> Plan de Produccion Anual
-              </router-link>
-            </li>
+<!--            <li>-->
+<!--              <router-link :to="{name:'add-planAnual'}">-->
+<!--                <i class="fa fa-table"></i> Plan de Produccion Anual-->
+<!--              </router-link>-->
+<!--            </li>-->
             <li>
               <router-link :to="{name:'add-cliente'}">
                 <i class="fa fa-plus"></i> Agregar Cliente
@@ -85,43 +85,43 @@
                 <i class="fa fa-plus"></i> Agregar Actividad
               </router-link>
             </li>
-            <li>
-              <router-link :to="{name:'verXareas'}">
-                <i class="fa fa-plus"></i> Ver por Áreas
-              </router-link>
-            </li>
-            <li>
-              <router-link :to="{name:'add-planmes'}">
-                <i class="fa fa-plus"></i> Plan del mes
-              </router-link>
-            </li>
-            <li>
-              <router-link :to="{name:'add-ct'}">
-                <i class="fa fa-plus"></i> CT
-              </router-link>
-            </li>
-          </ul>
-          <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
-            <i class="fa fa-users"></i>
-            <span>Insertar</span>
-            <i class="fa pull-right" :class="flechita('user')"></i>
-          </a>
-          <ul class="treeview-menu" :style="{'display':mostrar('user')}">
+<!--            <li>-->
+<!--              <router-link :to="{name:'verXareas'}">-->
+<!--                <i class="fa fa-plus"></i> Ver por Áreas-->
+<!--              </router-link>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <router-link :to="{name:'add-planmes'}">-->
+<!--                <i class="fa fa-plus"></i> Plan del mes-->
+<!--              </router-link>-->
+<!--            </li>-->
             <li>
               <router-link :to="{name:'add-areas'}">
-                <i class="fa fa-table"></i> Insertar Áreas
+                <i class="fa fa-plus"></i> Insertar Áreas
               </router-link>
             </li>
             <li>
               <router-link :to="{name:'add-especialidad'}">
                 <i class="fa fa-plus"></i> Insertar Especialidad
               </router-link>
-            </li><li>
-            <router-link :to="{name:'add-proyectista'}">
-              <i class="fa fa-plus"></i> Insertar Proyectistas
-            </router-link>
-          </li>
+            </li>
+            <li>
+              <router-link :to="{name:'add-asignacion'}">
+                <i class="fa fa-plus"></i> Asignar Proyectos a los Equipos
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'add-integrantes'}">
+                <i class="fa fa-plus"></i> Integrantes de los Equipos
+              </router-link>
+            </li>
+<!--            <li>-->
+<!--              <router-link :to="{name:'add-cierre'}">-->
+<!--                <i class="fa fa-plus"></i> Cierre-->
+<!--              </router-link>-->
+<!--            </li>-->
           </ul>
+
         </li>
             <!-- Jefe de Area -->
         <li v-if="hasPermission('jArea')" class="treeview" :class="{'active':showed=='user'}">
@@ -136,7 +136,11 @@
                 <i class="fa fa-plus"></i> C&aacute;lculo de Tiempo
               </router-link>
             </li>
-            
+            <li>
+              <router-link :to="{name:'add-integrantes'}">
+                <i class="fa fa-plus"></i> Integrantes de los Equipos
+              </router-link>
+            </li>
           </ul>
         </li>
 <!--        trabajador-->
@@ -153,6 +157,26 @@
               </router-link>
             </li>
 
+          </ul>
+        </li>
+
+        <li v-if="hasPermission('economia')" class="treeview" :class="{'active':showed=='user'}">
+          <a style="color:#f6f6f6;cursor:pointer" @click="mostrarSubMenu('user')">
+            <i class="fa fa-list-alt"></i>
+            <span>Cierre</span>
+            <i class="fa pull-right" :class="flechita('user')"></i>
+          </a>
+          <ul class="treeview-menu" :style="{'display':mostrar('user')}">
+            <li>
+              <router-link :to="{name:'add-cierre'}">
+                <i class="fa fa-plus"></i> Cierre Parcial
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{name:'get-cierre'}">
+                <i class="fa fa-plus"></i> Cierre
+              </router-link>
+            </li>
           </ul>
         </li>
       </ul>

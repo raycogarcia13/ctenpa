@@ -1,15 +1,12 @@
 module.exports = app => {
-    const control = app.controllers.actividadController;
-    app.route('/api/actividad')
-        .get(control.getActividad)
-        .post(control.createActividad);
+    const control = app.controllers.cierreProyectistaController;
+    app.route('/api/cierreProyectista')
+        .get(control.getCierreProyectista)
+        .post(control.createCierreP);
 
-    app.route('/api/actividad/:id')
-        .delete(control.deleteActividad)
-        .get(control.getActividadById)
-        .put(control.UpdateActividad);
-
-    app.route('/api/actividad/getOne')
-        .post(control.getOne);
+    app.route('/api/cierreProyectista/:id')
+        .delete(control.deleteCierreP)
+        .get(control.getCierrePById)
+        .put(control.UpdateCierrePro);
 
 };

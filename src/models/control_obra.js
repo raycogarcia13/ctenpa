@@ -28,7 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Equipo);
+        tabla.belongsTo(models.Trabajador);
+        tabla.belongsTo(models.Sub_proyecto);
     };
 
     return tabla;

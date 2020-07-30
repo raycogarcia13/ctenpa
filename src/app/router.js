@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-Vue.use(Router)
+Vue.use(Router);
 
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
@@ -9,6 +9,7 @@ import UsListado from './pages/users/Listado.vue'
 import CreateUser from './pages/users/CreateUser.vue'
 import Rhuman from './views/RHuman.vue'
 import JArea from './views/JArea.vue'
+import Economia from './views/Economia.vue'
 import ViewRecursos from './pages/RecursosHumanos/Listado.vue'
 import ViewAreas from './pages/RecursosHumanos/ListadoXareas.vue'
 import Proyectos from './pages/JArea/Proyectos.vue'
@@ -25,7 +26,10 @@ import CreateSubproyecto from "./pages/RecursosHumanos/CreateSubproyecto.vue";
 import CreateEquipo from "./pages/RecursosHumanos/CreateEquipo.vue";
 import CreateActividades from "./pages/RecursosHumanos/CreateActividades.vue";
 import CreateCT from "./pages/RecursosHumanos/CreateCT.vue";
-
+import CreateCierre from "./pages/RecursosHumanos/CreateCierre.vue";
+import CreateIntegrantes from "./pages/RecursosHumanos/CreateIntegrantes.vue";
+import CreateAsignacion from "./pages/RecursosHumanos/CreateAsignacion.vue";
+import Cierre from './pages/Economia/GetCierre.vue';
 let routes = [{
         path: '/',
         name: 'login',
@@ -63,6 +67,10 @@ let routes = [{
             { path: "add-equipo", name: 'add-equipo', component: CreateEquipo },
             { path: "add-actividades", name: 'add-actividades', component: CreateActividades },
             { path: "add-ct", name: 'add-ct', component: CreateCT },
+            { path: "add-asignacion", name: 'add-asignacion', component: CreateAsignacion},
+            { path: "add-integrantes", name: 'add-integrantes', component: CreateIntegrantes},
+            // { path: "add-cierre", name: 'add-cierre', component: CreateCierre},
+            // { path: "get-cierre", name: 'get-cierre', component: Cierre},
         ]
     },
     {
@@ -72,7 +80,15 @@ let routes = [{
             { path: "/", name: 'jarea', component: Proyectos },
 
         ]
-    }
+    },
+    {
+        path: '/economia/',
+        component: Economia,
+        children: [
+            { path: "get-cierre", name: 'get-cierre', component: Cierre },
+            { path: "add-cierre", name: 'add-cierre', component: CreateCierre},
+        ]
+    },
 ];
 
 export default new Router({

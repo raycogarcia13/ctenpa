@@ -41,7 +41,9 @@ module.exports = (sequelize, DataTypes) => {
         tabla.belongsTo(models.Denominaciones);
         tabla.belongsTo(models.Usuario);
         tabla.hasMany(models.Control_actividades);
-        tabla.hasMany(models.Equipo);
+        tabla.hasMany(models.Control_obra);
+        tabla.hasMany(models.Integrantes);
+        // tabla.hasMany(models.Equipo);
     };
 
     return tabla;

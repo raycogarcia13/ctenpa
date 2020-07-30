@@ -27,7 +27,7 @@ module.exports = app => {
                         return res.status(401).send("Usuario incorrecto");
                     } else {
                         if (!bcrypt.compareSync(password, user.password))
-                            return res.status(401).send("Contraseña incorrecta");
+                            return res.status(401).send("Contrase単a incorrecta");
                         else {
                             let idtrab = trab.findOne({
                                 include: [{ model: User }],

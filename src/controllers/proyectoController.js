@@ -1,10 +1,23 @@
-import Sequelize from 'sequelize'
 module.exports = app => {
     const proyec = app.db.models.Proyectos;
+    const contrato = app.db.models.Contratos;
+    const estados = app.db.models.Estados;
     const temp = app.db.models.Temporal;
     return {
+        countallProyectos: async(req, res) => {
+            try {
+                let all = await proyec.findAndCountAll();
+                console.log(all.count);
+                return res.status(200).json(all.count);
+
+            } catch (error) {
+                res.status(500).send(error);
+            }
+        },
         getProyectos: async(req, res) => {
-            let us = await proyec.findAll();
+            let us = await proyec.findAll({
+                include:[{model:contrato},{model:estados}]
+            });
             return res.status(200).json(us);
         },
         getProyectosById: async(req, res) => {
@@ -27,31 +40,31 @@ module.exports = app => {
 
         createProyecto: async(req, res) => {
             try {
-                let currentProyec = await proyec.findAll({
-                    order: [
-                        ['id', 'DESC']
-                    ],
-                    limit: 1
-                });
-                var a = (currentProyec.length == 1) ? currentProyec[0].codigo : null;
-                let contador;
-                if (a === null || a === 999) {
-                    contador = '000';
-                } else {
-                    console.log(a.substr(-3));
-                    let currentvalor = a.substr(-3);
-                    let tor = parseInt(currentvalor, 10);
-                    tor += 1;
+                // let currentProyec = await proyec.findAll({
+                //     order: [
+                //         ['id', 'DESC']
+                //     ],
+                //     limit: 1
+                // });
+                // var a = (currentProyec.length == 1) ? currentProyec[0].codigo : null;
+                // let contador;
+                // if (a === null || a === 999) {
+                //     contador = '000';
+                // } else {
+                //     console.log(a.substr(-3));
+                //     let currentvalor = a.substr(-3);
+                //     let tor = parseInt(currentvalor, 10);
+                //     tor += 1;
+                //
+                //     contador = ('000' + tor).slice(-3);
+                // }
 
-                    contador = ('000' + tor).slice(-3);
-                }
 
 
-                console.log(contador);
-                let codigo = req.body.num_contrato + req.body.anno_contrato + req.body.cod_ct;
+                // let codigo = req.body.num_contrato + req.body.anno_contrato + req.body.cod_ct;
 
                 let insertProyecto = {
-                    codigo: codigo,
+                    codigo: req.body.codigo,
                     nombre: req.body.nombre,
                     valor_total: req.body.valor_total,
                     descripcion: req.body.descripcion,
@@ -60,11 +73,9 @@ module.exports = app => {
                     EstadoId: req.body.EstadoId
                 };
                 const newproyec = await proyec.create(insertProyecto);
-                console.log(newproyec.id);
                 let codId = { codigo: newproyec.id, valor: newproyec.codigo };
                 const newTemp = await temp.create(codId);
                 return res.status(200).json(newproyec);
-                // return res.status(200).json(insertProyecto)
             } catch (error) {
                 res.send(error)
             }

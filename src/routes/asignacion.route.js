@@ -1,13 +1,13 @@
 module.exports = app => {
-    const control = app.controllers.actividadController;
-    app.route('/api/actividad')
-        .get(control.getActividad)
-        .post(control.createActividad);
+    const control = app.controllers.asignacionController;
+    app.route('/api/asignacion')
+        .get(control.getAsignacion)
+        .post(control.createAsignacion);
 
-    app.route('/api/actividad/:id')
-        .delete(control.deleteActividad)
-        .get(control.getActividadById)
-        .put(control.UpdateActividad);
+    app.route('/api/asignacion/:id')
+        .delete(control.deleteAsignacion)
+        .get(control.getAsignacionById)
+        .put(control.UpdateAsignacion);
 
     app.route('/api/actividad/getOne')
         .post(control.getOne);

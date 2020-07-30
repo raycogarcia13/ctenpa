@@ -26,7 +26,7 @@ function cantDaysMonth(mes, anno) {
     }
     return 0;
 }
-
+import moment from "moment";
 module.exports = app => {
     const equipo = app.db.models.Equipo;
     const trabajador = app.db.models.Trabajador;
@@ -36,6 +36,8 @@ module.exports = app => {
     const act = app.db.models.Actividades;
     const ctrlAct = app.db.models.Control_actividades;
     const ctrlObra = app.db.models.Control_obra;
+    const integrante = app.db.models.Integrantes;
+    const asig = app.db.models.Asignacion;
     return {
 
         getTrabXid: async(req, res) => {
@@ -47,6 +49,84 @@ module.exports = app => {
             });
             return res.status(200).json(usu);
         },
+        getDiaProyecxHoras: async (req,res)=>{
+            let id= req.params.id;
+            let dia=req.params.dia;
+            let mes=req.params.mes;
+            let anno=req.params.anno;
+            let fecha =moment().format(dia+'/'+mes+'/'+anno);
+            // return res.json(fecha);
+            // let fecha =new Date(mes+'/'+dia+'/'+anno);
+            let cantH = await app.controllers.fechasController.countHourDay(fecha);
+            let ctrO= await ctrlObra.findAll({
+              where:{
+                  TrabajadorId: id,
+                  dia:dia,
+                  mes:mes,
+                  anno:anno,
+              },
+              raw:true
+          });
+            let ctrA= await ctrlAct.findAll({
+                where:{
+                    TrabajadorId: id,
+                    dia:dia,
+                    mes:mes,
+                    anno:anno,
+                },
+                raw:true
+            });
+
+            let suma=0;
+            for(let i=0;i<ctrO.length;i++){
+                suma+=ctrO[i]['tiempo'];
+            }
+            for(let i=0;i<ctrA.length;i++){
+                suma+=ctrA[i]['tiempo'];
+            }
+
+         return res.status(200).json({
+             'status':(suma > cantH)?true:false,
+             'horasDia':cantH,
+             'worked':suma
+         })
+        },
+        getDiaProyecxHorasMes: async (req,res)=>{
+            let id= req.params.id;
+            let mes=req.params.mes;
+            let anno=req.params.anno;
+            let cantH = await app.controllers.fechasController.horasDelMes(mes,anno);
+            let ctrO= await ctrlObra.findAll({
+                where:[{
+                    TrabajadorId: id,
+                    mes:mes,
+                    anno:anno,
+                }],
+                raw:true
+            });
+            let ctrA= await ctrlAct.findAll({
+                where:[{
+                    TrabajadorId: id,
+                    mes:mes,
+                    anno:anno,
+                }],
+                raw:true
+            });
+
+            let suma=0;
+            for(let i=0;i<ctrO.length;i++){
+                suma+=ctrO[i]['tiempo'];
+            }
+            for(let i=0;i<ctrA.length;i++){
+                suma+=ctrA[i]['tiempo'];
+            }
+
+            return res.status(200).json({
+                'status':(suma > cantH)?true:false,
+                'horasMes':cantH,
+                'worked':suma
+            })
+        },
         getEquipXtrab: async(req, res) => {
             let usu = await trabajador.findOne({
                 include: [{ model: user }],
@@ -55,10 +135,12 @@ module.exports = app => {
                 }]
             });
             let e = await equipo.findOne({
-                include: [{ model: trabajador }],
-                where: [{
-                    TrabajadorId: usu.id
-                }]
+                include: [{ model: asig,include:[{model:integrante,
+                        where: [{
+                            TrabajadorId: usu.id
+                        }]
+                    }] }],
+                raw:true
             });
             return res.status(200).json(e);
         },
@@ -69,31 +151,38 @@ module.exports = app => {
 
         getCT: async(req, res) => {
             let a = await act.findAll();
-            // return res.json(a);
             let u = await trabajador.findOne({
                 include: [{ model: user }],
                 where: [{
                     UsuarioId: req.params.id
                 }]
             });
-            // return res.json(u.id);
-            let us = await equipo.findAll({
+            let us = await integrante.findAll({
                 where: [{
                     TrabajadorId: u.id,
                 }],
                 include: [
-                    { model: subp, include: [{ model: proyec }] }
-                ]
+                    {model:asig,include:[{ model: subp, include: [{ model: proyec }]}] }
+                ],
+                raw:true
             });
             // return res.json(us);
             let todos = [];
-            var dia = new Date().getDay();
-            var mes = new Date().getMonth();
-            var anno = new Date().getFullYear();
-            var tmpO = {};
-            var tmpObraO = {};
-            // obtener las actividades e insertar los datos en control de actividades
-            for (let i = 0; i < a.length; i++) {
+            var mes = (req.body.mes)?req.body.mes:new Date().getMonth();
+            var anno = (req.body.year)?req.body.year:new Date().getFullYear();
+            // return res.json(mes);
+            for(let i=0;i<a.length;i++){
+                let ctA = await ctrlAct.findAll({
+                    where:{
+                        "ActividadeId":a[i].id,
+                        TrabajadorId:u.id,
+                        mes:mes+1,
+                        anno
+                    },
+                    order: [
+                        ['dia', 'ASC']
+                    ],
+                });
                 let tmp = {
                     id: a[i].id,
                     nombre: a[i].actividad,
@@ -101,77 +190,70 @@ module.exports = app => {
                     anno: anno,
                     typ: 'actividades'
                 };
-                // return res.json(tmp);
-                let registerTmp = await ctrlAct.findAll();
-                // let registerTmp = await ctrlAct.findAll({
-                // where: {
-                //     id: a[i].id,
-                //     TrabajadorId: u.id
+                let tmpReg = [];
+                let it=0;
+                for (let j = 0; j < cantDaysMonth(mes + 1, anno); j++) {
+                    if (ctA[it]!=null)
+                    {
+                        if(ctA[it]['dia'] === j + 1)
+                        {
+                            tmpReg[j] = ctA[it]['tiempo'];
+                            it++;
+                        }
+                        else
+                            tmpReg[j] = 0;
+                    }
+                    else
+                        tmpReg[j] = 0;
 
-                // },
-                // order: [
-                //     ['dia', 'ASC']
-                // ],
-                // });
-                console.log(registerTmp[i]);
-                // let tmpReg = [];
-                // for (let j = 0; j < cantDaysMonth(mes + 1, anno); j++) {
-                //     if (registerTmp.length > 0 && registerTmp[0]['dia'] === j + 1) {
-                //         tmpReg[j] = registerTmp[i]['tiempo'];
-
-                //     } else
-                //         tmpReg[j] = 0;
-                // }
-                // tmp.tiempos = tmpReg;
-                // todos.push(tmp);
-                // console.log(tmpReg[j])
+                }
+                tmp.tiempos = tmpReg;
+                todos.push(tmp);
             }
             // obtener los proyectos e insertarle sus respectivos datos a control de obra
-            // return  res.json(us);
-            // for (let i = 0; i < us.length; i++) {
-            //     let tmpObra = {
-            //         id: us[i].id,
-            //         nombre: us[i].Sub_proyecto.Proyecto.nombre,
-            //         // dia:dia,
-            //         mes: mes + 1,
-            //         anno: anno,
-            //         typ: 'obras'
-            //     };
-            //     let registerTmpObra = await ctrlObra.findAll({
-            //         order: [
-            //             ['dia', 'ASC']
-            //         ],
-            //     });
+            for (let i = 0; i < us.length; i++) {
+                let tmpObra = {
+                    id: us[i].id,
+                    nombre: us[i]['Asignacion.Sub_proyecto.Proyecto.nombre'],
+                    mes: mes + 1,
+                    anno: anno,
+                    SubProyectoId:us[i]['Asignacion.Sub_proyecto.id'],
+                    typ: 'obras'
+                };
+                let registerTmpObra = await ctrlObra.findAll({
+                    where:{
+                        TrabajadorId:us[i].TrabajadorId,
+                        SubProyectoId:us[i]['Asignacion.Sub_proyecto.id'],
+                        mes:mes+1,
+                        anno
+                    },
+                    order: [
+                        ['dia', 'ASC']
+                    ],
+                });
             // return res.json(registerTmpObra[0]['dia'])
-            //     let tmpRegObra = [];
-            //     for (let j = 0; j < cantDaysMonth(mes + 1, anno); j++) {
-            //         if (tmpRegObra.length > 0 && registerTmpObra[0]['dia'] === j + 1) {
-            //             tmpRegObra[j] = registerTmpObra[0]['tiempo'];
+                let tmpRegObra = [];
+                let it=0;
+                for (let j = 0; j < cantDaysMonth(mes + 1, anno); j++) {
+                    if (registerTmpObra[it]!=null)
+                    {
+                        if(registerTmpObra[it]['dia'] === j + 1)
+                        {
+                            tmpRegObra[j] = registerTmpObra[it]['tiempo'];
+                            it++;
+                        }
+                        else
+                            tmpRegObra[j] = 0;
+                    }
+                    else
+                        tmpRegObra[j] = 0;
 
-            //         } else
-            //             tmpRegObra[j] = 0;
-            //     }
-            //     tmpObra.tiempos = tmpRegObra;
-            //     todos.push(tmpObra);
-            // }
-            // const union = Object.assign(tmp, tmpObra);
-            // var union = {...tmp, ...tmpObra};
-            // return res.status(200).json(union);
-            // var vale = Object.values(req.body.tiempos);
-            // for (let n;n<=todos.length;n++){
-            //     tmpO={
-            //         dia:n+1,
-            //         mes:todos.mes,
-            //
-            //     }
-            // }
-            // for (let h; h<=vale.length;h++){
-            //     tmpObraO={
-            //         tiempo:vale[h]
-            //     }
-            // }
-            // const union = Object.assign(tmpO, tmpObraO);
-            // return res.status(200).json(todos);
+                }
+                tmpObra.tiempos = tmpRegObra;
+                todos.push(tmpObra);
+            }
+
+            return res.status(200).json(todos);
         },
         getEquipoById: async(req, res) => {
             console.log(req.params.id);

@@ -1,11 +1,18 @@
 <template>
-    $END$
+    <div class="col-md-12">
+        <cierre></cierre>
+    </div>
 </template>
 
 <script>
+    import cierre from '../../components/cierre.vue'
     export default {
-        name: "GetCierre"
+        name: "GetCierre",
+        components: {
+            cierre
+        }
     }
+
 </script>
 
 <style scoped>

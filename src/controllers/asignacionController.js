@@ -1,39 +1,80 @@
 module.exports = app => {
-    const actividad = app.db.models.Actividades;
+    const asignacion = app.db.models.Asignacion;
+    const equipo = app.db.models.Equipo;
+    const subp = app.db.models.Sub_proyecto;
+    const proyectos = app.db.models.Proyectos;
     return {
-        getActividad: async(req, res) => {
-            let us = await actividad.findAll();
-            return res.status(200).json(us);
+        getAsignacion: async(req, res) => {
+            let us = await asignacion.findAll({
+                include:[{model:equipo, attributes:['nombre']},{model:subp,include:[{model:proyectos}]}],
+                raw:true
+            });
+            let todos=[];
+            for (var i = 0; i <us.length ; i++) {
+                var obj={
+                    "id":us[i]['id'],
+                    "equipo":us[i]['Equipo.nombre'],
+                    "proyecto":us[i]['Sub_proyecto.Proyecto.nombre'],
+                };
+                todos.push(obj);
+            }
+            return res.status(200).json(todos);
         },
         getOne: async(req, res) => {
-            let one = await actividad.findOne();
+            let one = await asignacion.findOne();
             return res.status(200).json(one);
         },
-        getActividadById: async(req, res) => {
+        getAsignacionById: async(req, res) => {
             console.log(req.params.id);
-            let currentProyec = await actividad.findByPk(req.body.id);
+            let currentProyec = await asignacion.findByPk(req.body.id);
             return res.status(200).json(currentProyec);
         },
-        UpdateActividad: async(req, res) => {
+        UpdateAsignacion: async(req, res) => {
             let id = req.params.id;
-            if (id) {
-                const updproyect = await actividad.update(req.body, {
-                    where: {
-                        id: id
+            try {
+                if (id) {
+                    const updproyect = await asignacion.update(req.body, {
+                        where: {
+                            id: id
+                        }
+                    });
+                    return res.status(200).json(updproyect)
+                }
+            }catch (e) {
+                res.json({
+                        errores:"SI",
+                        msg:e.detail,
+                        nombre:'Ya esa asignación existe por favor corríjala'
                     }
-                });
-                return res.status(200).json(updproyect)
+                )
             }
+
         },
 
-        createActividad: async(req, res) => {
-            const newproyec = await actividad.create(req.body);
-            return res.status(200).json(newproyec);
+        createAsignacion: async(req, res) => {
+            // let insert = {
+            //     "EquipoId":req.body.EquipoId,
+            //     "SubProyectoId":req.body.SubProyectoId
+            // };
+            // const newproyec = await asignacion.create(insert);
+            try {
+                const newproyec = await asignacion.create(req.body);
+                return res.status(200).json(newproyec);
+            }catch (e) {
+                console.log(e);
+                res.json({
+                    errores:"SI",
+                    msg:e.detail,
+                    nombre:'Ya esa asignación existe por favor corríjala'
+                }
+                )
+            }
+
         },
 
-        deleteActividad: async(req, res) => {
+        deleteAsignacion: async(req, res) => {
             let id = req.params.id;
-            const deletedTask = await actividad.destroy({
+            const deletedTask = await asignacion.destroy({
                 where: {
                     id: id
                 }

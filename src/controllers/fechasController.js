@@ -1,3 +1,4 @@
+import moment from 'moment';
 let dias = [
     'Domingo',
     'Lunes',
@@ -61,19 +62,47 @@ function countHourDayP(dt) {
     return cant;
 }
 
+function countHourDaymioM() {
+    let d = new Date().getDay();
+    let cant;
+    switch (d) {
+        case 5:
+            cant = 8;
+            break;
+        case 6:
+        case 0:
+            cant = 0;
+            break;
+        default:
+            cant = 9;
+            break;
+    }
+    return cant;
+}
+
 module.exports = {
     getDiasmes:(req,res)=>{
-        let mes= new Date().getUTCMonth();
-        let anno = new Date().getUTCFullYear();
-        return cantDaysMonth(mes, anno);
+        // let mes= new Date().getUTCMonth();
+        // let anno = new Date().getUTCFullYear();
+        let mes= moment().month();
+        let anno = moment().format("YYYY");
+        console.log(mes,anno);
+        return cantDaysMonth(mes + 1, anno);
     },
 
     dayOfWeek: (req, res) => {
         let d = dayOfWeekP(req.body.fecha);
         res.json({ dia: d, name: dias[d] });
     },
+    diaSemana: (req, res) => {
+        let dia= new Date().getDay();
+        res.json({ dia: dia, name: dias[dia] });
+    },
     countHourDay: att => {
         return countHourDayP(att);
+    },
+    countHourDaymio: att => {
+        return countHourDaymioM(att);
     },
     countHourMonth: (mes, anno) => {
         let cantMont = cantDaysMonth(mes, anno);
@@ -82,6 +111,20 @@ module.exports = {
         let cant = 0;
         for (let i = 1; i <= cantMont; i++) {
             let date = new Date(anno + '/' + mes + '/' + i);
+            cant += countHourDayP(date);
+        }
+        return cant;
+    },
+    horasDelMes: (mes, anno) => {
+        let mess= new Date().getUTCMonth();
+        let meses= mess +1;
+        let year = new Date().getUTCFullYear();
+        let cantMont = cantDaysMonth(meses, year);
+        if (!cantMont)
+            return null;
+        let cant = 0;
+        for (let i = 1; i <= cantMont; i++) {
+            let date = new Date(year + '/' + meses + '/' + i);
             cant += countHourDayP(date);
         }
         return cant;

@@ -1,5 +1,5 @@
 module.exports = (sequelize , DataTypes) =>{
-    const tabla = sequelize.define('Cierre_proyectista',{
+    const tabla = sequelize.define('Cierre_actividades',{
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -14,21 +14,17 @@ module.exports = (sequelize , DataTypes) =>{
             type:DataTypes.INTEGER,
             allowNull:false
         },
-        horas:{
-            type:DataTypes.FLOAT,
-            allowNull:false
-        },
-        acumulado_obras:{
+        acumulado_actividades:{
             type:DataTypes.FLOAT,
             allowNull:false
         },
 
     },{
-        tableName:'cierre_proyectista',
+        tableName:'cierre_actividades',
         timestamps: false,
     });
     tabla.associate = (models)=>{
-        tabla.belongsTo(models.Sub_proyecto);
+        tabla.belongsTo(models.Actividades);
         tabla.belongsTo(models.Trabajador);
     };
 

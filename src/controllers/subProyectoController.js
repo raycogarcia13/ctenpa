@@ -1,9 +1,13 @@
 module.exports = app => {
     const subproyec = app.db.models.Sub_proyecto;
+    const proyec = app.db.models.Proyectos;
+    const area = app.db.models.Area;
     const temp = app.db.models.Temporal;
     return {
         getSubProyectos: async (req, res) => {
-            let us = await subproyec.findAll();
+            let us = await subproyec.findAll({
+                include:[{model:proyec},{model:area}]
+            });
             return res.status(200).json(us);
         },
         getSubProyectosById: async (req, res) => {
@@ -25,31 +29,31 @@ module.exports = app => {
 
         createSubProyecto: async (req, res) => {
             try {
-                let currentProyec = await subproyec.findAll({
-                    order: [
-                        ['id', 'DESC']
-                    ],
-                    limit: 1
-                });
-                let a = (currentProyec.length == 1) ? currentProyec[0].codigo : null;
-                console.log(a);
-                let contador;
-                if (a === null || a === 999) {
-                    contador = '000';
-                } else {
-                    console.log(a.substr(-3));
-                    let currentvalor = a.substr(-3);
-                    let tor = parseInt(currentvalor, 10);
-                    tor += 1;
-
-                    contador = ('000' + tor).slice(-3);
-                }
-
-                console.log(contador);
-                let codigo = req.body.cod_servicio + req.body.num_contrato + req.body.anno_contrato + req.body.cod_ct+ contador;
+                // let currentProyec = await subproyec.findAll({
+                //     order: [
+                //         ['id', 'DESC']
+                //     ],
+                //     limit: 1
+                // });
+                // let a = (currentProyec.length == 1) ? currentProyec[0].codigo : null;
+                // console.log(a);
+                // let contador;
+                // if (a === null || a === 999) {
+                //     contador = '000';
+                // } else {
+                //     console.log(a.substr(-3));
+                //     let currentvalor = a.substr(-3);
+                //     let tor = parseInt(currentvalor, 10);
+                //     tor += 1;
+                //
+                //     contador = ('000' + tor).slice(-3);
+                // }
+                //
+                // console.log(contador);
+                // let codigo = req.body.cod_servicio + req.body.num_contrato + req.body.anno_contrato + req.body.cod_ct+ contador;
 
                 let insertProyecto = {
-                    codigo: codigo,
+                    codigo:req.body.codigo,
                     sub_valor: req.body.sub_valor,
                     descripcion: req.body.descripcion,
                     terminado: req.body.terminado,

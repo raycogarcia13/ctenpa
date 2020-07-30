@@ -1,13 +1,14 @@
---DROP FUNCTION public.cierreparcial();
+DROP FUNCTION public.cierreparcial();
 CREATE OR REPLACE FUNCTION public.cierreparcial()
-	  RETURNS table (tiempo double precision,
+	  RETURNS table (
+    tiempo double precision,
 	subpid integer,
 	trabid integer,
-	anno integer,
-	mes integer,
-	codigo character varying,
-	nombre character varying,
-	trabajador character varying,
+	annoa integer,
+	mesa integer,
+	codigo varchar,
+	nombre varchar,
+	trabajador text,
 	usuid integer)
      AS $BODY$
 BEGIN
@@ -27,9 +28,7 @@ FROM
 	INNER JOIN proyectos ON sub_proyecto."ProyectoId" = proyectos."id"
 	INNER JOIN cierre_proyectista ON cierre_proyectista."SubProyectoId" = sub_proyecto."id"
 	INNER JOIN trabajador ON cierre_proyectista."TrabajadorId" = trabajador."id" 
-WHERE
-	cierre_proyectista.anno = 2020 
-	AND cierre_proyectista.mes = 7 
+
 GROUP BY
 	sub_proyecto.codigo,
 	cierre_proyectista."SubProyectoId",

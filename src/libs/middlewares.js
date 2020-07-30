@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 // const apiRouteSecured = require('../routes/apiRouteSecured.route');
 // const router = express.Router();
 
@@ -10,6 +11,7 @@ module.exports = app => {
     app.set('env', 'development');
 
     // json
+    app.use(cors());
     app.use(express.json());
 
 
