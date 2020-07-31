@@ -2,7 +2,7 @@
     "development": {
         "username": "postgres",
         "password": "many92",
-        "database": "ctv1",
+        "database": "ctv2",
         "host": "127.0.0.1",
         "dialect": "postgres",
         "operatorsAliases": false,

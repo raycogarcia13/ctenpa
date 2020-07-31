@@ -10,15 +10,15 @@
             <div class="text-center col-md-3"><label for="">Día de la Semana: <strong>{{diaSemana}}: {{hoursDay}} horas</strong></label></div>
             <br>
         </div>
-        <div class="table-responsive-sm">
+        <div class="">
             <table class="table table-responsive table-borderless table-responsive-sm table-striped" id="tblData">
                 <thead class="thead-dark">
-                <th class="">Nombre</th>
-                <th v-for="dia in dias" :key="dia">{{dia}}</th>
+                <th class="sticky">Nombre</th>
+                <th v-for="dia in dias" :key="dia" class="sticky-2">{{dia}}</th>
                 </thead>
                 <tbody>
                 <tr v-for="(lol,index) in tabledata" :key="index" :class="{editing: lol == editedUser}" v-cloak>
-                    <td class="">
+                    <td class="sticky">
                         <div class="view">
                             {{lol.nombre}}
                         </div>
@@ -56,7 +56,7 @@
                 </tbody>
                 <tfoot class="thead-dark">
                <tr>
-                   <th class="">Total</th>
+                   <th class="sticky">Total</th>
                    <th v-for="(mio, idx)  in dias" :key="idx">{{ total=rowTotal(idx)  }}
                        <div v-if="total > 9" class="bg-danger rounded-circle text-justify center-align center text-center" style="width: 50px">Error</div>
                    </th>
@@ -388,19 +388,30 @@
 
 <style scoped type="text/css" media="print">
     @import url("//unpkg.com/element-ui@2.4.7/lib/theme-chalk/index.css");
-    .static {
-        position: absolute;
-        background-color: white;
-        }
-
-        .first-col {
-        padding-left: 32.5px!important;
-        }
+  
     .el-table__row .el-input .el-input__inner{
         border-style:none;
     }
     .hover-row .input .el-input__inner{
         border-style:solid;
+    }
+    .table-container{
+        max-width: 100%;
+        /* overflow-x: scroll; */
+        overflow-y: scroll;
+    }
+    #idData{
+        max-width: 100%;
+        overflow-x: scroll;
+    }
+    .table .sticky{
+        position: sticky;
+        left: 0;
+        z-index: 1;
+    }
+    .table .sticky-2{
+        position: sticky;
+        top: 0;
     }
     [v-cloak] {
         display: none;
@@ -413,10 +424,7 @@
     }
     .editing .view {
         display: none;
-    }
-    @media print {
-        .noPrint {display:none;}
-    }
+    }   
     .error input{
         color: red;
     }
