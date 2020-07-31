@@ -82,12 +82,10 @@
         <span v-html="formatedROl(data.value)"></span>
       </template> -->
       <template v-slot:cell(actions)="row">
-        <b-button size="sm" variant="success"  class="mr-1">
-            <router-link :to="{name:'add-ct'}">
-                <i class="fa fa-eye"></i>
-            </router-link>
+        <b-button size="sm" variant="info" data-toggle="tooltip" title="Ver CT" class="mr-1" @click="setWorker(row.item)">
+          <i class="fa fa-eye"></i>
         </b-button>
-        <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button>
+        <!-- <b-button size="sm" variant="danger" @click="deleteUser(row.item)" class="mr-1"><i class="fa fa-trash"></i> </b-button> -->
         <b-button size="sm" variant="primary" @click="row.toggleDetails">
           {{ row.detailsShowing ? '-' : '+' }} 
         </b-button>
@@ -100,10 +98,11 @@
             <li> Apellidos: {{ row.item.apellidos }}</li>
             <li> Especialidad: {{ row.item.Especialidad.especialidad }}</li>
             <li> Area: {{ row.item.Area.nombre }}</li>
-            <li> Coeficiente: {{ row.item.coeficiente }}</li>
-            <li> Salario con descuento: {{ salpordes= Math.round(((row.item.salario_basico/190.6)*this.horasXmes*100))/100 }}</li>
-            <li> Salario por resultado: {{salporResult= salpordes * row.item.coeficiente }}</li>
-            <li> Salario Total: {{ Math.round((salporResult + salpordes)*100)/100 }}</li>
+            <!-- <li> Usuario: {{ row.item.UsuarioId }}</li> -->
+            <!-- <li> Coeficiente: {{ row.item.coeficiente }}</li> -->
+            <!-- <li> Salario con descuento: {{ salpordes= Math.round(((row.item.salario_basico/190.6)*this.horasXmes*100))/100 }}</li> -->
+            <!-- <li> Salario por resultado: {{salporResult= salpordes * row.item.coeficiente }}</li> -->
+            <!-- <li> Salario Total: {{ Math.round((salporResult + salpordes)*100)/100 }}</li> -->
           </ul>
         </b-card>        
       </template>
@@ -140,6 +139,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
 export default {
+ 
 data(){
     return{
         onearea:[],
@@ -222,6 +222,7 @@ methods:{
         },  
   getProyecXarea(item)
       {        
+        console.log('Item:',item);
           this.isBusy=true;
           this.$api.get("/proyectista/getXarea/"+item,{
               headers:{
@@ -257,6 +258,10 @@ methods:{
           }).catch(err=>{             
               console.log(err); 
           })
+      },
+  setWorker(item){
+      sessionStorage.setItem('idwork',JSON.stringify(item));
+      this.$router.push('add-ct');
       }   
 },
 mounted() {

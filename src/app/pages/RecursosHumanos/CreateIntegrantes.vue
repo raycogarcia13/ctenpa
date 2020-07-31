@@ -94,10 +94,10 @@
         </b-row>
         <div class="pt-2">
             <el-button @click="visible = true" class="btn btn-outline-info">Insertar</el-button>
-            <el-dialog :visible.sync="visible" title="Insertar Integrante">
+            <el-dialog :visible.sync="visible" title="Insertar Integrante" >
                 <b-form>
                     <b-row>
-                        <div class="col-md-9">
+                        <div class="col-md-12">
                             <b-form-group
                                     label="Funcion que realiza:"
                                     label-for="funcion"
@@ -142,7 +142,7 @@
         <b-modal :id="infoModal.id" ok-variant="success" :title="infoModal.title" @ok="editarUser" @hide="resetInfoModal">
             <pre v-if="infoModal.content!=''" >{{ infoModal.content }}</pre>
             <div v-else>
-                <form>
+                <form class="col-md-12">
                     <b-form-group
                             label="Subproyecto:"
                             label-for="Subproyecto"
@@ -265,6 +265,7 @@
                     this.$swal({title:"Error ",type:'error',text:error.response.data,toast:true,position:'top-end',showConfirmButton:false,timer:3000});
                     this.cargando=false;
                 });
+                this.clear();
 
             },
             edit(item) {
@@ -337,7 +338,7 @@
                 let opt=[];
                 opt.push({text:'Escoja un elemento',value:null});
                 this.asignacion.forEach(function(element) {
-                    opt.push({text:element.equipo+' - '+ element.proyecto,value:element.id});
+                    opt.push({text:element.equipo+' - '+ element.proyecto+' - '+ element.codigo,value:element.id });
                 });
                 return opt;
             },
@@ -368,6 +369,11 @@
                     }
                 })
             },
+            clear(){
+                  this.equipo.subproyecto='',
+                  this.equipo.subproyecto.Asignacion='',
+                  this.equipo.subproyecto.Trabajador=''
+            }
 
         },
         created() {

@@ -26,6 +26,11 @@
           </a>
           <ul class="treeview-menu" :style="{'display':mostrar('user')}">
             <li>
+             <router-link :to="{name:'verXareas'}">
+               <i class="fa fa-plus"></i> Ver por Áreas
+             </router-link>
+           </li>
+            <li>
               <router-link :to="{name:'users'}">
                 <i class="fa fa-table"></i> Listado
               </router-link>
@@ -34,7 +39,7 @@
               <router-link :to="{name:'add-trabajador'}">
                 <i class="fa fa-plus"></i> Agregar Trabajador
               </router-link>
-            </li>
+            </li>             
           </ul>
         </li>
 
@@ -85,11 +90,11 @@
                 <i class="fa fa-plus"></i> Agregar Actividad
               </router-link>
             </li>
-<!--            <li>-->
-<!--              <router-link :to="{name:'verXareas'}">-->
-<!--                <i class="fa fa-plus"></i> Ver por Áreas-->
-<!--              </router-link>-->
-<!--            </li>-->
+           <li>
+             <router-link :to="{name:'verXareas'}">
+               <i class="fa fa-plus"></i> Ver por Áreas
+             </router-link>
+           </li>
 <!--            <li>-->
 <!--              <router-link :to="{name:'add-planmes'}">-->
 <!--                <i class="fa fa-plus"></i> Plan del mes-->
@@ -141,6 +146,11 @@
                 <i class="fa fa-plus"></i> Integrantes de los Equipos
               </router-link>
             </li>
+            <li>
+             <router-link :to="{name:'verXareas'}">
+               <i class="fa fa-plus"></i> Ver por Áreas
+             </router-link>
+           </li>
           </ul>
         </li>
 <!--        trabajador-->

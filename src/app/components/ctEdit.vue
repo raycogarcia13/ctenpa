@@ -1,22 +1,24 @@
 <template>
       <div>
         <div class="row mb-2">
-            <div class="float-left col-md-4"><label for="">Horas del mes: <strong>{{horasMes}}</strong></label></div>
+            <div class="float-left col-md-3"><label for="">Horas del mes: <strong> {{horasMes}}</strong></label></div>
             <br>
-            <div class="text-center col-md-4 bg-red " v-if="this.vali===true"><label for="ct" class="text-white" >CT inválido </label></div>
+            <div class="text-center col-md-3 bg-red " v-if="this.vali===true"><label for="ct" class="text-white" >CT inválido </label></div>
             <br>
-            <div class="text-center col-md-4"><label for="">Día de la Semana: <strong>{{diaSemana}}: {{hoursDay}} horas</strong></label></div>
+            <div class="text-center col-md-3"><label for="">Trabajador: <strong>{{usuario}} </strong></label></div>
+            <br>
+            <div class="text-center col-md-3"><label for="">Día de la Semana: <strong>{{diaSemana}}: {{hoursDay}} horas</strong></label></div>
             <br>
         </div>
         <div class="table-responsive-sm">
             <table class="table table-responsive table-borderless table-responsive-sm table-striped" id="tblData">
                 <thead class="thead-dark">
-                <th>Nombre</th>
+                <th class="">Nombre</th>
                 <th v-for="dia in dias" :key="dia">{{dia}}</th>
                 </thead>
                 <tbody>
                 <tr v-for="(lol,index) in tabledata" :key="index" :class="{editing: lol == editedUser}" v-cloak>
-                    <td>
+                    <td class="">
                         <div class="view">
                             {{lol.nombre}}
                         </div>
@@ -54,7 +56,7 @@
                 </tbody>
                 <tfoot class="thead-dark">
                <tr>
-                   <th>Total</th>
+                   <th class="">Total</th>
                    <th v-for="(mio, idx)  in dias" :key="idx">{{ total=rowTotal(idx)  }}
                        <div v-if="total > 9" class="bg-danger rounded-circle text-justify center-align center text-center" style="width: 50px">Error</div>
                    </th>
@@ -88,6 +90,7 @@
     Vue.use(VueExcelXlsx);
     export default {
         name: "ctEdit",
+        
         data: function() {
             return {
                 nombrexsl: moment().locale('es').format('l'),
@@ -100,6 +103,7 @@
                 fch:new Date().getUTCMonth()+1,
                 tabledata: [],
                 idTrab:'',
+                idUser:'',
                 equipoId:'',
                 dias:[],
                 editMode: false,
@@ -110,6 +114,7 @@
                 Hdiarias:false,
                gettiempos:'',
                 getdays:'',
+                usuario:'',
                 columns: [
                     {
                         label: "Actividad",
@@ -136,7 +141,7 @@
             ...mapState(['siderShow','user_signed']),
             capitalizeUs()
             {
-                return this.user_signed.username.charAt(0).toUpperCase() + this.user_signed.username.slice(1);
+                return this.usuario.charAt(0).toUpperCase() + this.usuario.slice(1);
             },
             getName()
             {
@@ -224,14 +229,14 @@
                 // e.preventDefault();
             },
             getTrabxId(){
-             this.$api.get('/equipo/trab/' + this.user_signed.id).then(res=>{
+             this.$api.get('/equipo/trab/' + this.idUser).then(res=>{
                    this.idTrab = res.data.id;
-                   console.log('Este es el id del trabajador',this.idTrab, this.user_signed.id)
+                   console.log('Este es el id del trabajador',this.idTrab, this.idUser)
                 }).catch(error=>{console.log(error)});
 
             },
             getEquiXtrab(){
-                 this.$api.get('/equipo/equixtrab/' + this.user_signed.id).then(res=>{
+                 this.$api.get('/equipo/equixtrab/' + this.idUser).then(res=>{
                     this.equipoId = res.data.id;
                 }).catch(error=>{console.log(error)});
 
@@ -304,7 +309,7 @@
                 }).catch(error=>{console.log(error)});
             },
             getProyectosById(uid){
-                this.$api.post('/equipo/ct/'+this.user_signed.id,{
+                this.$api.post('/equipo/ct/'+this.idUser,{
                     headers:{
                         'secret':JSON.parse(sessionStorage.getItem('ctenpa-secret'))
                     }
@@ -355,9 +360,20 @@
 
         },
         mounted: function() {
+            if(sessionStorage.getItem('idwork'))
+                {
+                    let user = JSON.parse(sessionStorage.getItem('idwork'));
+                    this.idUser = user.UsuarioId;
+                    this.usuario = user.nombre;
+                }
+                else
+                {
+                    this.usuario = this.user_signed.username;
+                    this.idUser = this.user_signed.id;
+                }
+            this.getTrabxId();
             this.getProyectosById();
             this.getDias();
-            this.getTrabxId();
             this.getEquiXtrab();
             this.getHorasMes();
             this.getDiasSemana();
@@ -371,7 +387,15 @@
 </script>
 
 <style scoped type="text/css" media="print">
-    /*@import url("//unpkg.com/element-ui@2.4.7/lib/theme-chalk/index.css");*/
+    @import url("//unpkg.com/element-ui@2.4.7/lib/theme-chalk/index.css");
+    .static {
+        position: absolute;
+        background-color: white;
+        }
+
+        .first-col {
+        padding-left: 32.5px!important;
+        }
     .el-table__row .el-input .el-input__inner{
         border-style:none;
     }

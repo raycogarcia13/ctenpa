@@ -139,7 +139,7 @@ export default {
         //     RolId:'90f07d16-f4f7-11e9-b0b3-6155f7e7f629',
         // })
 
-           
+         sessionStorage.removeItem('idwork')  ;
     },
 }
 </script>

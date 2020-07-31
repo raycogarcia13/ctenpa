@@ -45,7 +45,8 @@ let routes = [{
         component: Users,
         children: [
             { path: "/", name: 'users', component: UsListado },
-            { path: "add", name: 'add-user', component: CreateUser }
+            { path: "add", name: 'add-user', component: CreateUser },
+            // { path: "ver", name: 'verXareas', component: ViewAreas },
         ]
     },
     {
@@ -67,8 +68,8 @@ let routes = [{
             { path: "add-equipo", name: 'add-equipo', component: CreateEquipo },
             { path: "add-actividades", name: 'add-actividades', component: CreateActividades },
             { path: "add-ct", name: 'add-ct', component: CreateCT },
-            { path: "add-asignacion", name: 'add-asignacion', component: CreateAsignacion},
-            { path: "add-integrantes", name: 'add-integrantes', component: CreateIntegrantes},
+            { path: "add-asignacion", name: 'add-asignacion', component: CreateAsignacion },
+            { path: "add-integrantes", name: 'add-integrantes', component: CreateIntegrantes },
             // { path: "add-cierre", name: 'add-cierre', component: CreateCierre},
             // { path: "get-cierre", name: 'get-cierre', component: Cierre},
         ]
@@ -86,7 +87,7 @@ let routes = [{
         component: Economia,
         children: [
             { path: "get-cierre", name: 'get-cierre', component: Cierre },
-            { path: "add-cierre", name: 'add-cierre', component: CreateCierre},
+            { path: "add-cierre", name: 'add-cierre', component: CreateCierre },
         ]
     },
 ];

@@ -6,15 +6,16 @@ module.exports = app => {
     return {
         getAsignacion: async(req, res) => {
             let us = await asignacion.findAll({
-                include:[{model:equipo, attributes:['nombre']},{model:subp,include:[{model:proyectos}]}],
-                raw:true
+                include: [{ model: equipo, attributes: ['nombre'] }, { model: subp, include: [{ model: proyectos }] }],
+                raw: true
             });
-            let todos=[];
-            for (var i = 0; i <us.length ; i++) {
-                var obj={
-                    "id":us[i]['id'],
-                    "equipo":us[i]['Equipo.nombre'],
-                    "proyecto":us[i]['Sub_proyecto.Proyecto.nombre'],
+            let todos = [];
+            for (var i = 0; i < us.length; i++) {
+                var obj = {
+                    "id": us[i]['id'],
+                    "equipo": us[i]['Equipo.nombre'],
+                    "codigo": us[i]['Sub_proyecto.codigo'],
+                    "proyecto": us[i]['Sub_proyecto.Proyecto.nombre'],
                 };
                 todos.push(obj);
             }
@@ -40,13 +41,12 @@ module.exports = app => {
                     });
                     return res.status(200).json(updproyect)
                 }
-            }catch (e) {
+            } catch (e) {
                 res.json({
-                        errores:"SI",
-                        msg:e.detail,
-                        nombre:'Ya esa asignación existe por favor corríjala'
-                    }
-                )
+                    errores: "SI",
+                    msg: e.detail,
+                    nombre: 'Ya esa asignación existe por favor corríjala'
+                })
             }
 
         },
@@ -60,14 +60,13 @@ module.exports = app => {
             try {
                 const newproyec = await asignacion.create(req.body);
                 return res.status(200).json(newproyec);
-            }catch (e) {
+            } catch (e) {
                 console.log(e);
                 res.json({
-                    errores:"SI",
-                    msg:e.detail,
-                    nombre:'Ya esa asignación existe por favor corríjala'
-                }
-                )
+                    errores: "SI",
+                    msg: e.detail,
+                    nombre: 'Ya esa asignación existe por favor corríjala'
+                })
             }
 
         },
